@@ -1,0 +1,4 @@
+google-generativeai
+feedparser
+markdown
+python-dotenv
