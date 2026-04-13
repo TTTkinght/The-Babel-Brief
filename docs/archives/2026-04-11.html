@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>The Babel Brief</title>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+:root {
+    color-scheme: light;
+    --black: #F5F5F5;
+    --surface: #FFFFFF;
+    --surface-raised: #F0F0F0;
+    --border: #E8E8E8;
+    --border-visible: #CCCCCC;
+    --text-disabled: #999999;
+    --text-secondary: #666666;
+    --text-primary: #1A1A1A;
+    --text-display: #000000;
+    --accent: #FF661F;
+    --interactive: var(--text-display);
+    --display-xl: 4.5rem;
+    --display-lg: 3rem;
+    --display-md: 2.25rem;
+    --heading: 1.5rem;
+    --subheading: 1.125rem;
+    --body: 1rem;
+    --body-sm: 0.875rem;
+    --caption: 0.75rem;
+    --label: 0.6875rem;
+    --button: 0.8125rem;
+    --space-2xs: 2px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    --space-4xl: 96px;
+    --motion-fast: 160ms;
+    --motion-base: 240ms;
+    --motion-slow: 360ms;
+    --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --black: #000000;
+    --surface: #111111;
+    --surface-raised: #1A1A1A;
+    --border: #222222;
+    --border-visible: #333333;
+    --text-disabled: #666666;
+    --text-secondary: #999999;
+    --text-primary: #E8E8E8;
+    --text-display: #FFFFFF;
+    --interactive: var(--text-display);
+}
+* {
+    box-sizing: border-box;
+    letter-spacing: 0;
+}
+body {
+    margin: 0;
+    padding: var(--space-4xl) var(--space-xl);
+    background: var(--black);
+    color: var(--text-primary);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.5;
+    transition: background-color var(--motion-base) var(--ease-out), color var(--motion-base) var(--ease-out);
+}
+.brief-backbar {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto calc(var(--space-xl) + var(--space-sm));
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border-visible);
+}
+.brief-backbar .brief-back-link {
+    grid-column: 4 / 9;
+    width: fit-content;
+    color: var(--accent);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 0;
+    transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+}
+.theme-toggle {
+    grid-column: 10 / 13;
+    justify-self: end;
+    align-self: start;
+    min-height: 44px;
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--button);
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out);
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+    border-color: var(--text-display);
+}
+.brief-backbar .brief-brand {
+    grid-column: 1 / 3;
+    width: fit-content;
+    padding-left: 14px;
+    color: var(--accent);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 0;
+}
+.brief-backbar .brief-brand:hover,
+.brief-backbar .brief-brand:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+.email-container {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    row-gap: 0;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+.brief-detail-header {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto var(--space-3xl);
+}
+.brief-detail-instruments {
+    grid-column: 1 / 3;
+    display: grid;
+    gap: var(--space-sm);
+    align-content: start;
+}
+.instrument-label {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.instrument-number {
+    margin: 0;
+    color: var(--text-display);
+    font-family: "Doto", "Space Mono", monospace;
+    font-size: var(--display-lg);
+    line-height: 0.95;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.instrument-meta,
+.instrument-clock {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+}
+.instrument-clock {
+    width: fit-content;
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-visible);
+    color: var(--text-display);
+    transition: opacity var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
+}
+.instrument-clock.is-ticking {
+    opacity: 0.55;
+}
+.brief-detail-title {
+    grid-column: 4 / 12;
+    align-self: center;
+    margin: 0;
+    width: min(788.268px, 100%);
+    max-width: 100%;
+    opacity: 1;
+    color: var(--text-display);
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 700;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.email-container > * {
+    grid-column: 4 / 12;
+    max-width: 65ch;
+}
+.hero,
+.email-container > hr {
+    grid-column: 1 / -1;
+    max-width: none;
+}
+.email-container > h2 {
+    grid-column: 4 / 12;
+    max-width: 65ch;
+}
+.hero {
+    margin: 0 0 var(--space-3xl);
+}
+.hero img {
+    width: 100%;
+    display: block;
+    border-radius: 0;
+}
+h1 {
+    max-width: 12em;
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    border: 0;
+    color: var(--text-display);
+    font-size: var(--heading);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+h2 {
+    margin: var(--space-3xl) 0 var(--space-lg);
+    padding: var(--space-md) 0 0;
+    border-top: 1px solid var(--border-visible);
+    border-left: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+h2:first-of-type {
+    margin-top: var(--space-2xl);
+}
+h3 {
+    margin: var(--space-xl) 0 var(--space-md);
+    color: var(--accent);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.3;
+    font-weight: 700;
+}
+p,
+li {
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.6;
+}
+p {
+    margin: 0 0 var(--space-md);
+}
+ul {
+    margin: 0 0 var(--space-lg);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+li {
+    margin: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+ul ul {
+    margin-top: var(--space-sm);
+    margin-bottom: 0;
+    padding-left: var(--space-lg);
+    border-top: 1px solid var(--border);
+}
+.history-note {
+    margin: 0 0 var(--space-xl);
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.5;
+}
+.history-label {
+    color: var(--text-display);
+    font-weight: 700;
+}
+blockquote {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md);
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-primary);
+}
+a {
+    color: var(--interactive);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+}
+a:hover {
+    color: var(--text-display);
+    border-bottom-color: var(--text-display);
+}
+strong {
+    color: var(--text-display);
+    font-weight: 700;
+}
+.email-container > ul:first-of-type > li > strong {
+    color: var(--accent);
+}
+.email-container > ul:first-of-type {
+    border-top: 0;
+}
+.email-container > ul:first-of-type > li {
+    border-bottom: 0;
+}
+code {
+    padding: 1px 4px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+}
+hr {
+    border: 0;
+    border-top: 1px solid var(--border-visible);
+    margin: var(--space-3xl) 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes nd-power-on {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .brief-backbar,
+    .brief-detail-header,
+    .email-container {
+        animation: nd-power-on var(--motion-base) var(--ease-out) both;
+    }
+    .brief-detail-header {
+        animation-delay: 60ms;
+    }
+    .email-container {
+        animation-delay: 120ms;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+@media (max-width: 640px) {
+    body {
+        padding: var(--space-3xl) var(--space-md);
+    }
+    .brief-backbar {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+        margin-bottom: var(--space-2xl);
+    }
+    .brief-backbar span,
+    .brief-backbar a,
+    .theme-toggle {
+        grid-column: 1;
+    }
+    .theme-toggle {
+        justify-self: start;
+    }
+    .email-container {
+        display: block;
+    }
+    .brief-detail-header {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+        margin-bottom: var(--space-3xl);
+    }
+    .brief-detail-instruments,
+    .brief-detail-title {
+        grid-column: 1;
+    }
+    .email-container > * {
+        max-width: none;
+    }
+    h1 {
+        font-size: var(--heading);
+    }
+    .brief-detail-title {
+        font-size: var(--heading);
+    }
+    h2 {
+        margin-top: var(--space-2xl);
+    }
+    h3 {
+        font-size: var(--body);
+    }
+}
+</style>
+
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body>
+
+<div class="brief-backbar">
+    <a class="brief-brand" href="/">The Babel Brief</a>
+    <a class="brief-back-link" href="/">&lt; back</a>
+    <button class="theme-toggle" type="button" data-theme-toggle>[ DARK ]</button>
+</div>
+
+
+<header class="brief-detail-header">
+    <div class="brief-detail-instruments">
+        <p class="instrument-label">Issue</p>
+        <p class="instrument-number">11</p>
+        <p class="instrument-meta">04 / 2026</p>
+        <p class="instrument-label">CN Time</p>
+        <time class="instrument-clock" data-cn-clock>20:07</time>
+    </div>
+    <h1 class="brief-detail-title">Bessent与Powell曾就Anthropic模型风险警告银行CEO</h1>
+</header>
+
+
+<script>
+(() => {
+    const clocks = document.querySelectorAll("[data-cn-clock]");
+    if (clocks.length) {
+        const timeFormatter = new Intl.DateTimeFormat("zh-CN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: "Asia/Shanghai"
+        });
+        const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            timeZone: "Asia/Shanghai"
+        });
+        const tick = () => {
+            const now = new Date();
+            clocks.forEach((clock) => {
+                clock.textContent = timeFormatter.format(now);
+                clock.classList.remove("is-ticking");
+                void clock.offsetWidth;
+                clock.classList.add("is-ticking");
+                setTimeout(() => clock.classList.remove("is-ticking"), 120);
+            });
+            document.querySelectorAll("[data-cn-date]").forEach((date) => {
+                date.textContent = dateFormatter.format(now).replace(/\//g, " / ");
+            });
+        };
+
+        tick();
+        setInterval(tick, 30000);
+    }
+
+    const themeKey = "babel-brief-theme";
+    const buttons = document.querySelectorAll("[data-theme-toggle]");
+    const storedTheme = localStorage.getItem(themeKey);
+    const hashTheme = new URLSearchParams(window.location.hash.slice(1)).get("figmatheme");
+    const forcedTheme = ["dark", "light"].includes(hashTheme) ? hashTheme : "";
+    const initialTheme = forcedTheme || storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem(themeKey, theme);
+        buttons.forEach((button) => {
+            button.textContent = theme === "dark" ? "[ LIGHT ]" : "[ DARK ]";
+            button.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+        });
+    };
+
+    setTheme(initialTheme);
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+        });
+    });
+})();
+</script>
+
+<div class="email-container">
+
+<p class="history-note"><span class="history-label">历史上的今天（2001年）</span>：在发生中美撞机事件并被中方扣留11天后，美国海军EP-3E侦察机的24名机组人员从海南岛获释。此前，该机与一架中国歼-8战斗机在南海发生碰撞，导致中国飞行员王伟牺牲，美机随后迫降陵水机场。此事件曾引发严重的外交危机，机组人员的获释标志着危机开始走向缓解。 —— <a href="https://en.wikipedia.org/wiki/Lockheed_EP-3">来源: Wikipedia</a></p>
+
+<hr />
+<h2>🦉 Quick Hits</h2>
+<ul>
+<li><strong>消息人士：Bessent与Powell曾就Anthropic模型风险警告银行CEO</strong>：消息人士称，Bessent与Powell曾就Anthropic模型风险向银行CEO发出警告。（<a href="https://news.google.com/rss/articles/CBMizgFBVV95cUxOQ05ad1ZkdnNrcEhEMklEalc0TVBmWlppMzkxQlZxQVBpbUp1Nlk1STVqUm51WDI5QnYxS1BleDFONDZwTmR2Tlc4OGl3WGU2US0zVUhhVUQ0Zk5yYlFEV1g2M1ByNy1jUTVSTTRSYjhwUU9XU0lsRHY0V2tjbXNGX1dwUlFJZUV6UkRoang1TW5IbllaTTcycmRDV0ZNYnNQRnRFUWhybVNuVHMtdFdyX0tTLUN4Q1cwYTFPU3BPRG5UeGI4UTJZMXpBc25uZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Reuters</a>, <a href="https://news.google.com/rss/articles/CBMivwFBVV95cUxOS1ZrTS1hRzgwMlRWMXY4YXBNcVhzVUI0WUI1aTZZMEFCbk1KcTNQZG03alU2b3p3Vl9BMTNyNVk2X09ZeXFFa1B3c1JFS3JVbkwyWDgyX2FqRjhoVVNtaklmbUtlTWNmbjJUTko5YXh6MmdGcV9qMVFJQU1abmRvSVZuNUZVN1dzeWRJMHAzSWY2Z3JZUGJZcUE2cWx3U3NRSnI1Wlp5N3ZjdVlTSm5SXy1fTDgyQV9PYWE3U1QxWQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Bloomberg</a>）</li>
+<li><strong>中国欢迎台湾反对派领导人，借此向特朗普释放信号</strong>：习近平会见台湾反对派领导人，意在拉近两岸关系。（<a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxPeWp5Yzh1aHlOWnRoSmh6eWdkbFBBNnVmcUFZa0lOTlRRa3hEVXJOaTZTZWdKb3pXb1NsLWw1RUM4LWF3RmVVU3g1dG1jUWVFZUJpSmtfTUpJQlhfeEpmYllFWjdxaUFsNTBJdk9Ta2xPX0hMSkhfTXU5OGpvdXBZdURCcUhiUWNCcEdzdXZYc3JhLTU3d0VwcWdTbVpGVUx3RUJJRXkybmZyb1VBSlBHekdyb1I4VmVndEg4dkZEcEZUZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Bloomberg</a>, <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUmlNZUlwRDUyV3paUUloZXg2OFpiNnlhcUVCQmtVZGZVUXk4Rjc4UE1xRlZwblFoa2ItcHk3dUJZQzlQTGppc2xBWTNudGYtYy1ZS0M0WThBTTdYQ0laM2pydkhMXzc5M0o5MlVGWktqMkltc2paMGgyaksyQnVnTzdPSzFrdWRrNTlZWnp6b0IxbVM2OWF1c3lmTUt3aEFEbno5UFk4RnQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: WSJ</a>）</li>
+<li><code>[独家重磅]</code> <strong>伊朗战争冲击美国经济：通胀加剧，消费者信心跌至历史新低</strong>：伊朗战争冲击美国经济，导致通胀加剧及消费者信心创历史新低。（<a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxQQVZYUFprQUI1dlZsNTRSZHRCbllhWUlzcVJLSTl4WlBaLWZXUElvam5hWVR5SFlqaUhaN1Q0VmhWV2NPTVZ6ZG83a3VXcGo5bENLZVpTOXJrX1h6T3R2NnhXNjQwc0wwelFyVjNRQ3lyNno4UjJUZDBfNDJ6dFNZNmRyRDNuN3lxQUE0LU1DbU5kUzhhdmVwckRpbkZIRERzSmxxS1Y1WHE3RHBhMEpBbDFJSzZsd0NyT0U1eg?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Bloomberg</a>）</li>
+<li><code>[独家重磅]</code> <strong>伊朗战争致通胀飙升，美国消费者情绪骤降</strong>：伊朗战争导致通胀飙升，美国消费者情绪大幅下滑。（<a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxORURCLUppMF9taFNjeVJWZ1RuME5ncWpGalBJZVk2YUNKVkN1bEZBcjk2OEo0cEoyQVNMZFFLNndwMzRnMFpOZXY1WmUyRTNZRXZob3FqSi1tckItVFhoN0FOUFRwNXJFS29QQlVqZ2NmcF8wVzFEUkc2WGNuMUNWZ1huSnJQQ21XZzdSbVlveWVKSFJuTi1LcWF0c2t2WmtXUkhOeA?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Associated Press</a>）</li>
+</ul>
+<h2>🇨🇳 中国与世界 / China & The World</h2>
+<h3>1. 中国接见台湾反对派领导人，向特朗普释放信号</h3>
+<ul>
+<li><strong>全景综述</strong>：习近平会见台湾反对派领导人以拉近两岸关系，此举被视为向Trump传递信号。</li>
+<li><strong>新闻时间线</strong>：<strong>[2026年4月11日 10:18]</strong> Bloomberg发布报道 <strong>[2026年4月10日 20:21]</strong> WSJ发布报道</li>
+<li><strong>核心事实</strong>：中国通过接待台湾反对派领导人向Trump传递信号 (信息来源: Bloomberg)</li>
+<li><strong>Bloomberg视角</strong>：中国在接待台湾反对派领导人时向Trump传递信号 (引述自: Bloomberg 报道)</li>
+<li><strong>WSJ视角</strong>：习近平通过会见台湾反对派领导人试图拉近两岸关系 (引述自: WSJ 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：多源交叉报道提高了事件方向的可验证性，有助于判断中国相关政策、企业出海或双边互动的真实边界；劣势（风险）：若后续表态升级，外交、贸易、供应链或资本市场的外溢风险可能扩大。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxPeWp5Yzh1aHlOWnRoSmh6eWdkbFBBNnVmcUFZa0lOTlRRa3hEVXJOaTZTZWdKb3pXb1NsLWw1RUM4LWF3RmVVU3g1dG1jUWVFZUJpSmtfTUpJQlhfeEpmYllFWjdxaUFsNTBJdk9Ta2xPX0hMSkhfTXU5OGpvdXBZdURCcUhiUWNCcEdzdXZYc3JhLTU3d0VwcWdTbVpGVUx3RUJJRXkybmZyb1VBSlBHekdyb1I4VmVndEg4dkZEcEZUZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">China Sends Message to Trump as It Welcomes Taiwan’s Opposition Leader</a></li>
+<li><strong>WSJ</strong>: <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUmlNZUlwRDUyV3paUUloZXg2OFpiNnlhcUVCQmtVZGZVUXk4Rjc4UE1xRlZwblFoa2ItcHk3dUJZQzlQTGppc2xBWTNudGYtYy1ZS0M0WThBTTdYQ0laM2pydkhMXzc5M0o5MlVGWktqMkltc2paMGgyaksyQnVnTzdPSzFrdWRrNTlZWnp6b0IxbVM2OWF1c3lmTUt3aEFEbno5UFk4RnQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Xi Hosts Taiwan Opposition Leader to Draw Island Closer to China</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 伊朗战争冲击供应，中国拟禁止硫酸出口</h3>
+<ul>
+<li><strong>全景综述</strong>：鉴于伊朗战争冲击供应，中国拟禁止硫酸出口。</li>
+<li><strong>核心事实</strong>：受伊朗战争影响供应，中国正采取行动禁止硫酸出口 (信息来源: Bloomberg)</li>
+<li><strong>Bloomberg视角</strong>：中国因伊朗战争影响供应而计划禁止硫酸出口 (引述自: Bloomberg 报道)</li>
+<li><strong>外部回应视角</strong>：外部回应仍需观察，关键变量包括其他政府或企业是否把该事件转化为外交、关税、投资或供应链动作 (引述自: Bloomberg 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，有助于判断中国相关政策、企业出海或双边互动的真实边界；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若后续表态升级，外交、贸易、供应链或资本市场的外溢风险可能扩大。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxQWmUyQkwzalA1SXFITldzWlVOVm1WNGZpcUZfMktBNFBaM0dvY0Z4YXI3OV9CZGQtRWJxbnpkMHBJN2RIVmVWMi1qMjF1SVRydVliMF9zYzgwVG4yRmN4OGhhaVNpTzJZa2FZMXdlc0lEblFIWGRGM3lBRlFZNEoxN0lXZWMzY1dhR3diYlZlR3djalBFRUFWNTJVdkE1T0lKdGt3LU1VQVV1dXBpRVBpdWtyZFlEdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">China Moves to Ban Sulfuric Acid Exports as Iran War Hits Supply</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 中国与反对派谈和，台湾称只见军舰军机</h3>
+<ul>
+<li><strong>全景综述</strong>：台湾方面表示，在中国与反对派谈论和平之际，其周边仅见军舰与战机。</li>
+<li><strong>核心事实</strong>：台湾指出在中国与反对派进行和平对话时，其周边仍充斥着军舰和战机 (信息来源: Reuters)</li>
+<li><strong>Reuters视角</strong>：台湾称在中国与反对派和谈期间，仅观察到军舰与战机的活动 (引述自: Reuters 报道)</li>
+<li><strong>外部回应视角</strong>：外部回应仍需观察，关键变量包括其他政府或企业是否把该事件转化为外交、关税、投资或供应链动作 (引述自: Reuters 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，有助于判断中国相关政策、企业出海或双边互动的真实边界；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若后续表态升级，外交、贸易、供应链或资本市场的外溢风险可能扩大。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxON3dGUDI1b1JIdksyT1hLUGw4SnBjSzZEUElSZnFnVXBTc0laR3NxVlQzT1RsbHFTejBiS2pSUHFxME5iMVpJSEg5YXN3cml6eEY2YjdEM3dQMGlXTnozOEd5aTgxSlpCTUhJNzI4bHlGN0FMMUF1ZTRONnhuQ1BHXzlVU2RlcmZrMk5RalBlZ1R3VEw5NnlTcVFJN0NoYjVNVktoeGdqYXEyUDZpU3JjMDRzc05sZENE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Taiwan sees only warships and warplanes as China talks peace with opposition</a></li>
+</ul>
+</li>
+</ul>
+<h2>🌍 全球局势 / Global Affairs</h2>
+<h3>1. 万斯与卡利巴夫举行历史性会谈，需弥合深层不信任</h3>
+<ul>
+<li><strong>全景综述</strong>：美伊面对面会谈将成为1979年伊斯兰革命以来两国最高级别的接触。</li>
+<li><strong>核心事实</strong>：历史性的Vance与Ghalibaf会谈必须弥合双方深层的互不信任 (信息来源: BBC World News)</li>
+<li><strong>BBC World News视角</strong>：此次面对面会谈标志着美伊自1979年伊斯兰革命以来最高级别的接触 (引述自: BBC World News 报道)</li>
+<li><strong>外部反馈视角</strong>：外部反馈仍需观察，关键变量包括相关国家是否升级军事、制裁、外交或能源安全安排 (引述自: BBC World News 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，为判断地缘格局、谈判空间和政策约束提供了更清晰的事实锚点；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若相关方继续升级行动，冲突、制裁、能源或航运链条的外溢影响可能放大。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>BBC World News</strong>: <a href="https://www.bbc.com/news/articles/cn9qzl12537o?at_medium=RSS&amp;at_campaign=rss">Historic Vance-Ghalibaf talks must bridge deep distrust</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 伊朗战争动态：美国谈判代表将赴巴基斯坦进行停火谈判</h3>
+<ul>
+<li><strong>全景综述</strong>：黎巴嫩卫生部表示，自3月2日以来以色列袭击已造成1953人死亡、6303人受伤。</li>
+<li><strong>核心事实</strong>：美国谈判代表将抵达巴基斯坦参加伊朗战争停火谈判 (信息来源: Al Jazeera)</li>
+<li><strong>Al Jazeera视角</strong>：黎巴嫩卫生部称，3月2日以来以色列袭击导致的死亡人数已升至1953人，另有6303人受伤 (引述自: Al Jazeera 报道)</li>
+<li><strong>外部反馈视角</strong>：外部反馈仍需观察，关键变量包括相关国家是否升级军事、制裁、外交或能源安全安排 (引述自: Al Jazeera 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，为判断地缘格局、谈判空间和政策约束提供了更清晰的事实锚点；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若相关方继续升级行动，冲突、制裁、能源或航运链条的外溢影响可能放大。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Al Jazeera</strong>: <a href="https://www.aljazeera.com/news/liveblog/2026/4/11/iran-war-live-us-negotiators-due-to-arrive-in-pakistan-for-ceasefire-talks?traffic_source=rss">Iran war live: US negotiators due to arrive in Pakistan for ceasefire talks</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 万斯赴停战谈判，警告伊朗不要“戏弄”美国</h3>
+<ul>
+<li><strong>全景综述</strong>：Vance在出发前往旨在结束战争的谈判时警告伊朗不要戏弄美国。</li>
+<li><strong>核心事实</strong>：Vance在启程参加停战谈判之际警告伊朗不要试图愚弄美国 (信息来源: Associated Press)</li>
+<li><strong>Associated Press视角</strong>：Vance在前往旨在结束战争的谈判途中警告伊朗不要“戏弄”美国 (引述自: Associated Press 报道)</li>
+<li><strong>外部反馈视角</strong>：外部反馈仍需观察，关键变量包括相关国家是否升级军事、制裁、外交或能源安全安排 (引述自: Associated Press 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，为判断地缘格局、谈判空间和政策约束提供了更清晰的事实锚点；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若相关方继续升级行动，冲突、制裁、能源或航运链条的外溢影响可能放大。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Associated Press</strong>: <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNMVFJWTlBTU9Xbm52TXBPQlVfRUEwX2E4MWVMM01WNnBvd3ptck1xUmw4M1pIZGo2Y0pvM0pMMVFRS2M4elZoX1g4SkcxTkc0QVlXcUFBemQ3Y01HellqZWV1WFUyNjQtcWF5NnZSdDdJODcybGpUdDBtYXZnMVBSLXFlMnRmRU9aakt5ZS1XTDV5QkRXbzRN?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Vance warns Iran not to ‘play’ the US as he departs for negotiations aimed at ending the war</a></li>
+</ul>
+</li>
+</ul>
+<h3>4. 黎巴嫩与以色列官员周二将在美会晤</h3>
+<ul>
+<li><strong>全景综述</strong>：黎巴嫩高级官员此前告诉BBC，黎巴嫩只有在停火协议落实的情况下才会参加谈判。</li>
+<li><strong>核心事实</strong>：黎巴嫩和以色列官员将于周二在美国会晤 (信息来源: BBC World News)</li>
+<li><strong>BBC World News视角</strong>：黎巴嫩高级官员此前表示，黎巴嫩仅在停火生效后才会参与谈判 (引述自: BBC World News 报道)</li>
+<li><strong>外部反馈视角</strong>：外部反馈仍需观察，关键变量包括相关国家是否升级军事、制裁、外交或能源安全安排 (引述自: BBC World News 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，为判断地缘格局、谈判空间和政策约束提供了更清晰的事实锚点；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若相关方继续升级行动，冲突、制裁、能源或航运链条的外溢影响可能放大。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>BBC World News</strong>: <a href="https://www.bbc.com/news/articles/c93en5q2zl3o?at_medium=RSS&amp;at_campaign=rss">Lebanon and Israel officials to meet in US on Tuesday</a></li>
+</ul>
+</li>
+</ul>
+<h2>💰 商业与市场 / Business & Markets</h2>
+<h3>1. 伊朗战争冲击美国经济：通胀加剧，消费者信心创新低</h3>
+<ul>
+<li><strong>全景综述</strong>：伊朗战争导致美国通胀加剧，消费者信心降至历史低点。</li>
+<li><strong>核心事实</strong>：伊朗战争冲击美国经济，导致通胀上升及消费者信心创历史新低 (信息来源: Bloomberg)</li>
+<li><strong>Bloomberg视角</strong>：伊朗战争引发美国通胀飙升，消费者信心跌至历史低位 (引述自: Bloomberg 报道)</li>
+<li><strong>市场反馈视角</strong>：市场反馈仍需观察，关键变量包括资产价格、融资条件、需求预期和企业利润指引是否同步调整 (引述自: Bloomberg 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，有助于投资者更快重估资产价格、行业需求和企业盈利预期；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若关键变量未兑现，估值修正、融资条件收紧和波动率上升仍可能继续累积。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxQQVZYUFprQUI1dlZsNTRSZHRCbllhWUlzcVJLSTl4WlBaLWZXUElvam5hWVR5SFlqaUhaN1Q0VmhWV2NPTVZ6ZG83a3VXcGo5bENLZVpTOXJrX1h6T3R2NnhXNjQwc0wwelFyVjNRQ3lyNno4UjJUZDBfNDJ6dFNZNmRyRDNuN3lxQUE0LU1DbU5kUzhhdmVwckRpbkZIRERzSmxxS1Y1WHE3RHBhMEpBbDFJSzZsd0NyT0U1eg?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Iran War Hits US Economy With More Inflation, Record-Low Sentiment</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 伊朗战争致通胀飙升，美国消费者情绪骤降</h3>
+<ul>
+<li><strong>全景综述</strong>：伊朗战争导致通胀飙升，美国消费者情绪大幅下滑。</li>
+<li><strong>核心事实</strong>：伊朗战争致使通胀飙升，美国消费者信心骤降 (信息来源: Associated Press)</li>
+<li><strong>Associated Press视角</strong>：伊朗战争引发通胀飙升，美国消费者情绪降至冰点 (引述自: Associated Press 报道)</li>
+<li><strong>市场反馈视角</strong>：市场反馈仍需观察，关键变量包括资产价格、融资条件、需求预期和企业利润指引是否同步调整 (引述自: Associated Press 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，有助于投资者更快重估资产价格、行业需求和企业盈利预期；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若关键变量未兑现，估值修正、融资条件收紧和波动率上升仍可能继续累积。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Associated Press</strong>: <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxORURCLUppMF9taFNjeVJWZ1RuME5ncWpGalBJZVk2YUNKVkN1bEZBcjk2OEo0cEoyQVNMZFFLNndwMzRnMFpOZXY1WmUyRTNZRXZob3FqSi1tckItVFhoN0FOUFRwNXJFS29QQlVqZ2NmcF8wVzFEUkc2WGNuMUNWZ1huSnJQQ21XZzdSbVlveWVKSFJuTi1LcWF0c2t2WmtXUkhOeA?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">War in Iran sends inflation soaring and the mood of American consumers plunging</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 美联储要求了解美国银行对私人信贷公司的风险敞口</h3>
+<ul>
+<li><strong>全景综述</strong>：美联储寻求美国银行对私人信贷公司风险敞口的详细信息。</li>
+<li><strong>核心事实</strong>：美联储要求获取美国银行在私人信贷领域风险敞口的详细数据 (信息来源: Bloomberg)</li>
+<li><strong>Bloomberg视角</strong>：美联储正调查美国银行对私人信贷公司的风险敞口细节 (引述自: Bloomberg 报道)</li>
+<li><strong>市场反馈视角</strong>：市场反馈仍需观察，关键变量包括资产价格、融资条件、需求预期和企业利润指引是否同步调整 (引述自: Bloomberg 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，有助于投资者更快重估资产价格、行业需求和企业盈利预期；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若关键变量未兑现，估值修正、融资条件收紧和波动率上升仍可能继续累积。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxPY0daRUJTVlZNUjJ5QTB3d0l0T3FrR190UlFDRHdsTkQ3RnNVWWMwZ0FmRkZNR1FfOHVTRGJUTnhxdkE4anZPLUlHdU1yYTRmdDRvMlJqcUdSSm9GcEJLTXZnYVRpQ0J3OGt0Y04tS0VrZzBjM21KYkxON1lPczBMdWFTZU1VSnZtdnd2RlBqSUk3ZzB2LUwwREVjUF9BVnZOVndRMU05YklGdkdKRW4ybTlOWQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Fed Seeks Details on US Banks’ Exposure to Private Credit Firms</a></li>
+</ul>
+</li>
+</ul>
+<h2>🚀 科技与AI / Tech & AI</h2>
+<h3>1. 消息人士：Bessent与鲍威尔就Anthropic模型风险警告银行CEO</h3>
+<ul>
+<li><strong>全景综述</strong>：消息人士称，Bessent和Powell就Anthropic模型的风险向银行首席执行官发出警告。</li>
+<li><strong>核心事实</strong>：据消息人士透露，Bessent与Powell已就Anthropic模型风险提醒银行高管 (信息来源: Reuters)</li>
+<li><strong>Reuters视角</strong>：消息称Bessent和Powell已向多家银行CEO警告Anthropic模型的潜在风险 (引述自: Reuters 报道)</li>
+<li><strong>行业反馈视角</strong>：行业反馈仍需观察，关键变量包括算力供给、监管压力、客户采用速度和竞争对手跟进节奏 (引述自: Bloomberg 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：多源交叉报道提高了事件方向的可验证性，有助于判断技术部署、商业化路径和产业链协同的下一步节奏；劣势（风险）：若算力、监管、成本或客户采用速度受限，落地节奏仍可能低于预期。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMizgFBVV95cUxOQ05ad1ZkdnNrcEhEMklEalc0TVBmWlppMzkxQlZxQVBpbUp1Nlk1STVqUm51WDI5QnYxS1BleDFONDZwTmR2Tlc4OGl3WGU2US0zVUhhVUQ0Zk5yYlFEV1g2M1ByNy1jUTVSTTRSYjhwUU9XU0lsRHY0V2tjbXNGX1dwUlFJZUV6UkRoang1TW5IbllaTTcycmRDV0ZNYnNQRnRFUWhybVNuVHMtdFdyX0tTLUN4Q1cwYTFPU3BPRG5UeGI4UTJZMXpBc25uZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bessent, Powell warned bank CEOs about Anthropic model risks, sources say</a></li>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMivwFBVV95cUxOS1ZrTS1hRzgwMlRWMXY4YXBNcVhzVUI0WUI1aTZZMEFCbk1KcTNQZG03alU2b3p3Vl9BMTNyNVk2X09ZeXFFa1B3c1JFS3JVbkwyWDgyX2FqRjhoVVNtaklmbUtlTWNmbjJUTko5YXh6MmdGcV9qMVFJQU1abmRvSVZuNUZVN1dzeWRJMHAzSWY2Z3JZUGJZcUE2cWx3U3NRSnI1Wlp5N3ZjdVlTSm5SXy1fTDgyQV9PYWE3U1QxWQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Anthropic Model Scare Sparks Urgent Bessent, Powell Warning to Bank CEOs</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 消息人士：美国家网络总监Sean Cairncross正领导排查AI可能利用的基础设施漏洞</h3>
+<ul>
+<li><strong>全景综述</strong>：消息人士称，美国国家网络总监Sean Cairncross正领导一项识别安全漏洞的工作。</li>
+<li><strong>核心事实</strong>：消息人士称，美国国家网络总监Sean Cairncross正牵头识别AI可能利用的关键基础设施安全漏洞 (信息来源: WSJ)</li>
+<li><strong>WSJ视角</strong>：美国国家网络总监 Sean Cairncross 正领导一项识别安全漏洞的行动 (引述自: WSJ 报道)</li>
+<li><strong>行业反馈视角</strong>：行业反馈仍需观察，关键变量包括算力供给、监管压力、客户采用速度和竞争对手跟进节奏 (引述自: WSJ 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，有助于判断技术部署、商业化路径和产业链协同的下一步节奏；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若算力、监管、成本或客户采用速度受限，落地节奏仍可能低于预期。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>WSJ</strong>: <a href="http://www.techmeme.com/260410/p31#a260410p31">Sources: US National Cyber Director Sean Cairncross is leading an effort to identify security vulnerabilities in critical infrastructure that AI could exploit</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 美国敦促开展测试，华尔街银行试用Anthropic的Mythos模型</h3>
+<ul>
+<li><strong>全景综述</strong>：彭博社报道称，在美国政府的敦促下，华尔街银行正开始试用 Anthropic 的 Mythos 模型。</li>
+<li><strong>核心事实</strong>：华尔街银行在美国政府的敦促下开始测试 Anthropic 的 Mythos 模型 (信息来源: Bloomberg)</li>
+<li><strong>Bloomberg视角</strong>：华尔街银行正响应美国政府的号召，开始试用 Anthropic 的 Mythos 模型 (引述自: Bloomberg 报道)</li>
+<li><strong>行业反馈视角</strong>：行业反馈仍需观察，关键变量包括算力供给、监管压力、客户采用速度和竞争对手跟进节奏 (引述自: Bloomberg 报道)</li>
+<li><strong>AI推演</strong>：优势（机会）：该报道提供了早期线索，有助于判断技术部署、商业化路径和产业链协同的下一步节奏；劣势（风险）：目前仍属单源线索，需等待更多交叉报道确认；若算力、监管、成本或客户采用速度受限，落地节奏仍可能低于预期。</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOVFJKeVE4WFdVc2dSUGNpa0pZOUNHcmdJS0ZHRFhZQk92aWJFWkdmczQxTXFlNU5sSHJIVTVPR1pFNEhXalNrb2RQcVVuRElncVVrQTZIY1huak8tckpsX0ZkWVZWckhhVW5SVkdSUGoxcTFJNldGMk9wOGVqaGc0YnRhSTh3LWJBdFEyWUl2ZHNnT1lpa2pwbHFMVHIyYXV2VzctbkdmQnlpYnE1R1BZNVFuZW9kdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Wall Street Banks Try Out Anthropic’s Mythos as US Urges Testing</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>今日回响</strong></p>
+<h3>《Songs for Drella》</h3>
+<blockquote>
+<p><strong>Lou Reed John Cale</strong> · 1990-04-11 · Album Rock / Art Rock / Experimental</p>
+<p><strong>编辑推荐 / Editor's Notes：</strong><br />
+AllMusic 将《Songs for Drella》归入 Pop/Rock，并标注 Album Rock / Art Rock / Experimental 等风格；Wikipedia 将其界定为 Lou Reed John Cale 的一张录音室专辑；Wikidata 关联的发行厂牌包括 Sire；首发日期 1990-04-11 已由 Wikidata / MusicBrainz 交叉验证。</p>
+</blockquote>
+</div>
+</body>
+</html>

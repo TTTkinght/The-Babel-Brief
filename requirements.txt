@@ -2,3 +2,8 @@ google-generativeai
 feedparser
 markdown
 python-dotenv
+requests
+fastapi
+uvicorn
+beautifulsoup4
+PySocks

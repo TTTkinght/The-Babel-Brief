@@ -1,0 +1,55 @@
+name: The Babel Brief
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate brief
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          BRIEF_TIMEZONE: Asia/Shanghai
+          SKIP_NETWORK_PREFLIGHT: "1"
+          ALLOW_ENV_PROXY: "0"
+        run: python main.py
+
+      - name: Build static site
+        run: python build.py
+
+      - name: Commit generated files
+        run: |
+          git config user.name "babel-bot"
+          git config user.email "bot@babel-brief"
+          git add archives/ docs/
+          if ! git diff --cached --quiet; then
+            git commit -m "brief: $(date +'%Y-%m-%d')"
+            git push
+          fi

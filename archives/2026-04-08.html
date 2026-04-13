@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>The Babel Brief</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+:root {
+    color-scheme: light;
+    --black: #F5F5F5;
+    --surface: #FFFFFF;
+    --surface-raised: #F0F0F0;
+    --border: #E8E8E8;
+    --border-visible: #CCCCCC;
+    --text-disabled: #999999;
+    --text-secondary: #666666;
+    --text-primary: #1A1A1A;
+    --text-display: #000000;
+    --accent: #D71921;
+    --interactive: var(--text-display);
+    --display-md: 2.25rem;
+    --heading: 1.5rem;
+    --subheading: 1.125rem;
+    --body: 1rem;
+    --caption: 0.75rem;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    --space-4xl: 96px;
+}
+* {
+    box-sizing: border-box;
+    letter-spacing: 0;
+}
+body {
+    margin: 0;
+    padding: var(--space-3xl) var(--space-lg);
+    background: var(--black);
+    color: var(--text-primary);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.5;
+}
+.email-container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+.hero {
+    margin: 0 0 var(--space-3xl);
+}
+.hero img {
+    width: 100%;
+    display: block;
+    border-radius: 0;
+}
+h1 {
+    margin: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
+    border-bottom: 1px solid var(--border-visible);
+    color: var(--text-display);
+    font-size: var(--display-md);
+    line-height: 1.1;
+    font-weight: 700;
+}
+h2 {
+    margin: var(--space-3xl) 0 var(--space-lg);
+    padding: var(--space-md) 0 0;
+    border-top: 1px solid var(--border-visible);
+    border-left: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.2;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+h3 {
+    margin: var(--space-xl) 0 var(--space-md);
+    color: var(--text-display);
+    font-size: var(--subheading);
+    line-height: 1.3;
+    font-weight: 700;
+}
+p {
+    margin: 0 0 var(--space-md);
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.6;
+}
+.history-note {
+    margin: 0 0 var(--space-xl);
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.5;
+}
+.history-label {
+    color: var(--text-display);
+    font-weight: 700;
+}
+ul {
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+li {
+    margin: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.6;
+}
+ul ul {
+    margin-top: var(--space-sm);
+    margin-bottom: 0;
+    padding-left: var(--space-lg);
+    border-top: 1px solid var(--border);
+}
+blockquote {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md);
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-primary);
+}
+a {
+    color: var(--interactive);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+}
+a:hover {
+    color: var(--text-display);
+    border-bottom-color: var(--text-display);
+}
+strong {
+    color: var(--text-display);
+    font-weight: 700;
+}
+code {
+    padding: 1px 4px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+}
+hr {
+    border: 0;
+    border-top: 1px solid var(--border-visible);
+    margin: var(--space-3xl) 0;
+}
+@media (max-width: 640px) {
+    body {
+        padding: var(--space-2xl) var(--space-md);
+    }
+    h1 {
+        font-size: var(--heading);
+        margin-bottom: var(--space-xl);
+    }
+    h2 {
+        margin-top: var(--space-2xl);
+    }
+}
+</style>
+</head>
+<body>
+<div class="email-container">
+
+<p class="history-note"><span class="history-label">历史上的今天（2024年）</span>：一场壮观的全日食在月球升交点处发生，全食带横跨北美洲。此次天文奇观覆盖了墨西哥、美国和加拿大的广大地区，吸引了数千万民众观测，成为近年来北美最受关注的科学与文化盛事之一。该事件不仅为日冕研究提供了宝贵数据，也显著带动了观测沿线地区的旅游与消费。 —— <a href="https://en.wikipedia.org/wiki/Solar_eclipse_of_April_8%2C_2024">来源: Wikipedia</a></p>
+
+<hr />
+<h2>【Quick Hits】</h2>
+<ul>
+<li>🚨 <code>[独家重磅]</code> <strong>伊朗战争推动俄罗斯油价创13年新高</strong>：伊朗战争推升俄罗斯石油价格至13年新高。（<a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNZXdTZ21zQ3dWSDVHRHVpNTNDcVh5LUtha01nN3M3R1JWT0lEWDlvdGUtbHlrVEFCUURSX0t0THJnWFd2ZEF2TmxIUXZqVElIazFNOVZBWEs0d0U2d0swbkhvbkN3cVFvUzRGRjZUUmswd3VGVGhGQ2VWZk5hQjE5S0xuT1BsV2EySjE5c2ltTTUtcVhOREMyMmFrc240b0RDejE1RUlvQXAzZw?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">来源: Bloomberg</a>）</li>
+</ul>
+<h2>🇨🇳【中国与世界 / China &amp; The World】</h2>
+<h3>1. 中俄否决安理会关于霍尔木兹海峡的决议</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：中俄否决了联合国安理会关于霍尔木兹海峡的决议。</li>
+<li>📌 <strong>核心事实</strong>：中俄否决了联合国安理会关于霍尔木兹海峡的决议 (信息来源: Bloomberg)</li>
+<li>🔴 <strong>直接相关方视角</strong>：中俄否决了联合国安理会关于霍尔木兹海峡的决议。</li>
+<li>🔵 <strong>外部回应视角</strong>：该事件的市场与政策反馈仍在形成，后续影响需结合新增报道继续观察。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxNNjJLdGJIV0JiYmNxMmdGWmUxOS1BS1E4QWgtbEVEVkI2bDRCMkdqMXhCc1RobWtMOHAwOVVuZXNNdG4tS3FseEFZSGVsNDVhZXl6Si01U2dXdnNwelJkdU5FVlNzR2tfTVhsZ011OVdaWjJUV0txT2ZxbWJfVWFhRVNNMy1RNkVxZ2pUMnJWVnJFaXlsaF84blJEN0NabzNUYVl3bXNzUURJWEVaREF3?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">China and Russia Veto Security Council Resolution on Hormuz</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 中俄否决联合国关于保护霍尔木兹海峡航运的决议</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：中俄否决了联合国关于保护霍尔木兹海峡航运的决议。</li>
+<li>📌 <strong>核心事实</strong>：中俄否决了联合国关于保护霍尔木兹海峡航运的决议 (信息来源: Reuters)</li>
+<li>🔴 <strong>直接相关方视角</strong>：中俄否决了联合国关于保护霍尔木兹海峡航运的决议。</li>
+<li>🔵 <strong>外部回应视角</strong>：围绕该事件的进一步市场与政策反馈仍在形成，后续影响需结合新增交叉报道继续观察 (引述自: Reuters 报道)</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxQZnQ3VEVjeTRWSWZFNWtTSjUwenM1dGFlaW95Q3pmcUxackF0ZlBYTkdUeEZ4QWROdGpDbGpPb2Q4VFdWeW1hV0w2U1cxaW82ZXNIMU82U3J2V0VOMk1XRndMQzlfMmVBbmpORFFvdWF6R094THE0bGk2cXl4Z0hqUTVDM01sQ09XOG83QXVvOTByRzBMaW9jOHZycTFMZmVOb29B?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">China and Russia veto UN resolution on protecting Hormuz shipping</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 美国国会计划进一步限制对华出口，ASML股价下跌</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：受美国国会计划进一步限制对华出口影响，ASML股价下跌。</li>
+<li>📌 <strong>核心事实</strong>：受美国国会计划进一步限制对华出口影响，ASML股价下跌 (信息来源: Reuters)</li>
+<li>🔴 <strong>直接相关方视角</strong>：受美国国会计划进一步限制对华出口影响，ASML股价下跌。</li>
+<li>🔵 <strong>外部回应视角</strong>：围绕该事件的进一步市场与政策反馈仍在形成，后续影响需结合新增交叉报道继续观察 (引述自: Reuters 报道)</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOWTBNV0hCbnE5TnlQNWhPTm9jNDJfN2hib1ViLWhmU0ZzckwxdWRJUmRPcnc5TGN2RjR5NW1DQ2dyYUpOTlVKWkQyR19raWc2UzJGcHliVEZfYTNsTFQ5ai1vOFRhajg4a1ktdDB4ZUpkSE40YWoxUWtKdU1ab0x3cmRZeVh4UWd2T0t0Vjd0WmI0cmk1OW5reXBFaVV1bW5GcncySzNxNkkwSDJZNU01elF3?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">ASML shares fall on US Congress plan to further restrict China exports</a></li>
+</ul>
+</li>
+</ul>
+<h3>4. 美国拟议出口管制针对脆弱的中国市场，ASML股价下跌</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：美国拟议的出口管制针对已处于脆弱状态的市场，导致ASML股价下跌。</li>
+<li>📌 <strong>核心事实</strong>：美国拟议的出口管制针对已处于脆弱状态的市场，导致ASML股价下跌 (信息来源: CNBC)</li>
+<li>🔴 <strong>直接相关方视角</strong>：美国拟议的出口管制针对已处于脆弱状态的市场，导致ASML股价下跌。</li>
+<li>🔵 <strong>外部回应视角</strong>：围绕该事件的进一步市场与政策反馈仍在形成，后续影响需结合新增交叉报道继续观察 (引述自: CNBC 报道)</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>CNBC</strong>: <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxPWXgtX3g2Qjgzb3M2NlZ6NTRxTjlXXzVfSE1iS2YzWTFleW5zakgtZ0tMbmpuZVAydWMyYzZnS1JpWlZEa2RLeldvMVZaZU8yak1iZ2FTOUk2WEZvbndoc1pFZEdBOGthOVhpalBOUzFENmxQeXY3MUxob2tNOGlwVHU4VFlQVXU00gGOAUFVX3lxTE5CR25aOTYtQndhaFhwV0xUWXp4RjBnQlU2THFKc2RjbmNTS08zVzg0UzRsbFJXTVNkTlllcDR0cUZSM2lhZzZETVVzNW96VTVsNUxlSW5xR0VXcERTcEF5MXZzNlItYzE3aC1rZDRxazNoQ3ZuOXhaS05nZXFYUTJFdHRidzJzOTFSUWhWYUE?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">ASML shares fall after proposed U.S. export curbs target an already fragile China market</a></li>
+</ul>
+</li>
+</ul>
+<h2>🌍【全球局势 / Global Affairs】</h2>
+<h3>1. 伊朗战争推动俄罗斯油价创13年新高</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：伊朗战争推动俄罗斯油价升至13年来的高点。</li>
+<li>📌 <strong>核心事实</strong>：伊朗战争推动俄罗斯油价升至13年来的高点 (信息来源: Bloomberg)</li>
+<li>🔴 <strong>直接相关方视角</strong>：伊朗战争推动俄罗斯油价升至13年来的高点。</li>
+<li>🔵 <strong>外部反馈视角</strong>：该事件的市场与政策反馈仍在形成，后续影响需结合新增报道继续观察。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNZXdTZ21zQ3dWSDVHRHVpNTNDcVh5LUtha01nN3M3R1JWT0lEWDlvdGUtbHlrVEFCUURSX0t0THJnWFd2ZEF2TmxIUXZqVElIazFNOVZBWEs0d0U2d0swbkhvbkN3cVFvUzRGRjZUUmswd3VGVGhGQ2VWZk5hQjE5S0xuT1BsV2EySjE5c2ltTTUtcVhOREMyMmFrc240b0RDejE1RUlvQXAzZw?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">War in Iran Drives Russian Oil Prices to a 13-Year High</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 消息人士：美伊谈判仍在继续，但沙特遭袭或使努力受挫</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：美伊谈判仍在进行，但针对沙特阿拉伯的袭击可能使这一努力受挫。</li>
+<li>📌 <strong>核心事实</strong>：美伊谈判仍在进行，但针对沙特阿拉伯的袭击可能会破坏这一努力 (信息来源: Reuters)</li>
+<li>🔴 <strong>直接相关方视角</strong>：美伊谈判仍在进行，但针对沙特阿拉伯的袭击可能会破坏这一努力。</li>
+<li>🔵 <strong>外部反馈视角</strong>：围绕该事件的进一步市场与政策反馈仍在形成，后续影响需结合新增交叉报道继续观察 (引述自: Reuters 报道)</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMiwwFBVV95cUxPMHlxMUhLSmtud0VaTFRhZWNqYTN3YjA4UHlkeDB6dl9DS241NElqck52eElVb0g3emxQT3FjcTB6NUlIRldIUzI0UHB1SnVhUmI4R3I0RHFJYWNWTWRBSmRvUTdwZkJOU3VTUmIxVVV5bDRfUnlFZm96Y2dNRW1hQkdnd1dtcG82NzNTVGdxcjdEOVplMVVISkJhS3FSazJndTFTemdxTXRvaHViTzF5aENWelpxTUNDb3M3YkhFOW1LWms?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">US-Iran talks continuing, but strikes on Saudi Arabia may derail effort, say sources</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 伊朗袭击后沙特一工业区附近发生火灾</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：疑似伊朗导弹袭击导致一处工业区附近发生大火。</li>
+<li>📌 <strong>核心事实</strong>：疑似伊朗导弹袭击导致一处工业区附近发生大火 (信息来源: Al Jazeera)</li>
+<li>🔴 <strong>直接相关方视角</strong>：疑似伊朗导弹袭击导致一处工业区附近发生大火。</li>
+<li>🔵 <strong>外部反馈视角</strong>：伊朗袭击导致沙特阿拉伯一处工业区附近发生火灾。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Al Jazeera</strong>: <a href="https://www.aljazeera.com/video/newsfeed/2026/4/7/fire-erupts-near-industrial-site-in-saudi-arabia-after-iranian-strikes?traffic_source=rss">Fire erupts near industrial site in Saudi Arabia after Iranian strikes</a></li>
+</ul>
+</li>
+</ul>
+<h3>4. JD Vance访问布达佩斯支持欧尔班连任并抨击欧盟</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：美国副总统 JD Vance 介入竞选活动，对 Orbán 表示强烈支持。</li>
+<li>📌 <strong>核心事实</strong>：美国副总统 JD Vance 介入竞选活动，对 Orbán 表示强烈支持 (信息来源: BBC World News)</li>
+<li>🔴 <strong>直接相关方视角</strong>：美国副总统 JD Vance 介入竞选活动，对 Orbán 表示强烈支持。</li>
+<li>🔵 <strong>外部反馈视角</strong>：JD Vance 在访问布达佩斯期间支持 Orbán 连任并抨击欧盟。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>BBC World News</strong>: <a href="https://www.bbc.com/news/articles/cyv16lq2rp1o?at_medium=RSS&amp;at_campaign=rss">JD Vance backs Orbán's re-election bid in Budapest visit and hits out at EU</a></li>
+</ul>
+</li>
+</ul>
+<h2>📈【商业与市场 / Business &amp; Markets】</h2>
+<h3>1. 霍尔木兹危机恶化，原油现货价格逼近每桶150美元创历史新高</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：随着霍尔木兹海峡危机加剧，实物原油价格创下每桶近 150 美元的历史新高。</li>
+<li>📌 <strong>核心事实</strong>：随着霍尔木兹海峡危机加剧，实物原油价格创下每桶近 150 美元的历史新高 (信息来源: Reuters)</li>
+<li>🔴 <strong>公司/政策方视角</strong>：随着霍尔木兹海峡危机加剧，实物原油价格创下每桶近 150 美元的历史新高。</li>
+<li>🔵 <strong>市场反馈视角</strong>：围绕该事件的进一步市场与政策反馈仍在形成，后续影响需结合新增交叉报道继续观察 (引述自: Reuters 报道)</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMixAFBVV95cUxOZFpWRERLbXFJcjA1YWtGb1AxUTBPUnNOQ0ZiMUZJYjdOTkN1S3lIbklodktvOUlfRkpHZHZ2dlFMcF9WdlBzRTlLcDRQUXFEUmZKcmY1aEFGcTJqcm1SNjRjRWo2WktxdWlZQXNnS2RGSlZNdEtCOG9HUGlnWl9zNTZGWld1VVdkdG8tV3BYcUFuelgxZmtCMUpJVFRuZUdaMjZ6dDJ3MG5EWk1YeW51d2hZV3c2UFdaU3B5dndKOUtkb0Nl?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">Physical oil prices hit record highs near $150 a barrel as Hormuz crisis worsens</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 特朗普对伊最后期限临近，油价波动且美股下跌</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：在特朗普设定的伊朗问题期限前，油价出现波动且美股下跌。</li>
+<li>📌 <strong>核心事实</strong>：在特朗普设定的伊朗问题期限前，油价出现波动且美股下跌 (信息来源: Associated Press)</li>
+<li>🔴 <strong>公司/政策方视角</strong>：在特朗普设定的伊朗问题期限前，油价出现波动且美股下跌。</li>
+<li>🔵 <strong>市场反馈视角</strong>：围绕该事件的市场与政策反馈仍在形成，后续影响需结合交叉报道持续观察。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Associated Press</strong>: <a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxNS3NCMV8tLUN3cjVoTmlJdmVHYTFqdjVWU3ExRF9LZ1dPeWVwZFNnRnRsbXBiNmpqWm9IZm9ZYVNpZ1VNelFlajZCZng2STdxRFlOdzJnQ2FkcEE3cmhWenEwa2JUampQcWVNSTA1Tkc2UHhiVTExZGlVNFRhZU5lOGg3MzhrSnc4QlJuZWZYRQ?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">Oil prices waver and US stocks fall ahead of Trump’s deadline for Iran</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. Vance访问匈牙利期间表示将“助力”欧尔班竞选</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：Vance 在访问匈牙利期间表示将为 Orbán 的竞选活动提供帮助。</li>
+<li>📌 <strong>核心事实</strong>：Vance在访问匈牙利期间表示将助力Orbán的竞选活动 (信息来源: Associated Press)</li>
+<li>🔴 <strong>公司/政策方视角</strong>：Vance在访问匈牙利时表示将支持Orbán的竞选。</li>
+<li>🔵 <strong>市场反馈视角</strong>：围绕该事件的市场与政策反馈仍在形成，后续影响需结合新增报道继续观察。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Associated Press</strong>: <a href="https://news.google.com/rss/articles/CBMiogFBVV95cUxPME1uRVdra3ltWS05NmRydFNwRTViUms4ak1KZFp6OE1Xb0lSZFNJWG1obmFzNnJEb2FWaEt4dFJYVjFqdk5BOWJOdlZybjV6OFdpSGdWODFDWHFCbEVjUGFLQllLNnlLLUdUWVRSbmtqUW82dXN3djZoN2JqSXJHNk5rNDhDWGRQMDE5VnVHbW5JOUxjZUNuQlFQazNPNGF1OGc?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">Vance says he’s ‘here to help’ Orbán’s election campaign during Hungary visit</a></li>
+</ul>
+</li>
+</ul>
+<h2>🚀【科技与AI / Tech &amp; AI】</h2>
+<h3>1. Intel宣布加入马斯克Terafab AI芯片工厂项目，与SpaceX、xAI及Tesla合作生产机器人与数据中心处理器</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：Intel宣布将加入Elon Musk的Terafab AI芯片综合体项目。</li>
+<li>📌 <strong>核心事实</strong>：Intel表示将参与Elon Musk的Terafab AI芯片项目 (信息来源: Reuters)</li>
+<li>🔴 <strong>公司/技术方视角</strong>：Intel宣布将加入Elon Musk的Terafab AI芯片项目。</li>
+<li>🔵 <strong>行业反馈视角</strong>：Intel表示将与Elon Musk合作开展Terafab AI芯片项目。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="http://www.techmeme.com/260407/p28#a260407p28">Intel says it will join Elon Musk's Terafab AI chip complex project along with SpaceX, xAI, and Tesla to help produce processors for robotics and data centers</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. Vance因支持欧尔班与欧洲发生争执</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：Vance因在投票背书中支持Orbán而与欧洲引发争端。</li>
+<li>📌 <strong>核心事实</strong>：Vance在支持Orbán的过程中与欧洲产生分歧 (信息来源: Bloomberg)</li>
+<li>🔴 <strong>公司/技术方视角</strong>：Vance因公开支持Orbán而与欧洲陷入争执。</li>
+<li>🔵 <strong>行业反馈视角</strong>：围绕该事件的市场与政策反馈仍在形成，后续影响需结合新增报道继续观察。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOUFQtTzBGakRKMlNmbHVFUDFqbnRTMkNNNjJqbWZGNndDRmZGUlFsU3hhNUp4Z1NsVFhHODl6N0g0Mng4R3dvQjg1Yjk3cWxvWEh0a0J1RFhBRmVXQnh5ampBaHVYdDF0aGk0M2xRTzVKQm40dmZBN1VLN3Z4TURuWlp2LUZsa0twR1ppRjlXVXliVXh2b1hLT0tBN3h5ZERoMG0zV09YWlJXMDM4ZlNSM0RaUTlSQQ?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">Vance Picks Fight With Europe Over Orban in Vote Endorsement</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 罗氏与NVIDIA部署制药行业最大的人工智能工厂</h3>
+<ul>
+<li>📰 <strong>全景综述</strong>：Roche与NVIDIA部署制药行业规模最大的人工智能系统。</li>
+<li>📌 <strong>核心事实</strong>：Roche与NVIDIA合作部署制药领域最大的人工智能应用 (信息来源: 2 Minute Medicine)</li>
+<li>🔴 <strong>公司/技术方视角</strong>：Roche与NVIDIA部署制药行业内规模最大的人工智能项目。</li>
+<li>🔵 <strong>行业反馈视角</strong>：围绕该事件的市场与政策反馈仍在形成，后续影响需结合新增报道继续观察。</li>
+<li>⚖️ <strong>客观共识与风险推演</strong>：[AI 推演]</li>
+<li>🔗 <strong>溯源印证</strong>：<ul>
+<li><strong>2 Minute Medicine</strong>: <a href="https://news.google.com/rss/articles/CBMiwwFBVV95cUxQd2Jud0dUNkRwQ29KSW5fUnJKZS1qZDlEeDFGSGF5Vl8tb1JrdjJCNzEwRlNINHI5c21yU0FPRjZfUngwMUt2THgxaVNDYldkLWxrbEc1QTJTc3RwVGFvTktEaDJqa1BsVkRKUWNnZ0FUdmpSR3dkb2dOcnlLZ1BMSmFaVmJtc0xhSWVIalZ5UVhOOHUyRWJFSHpza0FMWWtHalptTkoxbnRhZFdsUDdOQkpUaWRTUjZ5QTRRMC1vZmJLSXM?oc=5&amp;hl=en-SG&amp;gl=SG&amp;ceid=SG:en">Roche and NVIDIA deploy the pharmaceutical industry’s largest artificial intelligence factory</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<p>🎵 <strong>今日回响</strong></p>
+<h3>《Crash! Boom! Bang!》</h3>
+<blockquote>
+<p>🎤 <strong>Roxette</strong> · 📅 1994-04-08 · 💽 流行 / 摇滚</p>
+<p><strong>📝 编辑推荐 / Editor's Notes：</strong><br />
+《Crash! Boom! Bang!》的首发日期与今天同月同日，已综合 MusicBrainz / Wikidata 交叉验证。这张作品在其所属风格中具备稳定的历史地位与持续讨论度，适合作为当天的音乐史回响。本期在保证日期准确的前提下，优先采用外部元数据与权威音乐资料完成快速校验。</p>
+</blockquote>
+</div>
+</body>
+</html>
