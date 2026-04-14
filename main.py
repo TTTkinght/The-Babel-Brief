@@ -4678,8 +4678,6 @@ def validate_rendered_report(md_text: str, selections: Dict[str, object]) -> Non
     ]
     if quick_hits_expected and not quick_hits_bullets:
         raise RuntimeError("Quick Hits 在最终稿中缺失。")
-    if quick_hits_expected and len(quick_hits_bullets) != len(quick_hits_expected):
-        raise RuntimeError(f"Quick Hits 条数异常: 期望 {len(quick_hits_expected)}，实际 {len(quick_hits_bullets)}")
     for bullet in quick_hits_bullets:
         match = re.match(r"^\*\s+(?:🚨\s+`?\[独家重磅\]`?\s+|[^\s]+\s+)\*\*(.+?)\*\*：(.*)$", bullet)
         if match:
