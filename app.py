@@ -50,8 +50,8 @@ MONTH_NAMES = {
 
 BACK_LINK_HTML = """
 <div class="brief-backbar">
-    <a class="brief-brand" href="/">The Babel Brief</a>
-    <a class="brief-back-link" href="/">&lt; back</a>
+    <a class="brief-brand" href="../">The Babel Brief</a>
+    <a class="brief-back-link" href="../">&lt; back</a>
     <button class="theme-toggle" type="button" data-theme-toggle>[ DARK ]</button>
 </div>
 """
@@ -1218,7 +1218,7 @@ def render_archive_row(entry: ArchiveEntry, today: Date, index: int) -> str:
     today_label = '<span class="today-label">Today</span>' if entry.archive_date == today else ""
     row_delay = min(index, 10) * 35 + 120
 
-    return f"""<a class="archive-item" href="/archives/{archive_date}" style="--row-delay: {row_delay}ms">
+    return f"""<a class="archive-item" href="archives/{archive_date}.html" style="--row-delay: {row_delay}ms">
     <span class="item-index">{index:02d}</span>
     <div class="date-block" aria-label="{escape(archive_date)}">
         <span class="day">{entry.archive_date.day}</span>
