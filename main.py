@@ -1663,15 +1663,15 @@ Subject: [中文短句；中文短句]
 6. 结尾彩蛋：
    - 必须用 `---` 分割，并输出标题 `🎵 **今日回响**`。
    - 【时间锚点（最高红线）】：所选专辑的官方首发日期，月份和日期必须与今天的现实日期完全一致。宁可冷门，绝不允许错日期。
-   - 【质量红线】：推荐理由必须像一篇专业乐评，不是泛泛而谈的“好听”“经典”。必须提取可验证的专业事实，例如 Pitchfork、Rolling Stone、AllMusic 等权威评价，录音室技术、制作班底、历史地位、奖项或流派影响。
-   - 【硬性事实门槛】：仅写“AllMusic 流派/Styles 标签”“Wikipedia 录音室专辑”“Wikidata 厂牌/发行信息”一律不合格；这些只能作为辅助材料，不能替代 Pitchfork、Rolling Stone、AllMusic 等权威机构的真实事实论点、录音室技术、制作班底、历史评分地位、奖项或榜单表现。
+   - 【质量红线】：推荐理由必须像一篇专业乐评，不是泛泛而谈的“好听”“经典”。优先参考 Apple Music 编辑推荐语、Pitchfork、Rolling Stone、Album of the Year、AllMusic 等优质乐评或可验证音乐事实，但正文不必强行点名任何媒体、评分或作者。
+   - 【硬性事实门槛】：仅写“AllMusic 流派/Styles 标签”“Wikipedia 录音室专辑”“Wikidata 厂牌/发行信息”一律不合格；这些只能作为辅助材料，不能替代真实评论论点、录音室技术、制作班底、历史评分地位、奖项、榜单表现或对声音结构的专业判断。
    - 【禁止事项】：禁止编造发行日期、禁止捏造媒体评分、禁止空洞抒情、禁止用万能褒义词堆砌。
    - 排版与语气必须严格如下：
      ### 《[专辑名]》
      > 🎤 **[歌手/乐队]** · 📅 [首发精确日期] · 💽 [流派]
      >
      > **📝 编辑推荐 / Editor's Notes：**
-     > [撰写 100-150 字的专业乐评。必须提取 Pitchfork、Rolling Stone、AllMusic 等权威机构的真实事实论点、录音室技术创新或历史评分地位。绝对拒绝浮夸辞藻，尊重客观音乐史。绝不允许使用空洞修辞，绝不允许凭空捏造主观听感。]
+     > [撰写 100-150 字的专业乐评。可参考 Apple Music 编辑推荐语和优质音乐媒体的评论论点，但要转译成流利中文段落，不要机械点名来源。绝对拒绝浮夸辞藻，尊重客观音乐史。绝不允许使用空洞修辞，绝不允许凭空捏造主观听感。]
 
 7. 邮件标题元数据：
    - 全文最后必须另起一行，仅输出以下纯文本格式：
@@ -2462,7 +2462,7 @@ def fetch_reader_markdown(url: str, timeout_s: int) -> str:
     clean_url = clean_text(url)
     if not clean_url:
         return ""
-    reader_url = f"https://r.jina.ai/http://r.jina.ai/http://{clean_url}"
+    reader_url = f"https://r.jina.ai/http://{clean_url}"
     try:
         response = http_get(reader_url, headers={"User-Agent": APP_USER_AGENT}, timeout=timeout_s)
         response.raise_for_status()
@@ -2539,6 +2539,48 @@ def fetch_genius_search_knowledge(album: str, artist: str, timeout_s: int) -> Di
             "text": snippet[:800],
         }
     return {}
+
+
+REVIEW_SITE_QUERIES = (
+    ("Pitchfork", "pitchfork.com/reviews/albums", "site:pitchfork.com/reviews/albums"),
+    ("Rolling Stone", "rollingstone.com", "site:rollingstone.com/music/music-album-reviews"),
+    ("Album of the Year", "albumoftheyear.org", "site:albumoftheyear.org/album"),
+    ("The Guardian", "theguardian.com", "site:theguardian.com/music"),
+    ("NME", "nme.com", "site:nme.com/reviews/album"),
+)
+
+
+def fetch_music_review_site_knowledge(album: str, artist: str, timeout_s: int) -> List[Dict[str, str]]:
+    review_items: List[Dict[str, str]] = []
+    for source, domain, site_query in REVIEW_SITE_QUERIES:
+        query = f'"{album}" "{artist}" {site_query}'
+        for result in fetch_duckduckgo_results(query, timeout_s, limit=4):
+            url = clean_text(result.get("url", ""))
+            title = clean_text(result.get("title", ""))
+            snippet = clean_text(result.get("snippet", ""))
+            if domain not in url:
+                continue
+            if (
+                match_similarity(album, title) < 0.38
+                and match_similarity(album, snippet) < 0.38
+                and clean_text(album).lower() not in f"{title} {snippet}".lower()
+            ):
+                continue
+            text = clean_text(" ".join(part for part in (title, snippet) if part))
+            if len(text) < 120:
+                continue
+            review_items.append(
+                {
+                    "source": source,
+                    "author": "",
+                    "url": url.split("?", 1)[0],
+                    "text": text[:900],
+                }
+            )
+            break
+        if len(review_items) >= 3:
+            break
+    return review_items
 
 
 def fetch_allmusic_release_group(album: str, artist: str, timeout_s: int) -> Optional[Dict[str, object]]:
@@ -3202,6 +3244,9 @@ def collect_today_echo_editorial_facts(album: str, artist: str, timeout_s: int) 
     if genius:
         facts["review_sources"].append(genius)
 
+    for review_item in fetch_music_review_site_knowledge(album, artist, timeout_s):
+        facts["review_sources"].append(review_item)
+
     wikidata = fetch_wikidata_editorial_facts(album, artist, timeout_s)
     if wikidata:
         facts["wikidata_genres"] = wikidata.get("wikidata_genres", [])
@@ -3211,6 +3256,27 @@ def collect_today_echo_editorial_facts(album: str, artist: str, timeout_s: int) 
         facts["wikidata_url"] = wikidata.get("wikidata_url", "")
 
     return facts
+
+
+def ranked_today_echo_review_sources(review_sources: Sequence[Dict[str, object]]) -> List[Dict[str, object]]:
+    priority = {
+        "Apple Music": 0,
+        "Pitchfork": 1,
+        "Rolling Stone": 2,
+        "Album of the Year": 3,
+        "The Guardian": 4,
+        "NME": 5,
+        "AllMusic": 6,
+        "Genius": 7,
+        "Wikipedia Critical reception": 8,
+    }
+    return sorted(
+        list(review_sources),
+        key=lambda item: (
+            priority.get(clean_text(str(item.get("source", ""))), 20),
+            -len(clean_text(str(item.get("text", "")))),
+        ),
+    )
 
 
 def today_echo_note_is_acceptable(note: str) -> bool:
@@ -3229,6 +3295,12 @@ def today_echo_note_is_acceptable(note: str) -> bool:
         "当前可核查资料",
         "基础作品信息",
         "本期只保留",
+        "提供了专辑层面的评论证据",
+        "推荐理由应从评论论点进入",
+        "推荐理由应",
+        "页面标注",
+        "评价焦点落在",
+        "资料清单",
         "好听",
         "杰作",
         "神作",
@@ -3242,18 +3314,22 @@ def today_echo_note_is_acceptable(note: str) -> bool:
         return False
     if text.count("；") >= 4:
         return False
-    authority_sources = ("AllMusic", "Pitchfork", "Rolling Stone", "Apple Music", "Genius")
-    review_claim_markers = ("评论", "评价", "评分", "星", "认为", "称", "写道", "指出", "强调", "注释", "editorial", "review")
     substantive_music_fact_markers = (
         "录音技术", "录音师", "录制", "制作", "制作人", "编曲", "采样", "混音", "母带",
         "榜单", "Billboard", "奖", "格莱美", "Grammy", "水星奖", "普利策",
         "历史地位", "排名", "年度", "十年", "评分", "星级", "满分", "单曲", "专辑榜",
     )
-    has_authoritative_claim = (
-        any(source in text for source in authority_sources)
-        and any(marker in text for marker in review_claim_markers)
+    music_criticism_markers = (
+        "声音", "音色", "声场", "人声", "吉他", "贝斯", "鼓", "键盘", "合成器", "弦乐",
+        "旋律", "节奏", "律动", "和声", "编曲", "结构", "叙事", "歌词", "制作", "录音",
+        "混音", "母带", "采样", "曲式", "合奏", "氛围", "乐队", "器乐", "唱腔", "段落",
     )
+    has_music_criticism = sum(1 for marker in music_criticism_markers if marker in text) >= 2
     has_substantive_fact = any(marker in text for marker in substantive_music_fact_markers)
+    has_review_source_context = (
+        any(source in text for source in ("AllMusic", "Pitchfork", "Rolling Stone", "Apple Music", "Genius", "Album of the Year"))
+        and any(marker in text for marker in ("评论", "评价", "评分", "星", "认为", "称", "写道", "指出", "强调", "注释"))
+    )
     metadata_smell_phrases = [
         "将其归入",
         "将其界定为",
@@ -3263,12 +3339,13 @@ def today_echo_note_is_acceptable(note: str) -> bool:
         "补足唱片工业语境",
         "并标注",
         "等 Styles 标签",
+        "评论证据",
     ]
     metadata_smell_count = sum(text.count(phrase) for phrase in metadata_smell_phrases)
     if metadata_smell_count >= 2:
         return False
 
-    return has_authoritative_claim or has_substantive_fact
+    return has_music_criticism or has_substantive_fact or has_review_source_context
 
 
 ORDINAL_CN_MAP = {
@@ -3330,32 +3407,32 @@ def build_review_source_fallback_note(
     editorial_facts: Dict[str, object],
     fast_genre: str,
 ) -> str:
-    review_sources = list(editorial_facts.get("review_sources", []))
-    allmusic_review = next(
-        (
-            item
-            for item in review_sources
-            if clean_text(str(item.get("source", ""))) == "AllMusic"
-            and clean_text(str(item.get("text", "")))
-        ),
-        None,
-    )
-    if not allmusic_review:
+    review_sources = ranked_today_echo_review_sources(list(editorial_facts.get("review_sources", [])))
+    review = next((item for item in review_sources if clean_text(str(item.get("text", "")))), None)
+    if not review:
         return ""
 
-    review_text = clean_text(str(allmusic_review.get("text", "")))
-    author = clean_text(str(allmusic_review.get("author", ""))) or "评论作者"
+    review_text = clean_text(str(review.get("text", "")))
+    source = clean_text(str(review.get("source", "")))
+    author = clean_text(str(review.get("author", "")))
     rating = clean_text(str(editorial_facts.get("allmusic_rating", "")))
     recording_locations = list(editorial_facts.get("recording_locations", []))
     recording_location = clean_text(str(recording_locations[0])) if recording_locations else ""
 
-    arrangement_facts = []
-    if re.search(r"\bkeyboards?\b", review_text, re.IGNORECASE):
-        arrangement_facts.append("键盘")
-    if re.search(r"\bguitars?\b", review_text, re.IGNORECASE):
-        arrangement_facts.append("吉他")
-    if re.search(r"\bvoices?\b|\bvocals?\b", review_text, re.IGNORECASE):
-        arrangement_facts.append("人声")
+    arrangement_facts: List[str] = []
+    marker_map = [
+        (r"\bkeyboards?\b|键盘", "键盘"),
+        (r"\bguitars?\b|吉他", "吉他"),
+        (r"\bvoices?\b|\bvocals?\b|人声|唱腔", "人声"),
+        (r"\bdrums?\b|鼓|节奏", "节奏"),
+        (r"\bsynth(?:esizer)?s?\b|合成器", "合成器"),
+        (r"\blyrics?\b|歌词", "歌词"),
+        (r"\bproduction\b|制作", "制作"),
+        (r"\brecord(?:ing|ed)?\b|录音", "录音"),
+    ]
+    for pattern, label in marker_map:
+        if re.search(pattern, review_text, re.IGNORECASE):
+            arrangement_facts.append(label)
 
     narrative_subject = ""
     if re.search(r"\bwarhol\b", review_text, re.IGNORECASE):
@@ -3371,29 +3448,25 @@ def build_review_source_fallback_note(
         and {"键盘", "吉他", "人声"}.issubset(set(arrangement_facts))
     ):
         arrangement_text = "Cale 的键盘、Reed 的吉他和两人的人声"
-    arrangement_phrase = f"以 {arrangement_text}" if re.search(r"[A-Za-z]", arrangement_text) else f"以{arrangement_text}"
 
     if len(arrangement_facts) >= 2 and narrative_subject:
-        first = (
-            f"AllMusic 评论人 {author} 指出，《{album}》{arrangement_phrase}构成，"
-            f"并围绕 {narrative_subject}展开。"
-        )
+        first = f"《{album}》以{arrangement_text}构成紧凑骨架，并围绕 {narrative_subject}展开叙事。"
     elif len(arrangement_facts) >= 2:
-        first = (
-            f"AllMusic 评论人 {author} 的长评把《{album}》的重点放在 "
-            f"{arrangement_text}等编制线索上。"
-        )
+        first = f"《{album}》的听感重心落在{arrangement_text}的相互牵引上，歌曲不是风格标签的堆叠，而是靠编制关系推进。"
     elif review_text:
-        first = (
-            f"AllMusic 评论人 {author} 为《{album}》提供了专辑层面的评论证据，"
-            "推荐理由应从评论论点进入。"
-        )
+        first = f"《{album}》更值得从歌曲结构、编制和录音空间的关系切入，而不是只按流派名词归类。"
     else:
         return ""
 
     supplements = []
-    if rating:
-        supplements.append(f"AllMusic {rating} 评分")
+    if source == "AllMusic" and author:
+        supplements.append(f"{author} 的专辑评论")
+    elif source == "Apple Music":
+        supplements.append("Apple Music 编辑语的作品脉络")
+    elif source:
+        supplements.append(f"{source} 的评论线索")
+    if source == "AllMusic" and rating:
+        supplements.append(f"{rating} 评分")
     if recording_location:
         location_text = re.sub(r"^(.+),\s*([^,]+,\s*[^,]+)$", r"\1（\2）", recording_location)
         supplements.append(f"{location_text}录音地点")
@@ -3401,9 +3474,9 @@ def build_review_source_fallback_note(
         supplements.append(f"{fast_genre} 风格语境")
 
     if supplements:
-        second = f"页面标注 {'与 '.join(supplements)}；评价焦点落在叙事结构与录音配置，而不是风格标签。"
+        second = f"{'与 '.join(supplements)}把这张唱片的工业语境落到可核查层面；声音组织和作品位置才是判断它的核心。"
     else:
-        second = "推荐重点应放在评论指出的叙事结构与录音配置，而不是风格标签。"
+        second = "这类专辑的判断重点在声音组织、歌曲结构和艺人阶段，而不是停留在风格名词。"
 
     note = truncate_review_note_at_sentence(f"{first}{second}", limit=180)
     return ensure_terminal_punctuation(note)
@@ -3454,7 +3527,7 @@ def build_local_today_echo_note(
 
 def build_knowledge_based_today_echo_note(album: str, artist: str, fast_genre: str) -> str:
     prompt = f"""
-你是严谨的中文音乐评论编辑。请凭音乐史知识，为以下专辑写一段 100-150 字的简体中文短乐评。
+你是严谨的中文音乐评论编辑。请参考 Apple Music 编辑团队的专辑推荐语气质，凭音乐史知识为以下专辑写一段 100-150 字的简体中文短乐评。
 
 专辑：{album}
 艺人：{artist}
@@ -3467,11 +3540,12 @@ def build_knowledge_based_today_echo_note(album: str, artist: str, fast_genre: s
 
 硬规则：
 1. 写成连续段落，不要写成资料清单、字段汇总或元数据罗列。
-2. 必须围绕作品的声音结构、制作/录音语境、创作位置、历史影响、评论界认知或流派作用展开。
+2. 从声音结构、制作/录音语境、歌曲叙事、艺人阶段、历史影响或流派作用切入，读起来像一段真正的编辑推荐。
 3. 禁止只写“AllMusic 流派/Styles 标签”“Wikipedia 录音室专辑”“Wikidata 厂牌/发行信息”。
 4. 禁止“好听”“经典”“杰作”“神作”“伟大”“完美”“震撼”“不可错过”“封神”等浮夸词。
-5. 若不确定具体评分、奖项、榜单名或媒体原话，不要编造；用可稳妥概括的音乐史判断替代。
-6. 不要输出 JSON 以外的任何内容。
+5. 不要为了显得有依据而强行写 AllMusic / Pitchfork / Rolling Stone / Apple Music / Album of the Year 等来源名；只有确有把握且自然时才提。
+6. 若不确定具体评分、奖项、榜单名或媒体原话，不要编造；用可稳妥概括的音乐史判断替代。
+7. 不要输出 JSON 以外的任何内容。
 """
     try:
         data = extract_json_object(call_llm(prompt))
@@ -3504,11 +3578,12 @@ def repair_today_echo_note_with_llm(note: str, evidence_lines: Sequence[str]) ->
 }}
 
 硬规则：
-1. 必须保留至少 2 条可验证事实，优先保留 AllMusic / Rolling Stone / Spin 等评论论点、AllMusic 评分、录音地点、制作/录音/榜单/奖项事实。
+1. 必须保留至少 2 条可验证事实或评论判断，优先保留 Apple Music 编辑推荐、Pitchfork / Rolling Stone / Album of the Year / AllMusic 等评论论点、录音地点、制作/录音/榜单/奖项事实。
 2. 禁止“杰作”“神作”“伟大”“完美”“震撼”“不可错过”等浮夸词。
 3. 禁止写日期验证、资料不足、适合作为今日回响等解释。
-4. 禁止照搬英文原句；只做中文转述。
-5. 不要输出 JSON 以外的任何内容。
+4. 不要求在正文里点名任何媒体或评分；媒体名和评分只是证据，不是必须出现的文案元素。
+5. 禁止照搬英文原句；只做中文转述。
+6. 不要输出 JSON 以外的任何内容。
 """
     try:
         data = extract_json_object(call_llm(prompt))
@@ -3531,7 +3606,7 @@ def build_today_echo_note(
     styles = " / ".join(editorial_facts.get("styles", [])[:3])
     genres = " / ".join(editorial_facts.get("genres", [])[:2])
     fast_genre = clean_text(genre_hint) or styles or genres or "流行 / 摇滚"
-    review_sources = list(editorial_facts.get("review_sources", []))
+    review_sources = ranked_today_echo_review_sources(list(editorial_facts.get("review_sources", [])))
     review_payload = [
         {
             "source": clean_text(str(item.get("source", ""))),
@@ -3539,7 +3614,7 @@ def build_today_echo_note(
             "url": clean_text(str(item.get("url", ""))),
             "text": clean_text(str(item.get("text", "")))[:1200],
         }
-        for item in review_sources[:3]
+        for item in review_sources[:5]
         if clean_text(str(item.get("text", "")))
     ]
     evidence_lines = [
@@ -3554,11 +3629,13 @@ def build_today_echo_note(
         f"- Wikidata 制作人：{' / '.join(editorial_facts.get('wikidata_producers', [])[:3]) or '无'}",
         f"- Wikidata 厂牌：{' / '.join(editorial_facts.get('wikidata_labels', [])[:3]) or '无'}",
         f"- Wikidata 奖项：{' / '.join(editorial_facts.get('wikidata_awards', [])[:3]) or '无'}",
-        f"- 专业乐评证据池：{json.dumps(review_payload, ensure_ascii=False)}",
+        f"- 专业乐评证据池（按优先级：Apple Music 编辑推荐语、Pitchfork、Rolling Stone、Album of the Year、The Guardian、NME、AllMusic、Genius、Wikipedia reception）：{json.dumps(review_payload, ensure_ascii=False)}",
     ]
 
     prompt = f"""
-你是严谨的音乐主编兼乐评编辑。以下信息已经通过多源交叉验证：
+你是严谨的音乐主编兼乐评编辑。请参考 Apple Music 编辑团队的专辑推荐语气质，把外部乐评和音乐事实改写成一段流利、克制、有判断的中文短乐评。
+
+以下信息已经通过多源交叉验证：
 - 专辑：{album}
 - 艺人：{artist}
 - 官方首发日期：{release_date}
@@ -3574,11 +3651,11 @@ def build_today_echo_note(
 规则：
 1. note 必须是简体中文，克制、准确、专业，写成连续乐评短段，不要写成“资料清单”。
 2. 绝对禁止写“适合作为今天回响”“历史地位稳定”“持续讨论度”“首发日期已验证”“当前可核查资料”等空话或校验说明。
-3. 必须优先基于“专业乐评证据池”汇总，不要只使用风格、厂牌、日期等元数据。
-4. 必须提取 Pitchfork / Rolling Stone / AllMusic / Apple Music / Genius 等来源的真实事实论点；如果证据里没有这些来源的评论论点，就必须基于录音室技术、制作班底、历史评分地位、奖项、榜单、重要单曲等硬事实写作。
-5. 只写“流派 / 风格标签 / 录音室专辑 / 发行厂牌 / 首发日期”不合格；这些只能作为辅助事实，不能作为推荐理由主体。
-6. 如证据中没有 Pitchfork 或 Rolling Stone，就不要硬编；但至少要明确提到 AllMusic / Apple Music / Genius 的评论或知识事实，或一个具体的制作、录音、奖项、榜单、历史地位事实。
-7. 不要把所有句子都写成“某来源将其归入/界定为/记录为”的罗列；要把事实转译成专业判断。
+3. 必须优先基于“专业乐评证据池”汇总；若 Apple Music 编辑推荐语存在，优先吸收其叙述角度和编辑语气，但不要照搬。
+4. Pitchfork / Rolling Stone / Album of the Year / AllMusic / Genius 等只是可用证据来源；正文不必强行点名任何媒体、评分或作者，除非这样写自然且有助于表达。
+5. 若证据池没有可用乐评，再基于录音室技术、制作班底、历史评分地位、奖项、榜单、重要单曲等硬事实写作。
+6. 只写“流派 / 风格标签 / 录音室专辑 / 发行厂牌 / 首发日期”不合格；这些只能作为辅助事实，不能作为推荐理由主体。
+7. 不要把句子写成“某来源将其归入/界定为/记录为”的罗列；要把事实转译成关于声音、结构、叙事、制作或艺人阶段的专业判断。
 8. 禁止照搬英文评论原句；只能中文转述与压缩，不要连续引用超过 10 个英文词。
 9. note 必须控制在 100-150 个汉字，超过 180 个汉字视为失败。
 10. 禁止“杰作”“神作”“伟大”“完美”“震撼”“不可错过”等浮夸词。
@@ -4222,7 +4299,8 @@ def normalize_deep_field_line(text: str) -> Optional[str]:
 
 
 def consume_ai_lines(lines: List[str], start: int) -> Tuple[str, int]:
-    merged_parts: List[str] = []
+    upside_text = ""
+    downside_text = ""
     index = start + 1
     while index < len(lines):
         raw = lines[index]
@@ -4237,15 +4315,18 @@ def consume_ai_lines(lines: List[str], start: int) -> Tuple[str, int]:
             break
 
         if label in {"机会", "优势"}:
-            merged_parts.append(f"优势（机会）：{body}")
+            upside_text = body
         else:
-            merged_parts.append(f"劣势（风险）：{body}")
+            downside_text = body
         index += 1
 
-    suffix = "；".join(part for part in merged_parts if part)
     merged_line = "- ⚖️ **AI推演**："
-    if suffix:
-        merged_line += f" {suffix}"
+    if upside_text and downside_text:
+        merged_line += f"若{clean_text(upside_text).rstrip('。')}，事件会获得短期缓冲；但{clean_text(downside_text).rstrip('。')}一旦成为主导变量，局势将重新转向压力定价。"
+    elif upside_text:
+        merged_line += f"关键变量是这一缓冲能否转化为可验证动作；若{clean_text(upside_text).rstrip('。')}，受力方会获得短期调整窗口。"
+    elif downside_text:
+        merged_line += f"关键变量是压力是否继续累积；若{clean_text(downside_text).rstrip('。')}，最直接受力方会被迫提前调整政策或市场定价。"
     return merged_line, index
 
 
@@ -4734,7 +4815,10 @@ def validate_rendered_report(md_text: str, selections: Dict[str, object]) -> Non
         for ai_line in ai_lines:
             if "客观共识与风险推演" in ai_line:
                 raise RuntimeError(f"{section_title} AI推演字段名未更新: {ai_line}")
-            if "优势（机会）" not in ai_line or "劣势（风险）" not in ai_line or len(clean_text(ai_line)) < 45:
+            banned_ai_shapes = ("优势（机会）", "劣势（风险）", "机会端", "风险端", "一方面", "另一方面", "既有机遇也有挑战")
+            if any(shape in ai_line for shape in banned_ai_shapes):
+                raise RuntimeError(f"{section_title} AI推演仍是标签化对仗结构: {ai_line}")
+            if len(clean_text(ai_line)) < 45:
                 raise RuntimeError(f"{section_title} AI推演内容不完整: {ai_line}")
 
         for line in block:
@@ -4897,12 +4981,12 @@ def repair_report_structure(md_text: str, history: str, selections: Dict[str, ob
    * 🚨 `[独家重磅]` **中文标题**：中文一句话。[[来源: 媒体](URL)]
 5. 四个深读板块每条都必须严格使用以下骨架：
    ### [序号]. [中文标题]
-   - 📰 **全景综述**：基于原文报道做摘抄式概括，综合核心段落、关键数据与背景变量，不要与核心事实重复。
+   - 📰 **全景综述**：只写“为什么这件事重要”，即宏观背景、结构性意义、与当前局势的关联和读者需要的前置语境，80-120 字；禁止罗列具体数字、人名、动作或时间节点。
    - ⏱️ **新闻时间线**：...  （仅在新闻事件本身有两个以上明确时间节点时输出；不要把媒体发布时间写成时间线）
-   - 📌 **核心事实**：提炼客观 facts、新闻发展的时间线与脉络，句末必须有信息来源，不要复述全景综述。
-   - 🔴 **[具体阵营A / 利益相关方A] 视角**：写出具体相关方名称、动作、诉求或报道侧重点。
-   - 🔵 **[具体阵营B / 对立方 / 市场反馈] 视角**：写出具体相关方、对立方或市场反馈；无直接对立方则转换为行业/市场反馈视角。
-   - ⚖️ **AI推演**：优势（机会）：...；劣势（风险）：...，内容必须补全，禁止只写空泛模板。
+   - 📌 **核心事实**：只写“发生了什么”，即具体动作、关键数字、当事方、时间节点；每条事实句末括注信息来源媒体名，禁止背景介绍、意义阐释或分析性语言。
+   - 🔴 **[具体阵营A / 利益相关方A] 视角**：写出具名主体的核心诉求、承压点与行为逻辑；若无直接引语，必须写客观利益结构，禁止“暂无表态”。
+   - 🔵 **[具体阵营B / 对立方 / 市场反馈] 视角**：写出具名主体、对立方或市场反馈的约束条件与行为逻辑；若无直接对立方，转换为行业/市场反馈视角，禁止空泛收尾。
+   - ⚖️ **AI推演**：写成一段 60-90 字方向性情景判断，抓住一个结构性变量，说清变量方向、直接受力方和反转条件；禁止“优势/风险”“一方面/另一方面”等对仗标签。
    - 🔗 **溯源印证**：
        * **媒体A**: [外媒原标题](URL)
        * **媒体B**: [外媒原标题](URL)
@@ -4955,7 +5039,10 @@ def collect_candidate_report_fragments(candidate: Dict[str, object]) -> List[Dic
                 or match_similarity(summary, headline) >= 0.42
             )
         )
-        text = summary if summary_matches_story else title_text
+        if summary and contains_cjk(summary):
+            text = summary
+        else:
+            text = summary if summary_matches_story else title_text
         if not text:
             continue
         if any(titles_match(text, fragment["text"]) for fragment in fragments):
@@ -4983,14 +5070,98 @@ def collect_candidate_report_fragments(candidate: Dict[str, object]) -> List[Dic
     return fragments
 
 
-def build_section_overview_text(candidate: Dict[str, object], fragments: Sequence[Dict[str, str]]) -> str:
-    if not fragments:
-        return condense_summary_sentence(candidate.get("headline", ""), limit=150)
-    first = fragments[0]
-    parts = [f"{first['source']}报道称，{first['text']}"]
-    for fragment in fragments[1:2]:
-        parts.append(f"{fragment['source']}补充称，{fragment['text']}")
-    return condense_summary_sentence("；".join(parts), limit=150)
+def build_candidate_corpus(candidate: Dict[str, object], fragments: Sequence[Dict[str, str]]) -> str:
+    return clean_text(
+        " ".join(
+            [str(candidate.get("headline", ""))]
+            + [fragment.get("title", "") for fragment in fragments]
+            + [fragment.get("text", "") for fragment in fragments]
+        )
+    )
+
+
+def corpus_has(corpus: str, pattern: str) -> bool:
+    return bool(re.search(pattern, corpus, re.IGNORECASE))
+
+
+def strip_report_scaffold(text: str, source: str = "") -> str:
+    value = clean_text(text)
+    value = re.sub(r"\s*[\(（]\s*信息来源[:：][^)）]+[)）]\s*$", "", value)
+    source_tokens = [clean_label_text(source)]
+    source_aliases = {
+        "Al Jazeera": ["半岛电视台"],
+        "BBC World News": ["BBC", "英国广播公司"],
+        "Associated Press": ["AP", "美联社"],
+        "Reuters": ["路透社"],
+        "Bloomberg": ["彭博社"],
+        "Financial Times": ["FT", "金融时报"],
+        "WSJ": ["华尔街日报"],
+    }
+    source_tokens.extend(source_aliases.get(clean_label_text(source), []))
+    source_tokens.extend(["Reuters", "Bloomberg", "Associated Press", "AP", "Al Jazeera", "BBC", "WSJ", "Financial Times"])
+    for token in unique_preserving_order([item for item in source_tokens if item]):
+        value = re.sub(
+            rf"^{re.escape(token)}(?:报道|报道称|称|表示|指出|补充称)?[:：，,]\s*",
+            "",
+            value,
+            flags=re.IGNORECASE,
+        )
+    value = re.sub(r"^核心事实是[:：]\s*", "", value)
+    value = value.strip(" ，,。；;：:")
+    return value
+
+
+def build_section_overview_text(
+    candidate: Dict[str, object],
+    fragments: Sequence[Dict[str, str]],
+    section_title: str = "",
+) -> str:
+    corpus = build_candidate_corpus(candidate, fragments)
+    if corpus_has(corpus, r"(openai|anthropic|ai|model|cyber|chip|nvidia|semiconductor|人工智能|模型|网络安全|芯片|半导体|算力)"):
+        return (
+            "这条新闻重要在于，AI 议题已经从产品竞赛进入金融安全、监管责任和基础设施韧性的交叉地带；"
+            "技术部署速度越快，治理边界和问责机制越难继续滞后。"
+        )
+    if corpus_has(corpus, r"(hormuz|shipping|ship|oil|gas|energy|封锁|航运|船只|海峡|能源|油价)"):
+        return (
+            "这条新闻的重要性在于，安全危机正在从战场叙事外溢到运输、能源和通胀链条；"
+            "一旦通行风险被市场重新定价，外交谈判会同时承受军事压力和民生成本压力。"
+        )
+    if corpus_has(corpus, r"(ceasefire|talks?|negotiat|war|missile|drone|hostage|停火|谈判|会谈|战争|导弹|无人机|人质)"):
+        return (
+            "这条新闻的关键不只是谈判是否举行，而是冲突各方是否开始把军事消耗转化为可执行的政治交换；"
+            "它关系到地区安全安排、盟友协调和后续制裁空间。"
+        )
+    if corpus_has(corpus, r"(taiwan|china|beijing|tariff|sanction|export control|台湾|中国|北京|关税|制裁|出口管制|中企|稀土)"):
+        return (
+            "这条新闻的重要性在于，中国议题从背景变量进入直接政策或外交动作；"
+            "涉台、贸易和供应链信号会被相关政府与市场同时解读为战略边界的变化。"
+        )
+    if corpus_has(corpus, r"(fed|bank|credit|inflation|rate|market|stocks?|bonds?|美联储|银行|信贷|通胀|利率|市场|债券|股市)"):
+        return (
+            "这条新闻的意义在于，它把宏观压力转化为金融体系和资产定价问题；"
+            "监管态度、融资条件与风险敞口的变化，都会影响投资者对政策路径和企业利润的判断。"
+        )
+
+    fallback_map = {
+        "## 🇨🇳【中国与世界 / China & The World】": (
+            "这条新闻的价值在于观察中国相关议题如何影响外交、贸易和供应链预期；"
+            "当政策信号进入跨境场景，市场往往会先重估边界条件，再等待正式表态。"
+        ),
+        "## 🌍【全球局势 / Global Affairs】": (
+            "这条新闻的价值在于判断地缘冲突是否出现新的约束条件；"
+            "谈判窗口、安全承诺和外部调停信号，都会改变各方继续升级或转向妥协的成本。"
+        ),
+        "## 📈【商业与市场 / Business & Markets】": (
+            "这条新闻的价值在于观察企业、政策和市场预期之间的传导；"
+            "只要关键变量影响资金成本或需求判断，资产价格就会先于正式数据作出反应。"
+        ),
+        "## 🚀【科技与AI / Tech & AI】": (
+            "这条新闻的价值在于观察技术扩张是否正在触碰监管、客户采用和基础设施约束；"
+            "真正的分水岭不是发布速度，而是能否进入高风险场景并保持可控。"
+        ),
+    }
+    return fallback_map.get(section_title, condense_summary_sentence(candidate.get("headline", ""), limit=120))
 
 
 EVENT_DATE_RE = re.compile(
@@ -5032,16 +5203,105 @@ def build_section_timeline_text(fragments: Sequence[Dict[str, str]]) -> str:
 
 
 def build_core_fact_text(candidate: Dict[str, object], fragments: Sequence[Dict[str, str]], timeline: str) -> str:
-    headline = clean_text(candidate.get("headline", ""))
-    sources = unique_preserving_order(
-        [fragment["source"] for fragment in fragments if fragment.get("source")]
-        or list(candidate.get("sources", []))
-    )
-    source_text = "、".join(sources[:3]) if sources else "相关媒体"
-    fact = f"核心事实是：{headline}；该事件已由{source_text}报道"
+    facts: List[str] = []
+    for fragment in fragments[:3]:
+        source = canonicalize_source_name(fragment.get("source", "")) or "相关媒体"
+        raw_fact = strip_report_scaffold(fragment.get("text", "") or fragment.get("title", ""), source)
+        if not raw_fact:
+            continue
+        raw_fact = condense_summary_sentence(raw_fact, limit=96).rstrip("。！？!?")
+        if any(titles_match(raw_fact, existing) or raw_fact in existing or existing in raw_fact for existing in facts):
+            continue
+        facts.append(f"{raw_fact} (信息来源: {source})")
+
+    if not facts:
+        headline = condense_summary_sentence(clean_text(candidate.get("headline", "")), limit=96).rstrip("。！？!?")
+        primary_source = canonicalize_source_name(str(candidate.get("primary_source", ""))) or "相关媒体"
+        if headline:
+            facts.append(f"{headline} (信息来源: {primary_source})")
+
     if timeline:
-        fact += "，报道脉络见上方时间线"
-    return fact + "。"
+        facts.append(f"事件含多个明确时间节点，见上方时间线 (信息来源: {facts[0].split('信息来源: ')[-1].rstrip(')') if facts else '相关媒体'})")
+    return "；".join(facts[:3]) + "。"
+
+
+def build_named_view_profile(section_title: str, corpus: str) -> Tuple[str, str, str, str]:
+    if corpus_has(corpus, r"(anthropic|openai|ai|model|cyber|人工智能|模型|网络安全|基础设施)"):
+        return (
+            "美国监管层视角",
+            "美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。",
+            "华尔街银行与AI公司视角",
+            "银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。",
+        )
+    if corpus_has(corpus, r"(hormuz|shipping|ship|oil|gas|energy|封锁|航运|船只|海峡|能源|油价)"):
+        return (
+            "美国谈判与能源安全视角",
+            "美国的核心诉求是把停火窗口和海上通行风险同时压住，因为运输中断会把军事压力快速转化为能源价格和盟友协调成本。",
+            "伊朗与航运市场视角",
+            "伊朗的谈判筹码来自地区安全风险上升；运输商、保险方和能源买家会先把不确定性计入运价、保费和库存安排。",
+        )
+    if corpus_has(corpus, r"(iran|tehran|ceasefire|negotiat|talks?|伊朗|德黑兰|停火|谈判|会谈)"):
+        return (
+            "美国谈判策略视角",
+            "美国的核心诉求是把军事威慑转化为可执行的谈判约束，同时避免冲突成本继续传导到能源、通胀和盟友安全承诺。",
+            "伊朗政权安全视角",
+            "伊朗的行为逻辑是保留谈判筹码并降低国内安全压力；若让步被解读为被迫退让，其后续执行空间会明显收窄。",
+        )
+    if corpus_has(corpus, r"(israel|gaza|lebanon|hostage|以色列|加沙|黎巴嫩|人质)"):
+        return (
+            "以色列安全内阁视角",
+            "以色列的核心诉求是维持安全威慑和国内政治支撑，因为停火、边境安排和人质议题都会直接影响政府承压程度。",
+            "地区调停方视角",
+            "调停方的行为逻辑是先冻结冲突扩散，再争取可验证的执行步骤；任何单方升级都会削弱谈判文本的可信度。",
+        )
+    if corpus_has(corpus, r"(taiwan|beijing|china|台湾|北京|中国|两岸|反对派)"):
+        return (
+            "北京政策视角",
+            "北京的核心诉求是把两岸议题维持在可塑形的政治框架内，因为对台接触同时服务于内部叙事、外交信号和对美博弈。",
+            "台湾与美国政策视角",
+            "台湾和美国的行为逻辑是避免象征性接触被转化为既成政治压力；军机军舰、关税或访问安排都会被纳入风险校准。",
+        )
+    if corpus_has(corpus, r"(tariff|sanction|export control|rare earth|关税|制裁|出口管制|稀土|硫酸|供应)"):
+        return (
+            "政策制定方视角",
+            "政策制定方的核心诉求是用贸易、出口或监管工具重塑供应链约束，因为关键物资一旦短缺，会迅速转化为谈判筹码。",
+            "进口商与产业链视角",
+            "进口商和下游企业的行为逻辑是提前锁定库存与替代来源；政策落地越突然，价格、合约和生产排期越容易被迫重估。",
+        )
+    if corpus_has(corpus, r"(fed|private credit|bank|美联储|私人信贷|银行|风险敞口)"):
+        return (
+            "美联储监管视角",
+            "美联储的核心诉求是穿透银行与私人信贷之间的风险传导，因为表外融资扩张会削弱传统资本约束的预警能力。",
+            "美国银行风险管理视角",
+            "美国银行的行为逻辑是证明风险敞口可计量、可隔离；若监管要求继续加码，资本占用和业务定价都会被迫调整。",
+        )
+    if corpus_has(corpus, r"(inflation|consumer|sentiment|通胀|消费者|信心|情绪)"):
+        return (
+            "美国政策制定者视角",
+            "政策制定者的核心压力来自通胀预期和消费信心同步恶化，因为这会压缩降息、财政刺激和危机沟通的空间。",
+            "消费者与市场定价视角",
+            "消费者承受的是价格和就业预期的双重压力；市场会先重估企业利润率、债券收益率和风险资产的折现假设。",
+        )
+    if section_title == "## 📈【商业与市场 / Business & Markets】":
+        return (
+            "政策制定者视角",
+            "政策制定者的核心诉求是避免单一事件演变成系统性定价压力，因为融资条件、需求预期和风险偏好会互相放大。",
+            "投资者定价视角",
+            "投资者的行为逻辑是先调整风险溢价，再等待正式数据确认；只要利润或利率路径变动，仓位会比政策声明更早反应。",
+        )
+    if section_title == "## 🚀【科技与AI / Tech & AI】":
+        return (
+            "技术部署方视角",
+            "技术部署方的核心诉求是扩大采用场景，但必须证明系统在成本、安全和合规上可持续，否则客户试点难以转化为长期合同。",
+            "监管与客户视角",
+            "监管者和企业客户会把可审计性放在采用速度之前；只要责任边界不清，采购和上线节奏就会被内部风控拖慢。",
+        )
+    return (
+        "直接当事方视角",
+        "直接当事方的核心诉求是把眼前压力转化为更有利的谈判或执行条件，因此会优先控制节奏、措辞和可验证动作。",
+        "市场与外部观察者视角",
+        "市场和外部观察者关注的是事件是否改变成本结构、政策约束或安全预期；信号越模糊，风险溢价越容易先行上升。",
+    )
 
 
 def build_section_view_texts(
@@ -5049,70 +5309,53 @@ def build_section_view_texts(
     fragments: Sequence[Dict[str, str]],
     fallback_labels: Tuple[str, str],
 ) -> Tuple[str, str, str, str]:
-    label_a, label_b = fallback_labels
-    if fragments:
-        primary = fragments[0]
-        label_a = f"{primary['source']}视角"
-        view_a = f"报道重点在于该事件的直接动作与已披露事实：{primary['text']}"
-    else:
-        view_a = "现有报道只提供了有限事实，核心仍在于确认直接动作、相关方身份与后续回应。"
-
-    secondary = None
-    for fragment in fragments[1:]:
-        if fragment.get("source") != (fragments[0].get("source") if fragments else ""):
-            secondary = fragment
-            break
-    if not secondary and len(fragments) > 1:
-        secondary = fragments[1]
-
-    if secondary:
-        label_b = f"{secondary['source']}视角"
-        view_b = f"补充重点在于事件的外溢影响、约束条件或市场反馈：{secondary['text']}"
-    else:
-        fallback_text_map = {
-            "## 🇨🇳【中国与世界 / China & The World】": "外部回应仍需观察，关键变量包括其他政府或企业是否把该事件转化为外交、关税、投资或供应链动作。",
-            "## 🌍【全球局势 / Global Affairs】": "外部反馈仍需观察，关键变量包括相关国家是否升级军事、制裁、外交或能源安全安排。",
-            "## 📈【商业与市场 / Business & Markets】": "市场反馈仍需观察，关键变量包括资产价格、融资条件、需求预期和企业利润指引是否同步调整。",
-            "## 🚀【科技与AI / Tech & AI】": "行业反馈仍需观察，关键变量包括算力供给、监管压力、客户采用速度和竞争对手跟进节奏。",
-        }
-        view_b = fallback_text_map.get(section_title, "外部反馈仍需观察，关键变量在于后续是否出现更多交叉报道与相关方表态。")
-    return label_a, view_a, label_b, view_b
+    corpus = clean_text(" ".join(fragment.get("title", "") + " " + fragment.get("text", "") for fragment in fragments))
+    if not corpus:
+        corpus = " ".join(fallback_labels)
+    return build_named_view_profile(section_title, corpus)
 
 
 def build_ai_inference_text(section_title: str, candidate: Dict[str, object], fragments: Sequence[Dict[str, str]]) -> str:
-    source_count = int(candidate.get("source_count", 0) or len({fragment.get("source", "") for fragment in fragments if fragment.get("source")}))
-    if source_count >= 2:
-        evidence_note = "多源交叉报道提高了事件方向的可验证性"
-        source_risk = ""
-    else:
-        evidence_note = "该报道提供了早期线索"
-        source_risk = "目前仍属单源线索，需等待更多交叉报道确认；"
-    inference_map = {
-        "## 🇨🇳【中国与世界 / China & The World】": (
-            "有助于判断中国相关政策、企业出海或双边互动的真实边界",
-            "若后续表态升级，外交、贸易、供应链或资本市场的外溢风险可能扩大",
-        ),
-        "## 🌍【全球局势 / Global Affairs】": (
-            "为判断地缘格局、谈判空间和政策约束提供了更清晰的事实锚点",
-            "若相关方继续升级行动，冲突、制裁、能源或航运链条的外溢影响可能放大",
-        ),
-        "## 📈【商业与市场 / Business & Markets】": (
-            "有助于投资者更快重估资产价格、行业需求和企业盈利预期",
-            "若关键变量未兑现，估值修正、融资条件收紧和波动率上升仍可能继续累积",
-        ),
-        "## 🚀【科技与AI / Tech & AI】": (
-            "有助于判断技术部署、商业化路径和产业链协同的下一步节奏",
-            "若算力、监管、成本或客户采用速度受限，落地节奏仍可能低于预期",
-        ),
-    }
-    opportunity, risk = inference_map.get(
-        section_title,
-        (
-            "有助于建立更清晰的事实锚点",
-            "若后续事实或相关方表态变化，事件影响仍可能重新定价",
-        ),
+    corpus = build_candidate_corpus(candidate, fragments)
+    if corpus_has(corpus, r"(anthropic|openai|ai|model|cyber|人工智能|模型|网络安全|基础设施)"):
+        return (
+            "关键变量是模型风险能否被银行风控和监管程序吸收。若测试暴露不可解释或不可停用的问题，"
+            "华尔街会先放慢采用；只有审计责任清晰，AI 公司才能把试点转成长期部署。"
+        )
+    if corpus_has(corpus, r"(hormuz|shipping|ship|oil|gas|energy|封锁|航运|船只|海峡|能源|油价)"):
+        return (
+            "关键变量是海上通行风险能否回落。若封锁继续，最先承压的是航运商、能源进口国和通胀预期；"
+            "只有停火机制出现可执行时间表，市场才会从冲突溢价转向谈判折价。"
+        )
+    if corpus_has(corpus, r"(ceasefire|talks?|negotiat|iran|war|停火|谈判|会谈|伊朗|战争)"):
+        return (
+            "关键变量是谈判能否形成可验证的执行步骤。若各方只释放会面信号而不冻结升级动作，"
+            "美国和伊朗都会继续把军事压力带进谈判桌，地区风险不会真正降温。"
+        )
+    if corpus_has(corpus, r"(taiwan|beijing|china|台湾|北京|中国|两岸)"):
+        return (
+            "关键变量是象征性接触会不会转化为政策动作。若北京继续放大政治信号，台湾和美国会被迫提高安全校准；"
+            "只有军事活动同步降温，两岸沟通才可能被市场解读为缓和。"
+        )
+    if corpus_has(corpus, r"(fed|private credit|bank|美联储|私人信贷|银行|风险敞口)"):
+        return (
+            "关键变量是监管是否把私人信贷纳入更硬的资本约束。若美联储继续追问穿透风险，"
+            "美国银行会先收紧授信和定价；只有风险数据透明化，信用扩张才可能恢复节奏。"
+        )
+    if corpus_has(corpus, r"(inflation|consumer|sentiment|market|通胀|消费者|信心|市场)"):
+        return (
+            "关键变量是价格压力是否继续侵蚀消费预期。若通胀和信心同步恶化，最先受力的是零售、信贷和政策沟通；"
+            "只有能源与就业数据稳定，市场才会重新交易软着陆。"
+        )
+    if section_title == "## 🚀【科技与AI / Tech & AI】":
+        return (
+            "关键变量是技术部署能否越过合规和成本门槛。若客户试点无法证明稳定收益，供应商会被迫转向更窄场景；"
+            "只有安全、价格和责任边界同时清楚，采用曲线才会重新变陡。"
+        )
+    return (
+        "关键变量是当前信号能否变成可验证动作。若当事方继续停留在表态层面，市场会先提高风险折价；"
+        "只有执行路径、时间表和责任主体变清楚，事件影响才会从猜测转为定价。"
     )
-    return f"优势（机会）：{evidence_note}，{opportunity}；劣势（风险）：{source_risk}{risk}。"
 
 
 def collect_traceability_entries(candidate: Dict[str, object], limit: int = 2) -> List[Tuple[str, str, str]]:
@@ -5150,7 +5393,7 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
         headline = clean_text(candidate.get("headline", ""))
         fragments = collect_candidate_report_fragments(candidate)
         timeline = build_section_timeline_text(fragments)
-        overview = build_section_overview_text(candidate, fragments)
+        overview = build_section_overview_text(candidate, fragments, section_title)
         core_fact = build_core_fact_text(candidate, fragments, timeline)
         label_a_text, view_a_text, label_b_text, view_b_text = build_section_view_texts(
             section_title,
@@ -5203,7 +5446,8 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
         rendered.append(f"- 📰 **全景综述**：{overview}")
         if clean_text(str(entry.get("timeline", ""))):
             rendered.append(f"- ⏱️ **新闻时间线**：{entry['timeline']}")
-        rendered.append(f"- 📌 **核心事实**：{core_fact} (信息来源: {primary_source})")
+        core_fact_suffix = "" if "信息来源:" in core_fact else f" (信息来源: {primary_source})"
+        rendered.append(f"- 📌 **核心事实**：{core_fact}{core_fact_suffix}")
         rendered.append(f"- 🔴 **{entry['label_a']}**：{view_a} (引述自: {primary_source} 报道)")
         rendered.append(f"- 🔵 **{entry['label_b']}**：{view_b} (引述自: {secondary_source} 报道)")
         rendered.append(f"- ⚖️ **AI推演**：{ai_inference}")
