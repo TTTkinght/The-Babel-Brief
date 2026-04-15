@@ -36,6 +36,7 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          GEMINI_MODEL: gemini-3-flash-preview
           BRIEF_TIMEZONE: Asia/Shanghai
           SKIP_NETWORK_PREFLIGHT: "1"
           ALLOW_ENV_PROXY: "0"
