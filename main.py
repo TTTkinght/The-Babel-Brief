@@ -4324,9 +4324,9 @@ def consume_ai_lines(lines: List[str], start: int) -> Tuple[str, int]:
     if upside_text and downside_text:
         merged_line += f"若{clean_text(upside_text).rstrip('。')}，事件会获得短期缓冲；但{clean_text(downside_text).rstrip('。')}一旦成为主导变量，局势将重新转向压力定价。"
     elif upside_text:
-        merged_line += f"关键变量是这一缓冲能否转化为可验证动作；若{clean_text(upside_text).rstrip('。')}，受力方会获得短期调整窗口。"
+        merged_line += f"这一路径需要转化为可验证动作；若{clean_text(upside_text).rstrip('。')}，受力方会获得短期调整窗口。"
     elif downside_text:
-        merged_line += f"关键变量是压力是否继续累积；若{clean_text(downside_text).rstrip('。')}，最直接受力方会被迫提前调整政策或市场定价。"
+        merged_line += f"压力若继续累积，局势会更快进入重新定价阶段；若{clean_text(downside_text).rstrip('。')}，最直接受力方会被迫提前调整政策或市场定价。"
     return merged_line, index
 
 
