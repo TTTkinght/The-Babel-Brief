@@ -1014,7 +1014,7 @@ h1 {{
 .clock-readout {{
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: 72px;
     margin-top: var(--space-sm);
 }}
 .analog-clock {{
@@ -1182,12 +1182,12 @@ h1 {{
 .entry-title {{
     margin: 0;
     color: var(--text-primary);
-    max-width: 65ch;
+    max-width: 750px;
     font-size: var(--subheading);
     line-height: 1.3;
     font-weight: 400;
     text-decoration: underline;
-    text-decoration-color: transparent;
+    text-decoration-color: currentColor;
     text-decoration-thickness: 1px;
     text-underline-offset: 4px;
     transition: color var(--motion-fast) var(--ease-out), text-decoration-color var(--motion-fast) var(--ease-out);
