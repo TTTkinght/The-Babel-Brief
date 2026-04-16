@@ -1011,6 +1011,12 @@ h1 {{
     row-gap: var(--space-sm);
     justify-items: start;
 }}
+.clock-readout {{
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-sm);
+}}
 .analog-clock {{
     position: relative;
     width: 80px;
@@ -1091,7 +1097,7 @@ h1 {{
     z-index: 10;
 }}
 .clock-value {{
-    font-size: var(--display-lg);
+    font-size: 48px;
     line-height: 0.95;
     font-weight: 700;
     transition: opacity var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
@@ -1303,12 +1309,15 @@ h1 {{
             </div>
             <div class="metric-block home-clock" aria-label="北京时间实时钟表">
                 <p class="clock-label">CN Time</p>
-                <div class="analog-clock" id="home-analog-clock">
-                    <!-- 60个刻度由JS生成 -->
-                    <div class="clock-hand hand-hour" id="hand-h"></div>
-                    <div class="clock-hand hand-minute" id="hand-m"></div>
-                    <div class="clock-hand hand-second" id="hand-s"></div>
-                    <div class="clock-center"></div>
+                <div class="clock-readout">
+                    <time class="clock-value" data-cn-clock>{escape(clock_text)}</time>
+                    <div class="analog-clock" id="home-analog-clock">
+                        <!-- 60个刻度由JS生成 -->
+                        <div class="clock-hand hand-hour" id="hand-h"></div>
+                        <div class="clock-hand hand-minute" id="hand-m"></div>
+                        <div class="clock-hand hand-second" id="hand-s"></div>
+                        <div class="clock-center"></div>
+                    </div>
                 </div>
                 <p class="clock-date" data-cn-date>{escape(clock_date)}</p>
             </div>
