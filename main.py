@@ -4013,10 +4013,17 @@ def translate_remaining_english_fields(md_text: str) -> str:
             continue
 
         suffix = ""
+        linked_citation_suffix_match = re.search(
+            r"(\s*[\(（]\s*(?:来源|基于|参考)[:：]\s*(?:\[[^\]]+\]\(https?://[^)]+\)(?:\s*,\s*)?)+\s*[\)）]\s*)$",
+            body,
+        )
         quote_suffix_match = re.search(r"(\s*[\(（]\s*引述自[:：][^)）]+?报道?\s*[\)）]\s*)$", body)
         source_suffix_match = re.search(r"(\s*[\(（]\s*信息来源[:：][^)）]+[\)）]\s*)$", body)
         markdown_source_suffix_match = re.search(r"(\[来源[:：][^\]]+\]\(https?://[^)]+\))$", body)
-        if quote_suffix_match:
+        if linked_citation_suffix_match:
+            suffix = linked_citation_suffix_match.group(1)
+            body = body[:linked_citation_suffix_match.start()].rstrip()
+        elif quote_suffix_match:
             suffix = quote_suffix_match.group(1)
             body = body[:quote_suffix_match.start()].rstrip()
         elif source_suffix_match:
