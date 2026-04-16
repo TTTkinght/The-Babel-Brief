@@ -1650,14 +1650,15 @@ Subject: [中文短句；中文短句]
    - 绝对禁止把整条深度新闻写成有序列表容器，例如 `1. 标题 / 2. 全景综述 / 3. 核心事实` 这种格式一律禁止。
    - 标题下方的所有字段都必须使用单层无序列表 `- `，不得把字段编号化。
    - `溯源印证` 下方必须使用 `* **媒体名**: [外媒原报道真实标题](URL)`；绝对禁止拆成“标题”“链接”两行。
+   - `报道概括 / 两方观点 / AI推演` 可以综合多家媒体、机构声明、数据源和社交媒体公开信息（包括 X），但每一处观点或判断必须能回到明确出处 URL；严禁无链接来源、严禁编造 URL。
    - `AI推演` 必须模仿 Tangle News 的 “My take / Tangle's take” 写法：先承认争议双方最强论点，再给出编辑部自己的判断。必须写成单个 bullet 行，禁止标签化对仗结构，禁止再嵌套子列表。
    ### [当前板块独立序号]. [事件标题]
-   - 📰 **全景综述**：直接概括原始报道本身，写清谁做了什么、发生了什么、报道给出的关键背景和直接后果。控制在 80-130 字。禁止写“这条新闻的重要性在于”“关键变量是”等点评分析句式。
+   - 📰 **全景综述**：直接概括原始报道本身，写清谁做了什么、发生了什么、报道给出的关键背景和直接后果。控制在 80-130 字。禁止写“这条新闻的重要性在于”“关键变量是”等点评分析句式；句末必须以可点击链接标注主要出处。
    - ⏱️ **新闻时间线（条件触发）**：仅当事件本身跨越多个明确时间节点时触发；严禁把不同媒体的发布时间拼成时间线。
    - 📌 **核心事实**：只写“发生了什么”——即具体动作、关键数字、当事方、时间节点，纯事实罗列，每条事实句末括注信息来源媒体名。禁止出现任何背景介绍、意义阐释或分析性语言；如果一句话在“全景综述”里已经出现过相似意思，则必须删掉。
-   - 🔴 **[一方观点 / What one side is saying]**：模仿 Tangle 的观点综述，先用一句话概括这一方的核心看法，再解释其理由。必须写出具名阵营、利益相关方、政策派别或市场群体；禁止写成媒体视角复述标题。
-   - 🔵 **[另一方观点 / What the other side is saying]**：模仿 Tangle 的观点综述，概括另一方、反对方、受影响方或市场反馈的最强论点。若不是左右派议题，也要找出真实利益冲突或政策取舍；禁止空泛写“外部反馈仍需观察”。
-   - ⚖️ **AI推演**：模仿 Tangle 的 “My take”：先公平承认两方各自说对了什么，再给出清晰编辑判断。60-100 字，必须落到一个明确结论，禁止“优势/风险”“一方面/另一方面”等对仗模板。
+   - 🔴 **[一方观点 / What one side is saying]**：模仿 Tangle 的观点综述，先用一句话概括这一方的核心看法，再解释其理由。必须写出具名阵营、利益相关方、政策派别或市场群体；禁止写成媒体视角复述标题；句末必须以可点击链接标注该观点出处。
+   - 🔵 **[另一方观点 / What the other side is saying]**：模仿 Tangle 的观点综述，概括另一方、反对方、受影响方或市场反馈的最强论点。若不是左右派议题，也要找出真实利益冲突或政策取舍；禁止空泛写“外部反馈仍需观察”；句末必须以可点击链接标注该观点出处。
+   - ⚖️ **AI推演**：模仿 Tangle 的 “My take”：先公平承认两方各自说对了什么，再给出清晰编辑判断。60-100 字，必须落到一个明确结论，禁止“优势/风险”“一方面/另一方面”等对仗模板；句末必须以可点击链接标注判断所依据的来源。
    - 🔗 **溯源印证**：必须列出外媒原生标题和链接。
 
 6. 结尾彩蛋：
@@ -4835,6 +4836,8 @@ def validate_rendered_report(md_text: str, selections: Dict[str, object]) -> Non
                 banned_overview_shapes = ("这条新闻的重要性在于", "这条新闻重要在于", "这条新闻的价值在于", "关键变量是")
                 if any(shape in stripped for shape in banned_overview_shapes):
                     raise RuntimeError(f"{section_title} 全景综述仍是点评模板: {stripped}")
+                if "](http" not in stripped:
+                    raise RuntimeError(f"{section_title} 全景综述缺少可点击出处 URL: {stripped}")
             if stripped.startswith("- 🔴 ") or stripped.startswith("- 🔵 "):
                 perspective_label = re.match(r"^-\s+[🔴🔵]\s+\*\*([^*]+)\*\*：", stripped)
                 if perspective_label:
@@ -4842,6 +4845,10 @@ def validate_rendered_report(md_text: str, selections: Dict[str, object]) -> Non
                     media_label_pattern = r"^(Reuters|Bloomberg|Financial Times|FT|WSJ|AP|Associated Press|Al Jazeera|BBC|BBC World News|AFP|Nikkei Asia|South China Morning Post|Techmeme|TechCrunch).*(视角|观点)$"
                     if re.match(media_label_pattern, label, flags=re.IGNORECASE):
                         raise RuntimeError(f"{section_title} 视角标签仍是媒体视角: {stripped}")
+                if "](http" not in stripped:
+                    raise RuntimeError(f"{section_title} 视角字段缺少可点击出处 URL: {stripped}")
+            if stripped.startswith("- ⚖️ **AI推演**：") and "](http" not in stripped:
+                raise RuntimeError(f"{section_title} AI推演缺少可点击出处 URL: {stripped}")
 
 
 def extract_markdown_section_lines(md_text: str, section_title: str) -> List[str]:
@@ -4994,12 +5001,12 @@ def repair_report_structure(md_text: str, history: str, selections: Dict[str, ob
    * 🚨 `[独家重磅]` **中文标题**：中文一句话。[[来源: 媒体](URL)]
 5. 四个深读板块每条都必须严格使用以下骨架：
    ### [序号]. [中文标题]
-   - 📰 **全景综述**：直接概括原始报道本身，写清谁做了什么、发生了什么、报道给出的关键背景和直接后果，80-130 字；禁止写“这条新闻的重要性在于”“关键变量是”等点评分析句式。
+   - 📰 **全景综述**：直接概括原始报道本身，写清谁做了什么、发生了什么、报道给出的关键背景和直接后果，80-130 字；禁止写“这条新闻的重要性在于”“关键变量是”等点评分析句式；句末必须以可点击链接标注主要出处。
    - ⏱️ **新闻时间线**：...  （仅在新闻事件本身有两个以上明确时间节点时输出；不要把媒体发布时间写成时间线）
    - 📌 **核心事实**：只写“发生了什么”，即具体动作、关键数字、当事方、时间节点；每条事实句末括注信息来源媒体名，禁止背景介绍、意义阐释或分析性语言。
-   - 🔴 **[一方观点 / What one side is saying]**：像 Tangle 一样概括这一方最强论点，写清具名阵营、利益相关方、政策派别或市场群体为何这样看。
-   - 🔵 **[另一方观点 / What the other side is saying]**：像 Tangle 一样概括另一方、反对方、受影响方或市场反馈的最强论点；没有左右派时，也要找出真实利益冲突或政策取舍。
-   - ⚖️ **AI推演**：模仿 Tangle 的 “My take”：先公平承认两方各自说对了什么，再给出清晰编辑判断，60-100 字；禁止“优势/风险”“一方面/另一方面”等对仗标签。
+   - 🔴 **[一方观点 / What one side is saying]**：像 Tangle 一样概括这一方最强论点，写清具名阵营、利益相关方、政策派别或市场群体为何这样看；句末必须以可点击链接标注该观点出处。
+   - 🔵 **[另一方观点 / What the other side is saying]**：像 Tangle 一样概括另一方、反对方、受影响方或市场反馈的最强论点；没有左右派时，也要找出真实利益冲突或政策取舍；句末必须以可点击链接标注该观点出处。
+   - ⚖️ **AI推演**：模仿 Tangle 的 “My take”：先公平承认两方各自说对了什么，再给出清晰编辑判断，60-100 字；禁止“优势/风险”“一方面/另一方面”等对仗标签；句末必须以可点击链接标注判断所依据的来源。
    - 🔗 **溯源印证**：
        * **媒体A**: [外媒原标题](URL)
        * **媒体B**: [外媒原标题](URL)
@@ -5341,7 +5348,7 @@ def build_ai_inference_text(section_title: str, candidate: Dict[str, object], fr
 
 def build_deep_candidate_payload(candidate: Dict[str, object], index: int) -> Dict[str, object]:
     items = []
-    for item in candidate.get("items", [])[:3]:
+    for item in candidate.get("items", [])[:5]:
         items.append(
             {
                 "source": canonicalize_source_name(str(item.get("source", ""))),
@@ -5396,6 +5403,75 @@ def normalize_core_fact_source_marker(text: object, fallback_source: str) -> str
     return value
 
 
+def collect_candidate_citation_refs(candidate: Dict[str, object], limit: int = 6) -> List[Dict[str, str]]:
+    refs: List[Dict[str, str]] = []
+    seen = set()
+    for item in candidate.get("items", []):
+        source = canonicalize_source_name(str(item.get("source", "")))
+        title = clean_text(item.get("title", ""))
+        url = clean_text(item.get("link", ""))
+        if not source or not url or not re.match(r"^https?://", url):
+            continue
+        key = (source, url)
+        if key in seen:
+            continue
+        refs.append({"source": source, "title": title, "url": url})
+        seen.add(key)
+        if len(refs) >= limit:
+            break
+    return refs
+
+
+def normalize_deep_entry_refs(
+    raw_refs: object,
+    candidate: Dict[str, object],
+    fallback_limit: int = 2,
+) -> List[Dict[str, str]]:
+    available_refs = collect_candidate_citation_refs(candidate, limit=8)
+    url_map = {ref["url"]: ref for ref in available_refs}
+    source_map: Dict[str, Dict[str, str]] = {}
+    for ref in available_refs:
+        source_map.setdefault(ref["source"].lower(), ref)
+
+    normalized: List[Dict[str, str]] = []
+    raw_list = raw_refs if isinstance(raw_refs, list) else []
+    for raw in raw_list:
+        if not isinstance(raw, dict):
+            continue
+        url = clean_text(raw.get("url", ""))
+        source = canonicalize_source_name(str(raw.get("source", "")))
+        matched = url_map.get(url) if url else None
+        if not matched and source:
+            matched = source_map.get(source.lower())
+        if not matched:
+            continue
+        key = (matched["source"], matched["url"])
+        if any((item["source"], item["url"]) == key for item in normalized):
+            continue
+        normalized.append(matched)
+        if len(normalized) >= fallback_limit:
+            break
+
+    if normalized:
+        return normalized
+    return available_refs[:fallback_limit]
+
+
+def render_deep_citation_suffix(refs: Sequence[Dict[str, str]], label: str = "来源") -> str:
+    parts = []
+    seen = set()
+    for ref in refs:
+        source = clean_label_text(ref.get("source", ""))
+        url = clean_text(ref.get("url", ""))
+        if not source or not url or (source, url) in seen:
+            continue
+        parts.append(f"[{source}]({url})")
+        seen.add((source, url))
+    if not parts:
+        return ""
+    return f"（{label}: {', '.join(parts)}）"
+
+
 def normalize_tangle_deep_entries(
     raw_entries: Sequence[object],
     candidates: Sequence[Dict[str, object]],
@@ -5433,6 +5509,10 @@ def normalize_tangle_deep_entries(
         label_b = clean_label_text(sanitize_deep_entry_text(raw_entry.get("perspective_b_label"), 42)) or "另一方观点"
         view_b = sanitize_deep_entry_text(raw_entry.get("perspective_b"), 180)
         ai_take = sanitize_deep_entry_text(raw_entry.get("ai_take"), 180)
+        overview_refs = normalize_deep_entry_refs(raw_entry.get("overview_refs"), candidate, fallback_limit=2)
+        perspective_a_refs = normalize_deep_entry_refs(raw_entry.get("perspective_a_refs"), candidate, fallback_limit=1)
+        perspective_b_refs = normalize_deep_entry_refs(raw_entry.get("perspective_b_refs"), candidate, fallback_limit=1)
+        ai_take_refs = normalize_deep_entry_refs(raw_entry.get("ai_take_refs"), candidate, fallback_limit=2)
 
         if not (view_a and view_b and ai_take):
             fragments = collect_candidate_report_fragments(candidate)
@@ -5460,6 +5540,10 @@ def normalize_tangle_deep_entries(
                 "label_b": label_b,
                 "view_b": view_b,
                 "ai_inference": ai_take,
+                "overview_refs": overview_refs,
+                "perspective_a_refs": perspective_a_refs,
+                "perspective_b_refs": perspective_b_refs,
+                "ai_take_refs": ai_take_refs,
             }
         )
     return normalized
@@ -5490,23 +5574,29 @@ def build_tangle_style_deep_entries_with_llm(
       "index": 1,
       "title": "中文事实标题，不要带媒体名前缀",
       "overview": "80-130字，直接概括报道原文：谁做了什么、发生了什么、报道给出的背景和直接后果",
+      "overview_refs": [{{"source": "媒体或信息源名称", "url": "必须原样复制候选 JSON 里的 link"}}],
       "core_fact": "纯事实句；句末括注信息来源媒体名",
       "perspective_a_label": "一方观点标签，例如 美国鹰派怎么看 / 北京怎么看 / 投资者怎么看",
       "perspective_a": "像 Tangle 的观点综述，先概括这一方最强论点，再解释理由；不要复述标题",
+      "perspective_a_refs": [{{"source": "媒体、机构、数据源或 X 账号名称", "url": "必须原样复制候选 JSON 里的 link"}}],
       "perspective_b_label": "另一方观点标签，例如 伊朗怎么看 / 台湾怎么看 / 监管者怎么看",
       "perspective_b": "概括另一方、反对方、受影响方或市场反馈的最强论点；没有左右派也要写真实利益冲突",
-      "ai_take": "60-100字，像 Tangle 的 My take：先承认双方各自说对了什么，再给出清晰判断"
+      "perspective_b_refs": [{{"source": "媒体、机构、数据源或 X 账号名称", "url": "必须原样复制候选 JSON 里的 link"}}],
+      "ai_take": "60-100字，像 Tangle 的 My take：先承认双方各自说对了什么，再给出清晰判断",
+      "ai_take_refs": [{{"source": "判断所依据的来源名称", "url": "必须原样复制候选 JSON 里的 link"}}]
     }}
   ]
 }}
 
 硬规则：
-1. 严禁在 overview 写“这条新闻的重要性在于”“关键变量是”“这条新闻的价值在于”等点评句。overview 只概括报道原文。
-2. 严禁把 perspective 写成“Reuters视角 / Bloomberg视角 / Financial Times视角”。观点标签必须是阵营、利益相关方、政策派别、市场群体或受影响方。
-3. 严禁使用“外部反馈仍需观察”“优势（机会）”“劣势（风险）”“一方面/另一方面”“既有机遇也有挑战”等模板。
-4. 不要编造引语；如果原文没有直接引语，就写该方可从报道事实中推导出的最强论点和利益逻辑。
-5. title 必须比原始标题更像中文新闻标题，去掉“消息人士”“据报道”“FT:”这类壳。
-6. 只使用下面 JSON 里的信息，不要另造事实；不要添加 JSON 里没有出现的武器类型、技术属性、地理范围、机构或专家群体。
+1. 学习 Tangle News 的方法：overview 像 “Today’s topic” 做事实背景；perspective 像 “What one side is saying / What the other side is saying” 收集不同阵营的最强论点；ai_take 像 “My take” 给出编辑判断。
+2. 观点材料可以来自候选 JSON 中的媒体报道、机构声明、数据源、Substack、X 等社交媒体链接；但 refs 里的 URL 必须原样复制候选 JSON 的 link，严禁编造、改写或补全 URL。
+3. 严禁在 overview 写“这条新闻的重要性在于”“关键变量是”“这条新闻的价值在于”等点评句。overview 只概括报道原文。
+4. 严禁把 perspective 写成“Reuters视角 / Bloomberg视角 / Financial Times视角”。观点标签必须是阵营、利益相关方、政策派别、市场群体、机构或具名社交媒体账号。
+5. 严禁使用“外部反馈仍需观察”“优势（机会）”“劣势（风险）”“一方面/另一方面”“既有机遇也有挑战”等模板。
+6. 不要编造引语；如果原文没有直接引语，就写该方可从报道事实中推导出的最强论点和利益逻辑。
+7. title 必须比原始标题更像中文新闻标题，去掉“消息人士”“据报道”“FT:”这类壳。
+8. 只使用下面 JSON 里的信息，不要另造事实；不要添加 JSON 里没有出现的武器类型、技术属性、地理范围、机构或专家群体。
 
 候选新闻：
 {json.dumps(payload, ensure_ascii=False, indent=2)}
@@ -5572,6 +5662,7 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
                 (label_a, label_b),
             )
             ai_inference = build_ai_inference_text(section_title, candidate, fragments)
+            citation_refs = collect_candidate_citation_refs(candidate, limit=3)
 
             entries.append(
                 {
@@ -5586,6 +5677,10 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
                     "label_b": label_b_text,
                     "view_b": view_b_text,
                     "ai_inference": ai_inference,
+                    "overview_refs": citation_refs[:2],
+                    "perspective_a_refs": citation_refs[:1],
+                    "perspective_b_refs": citation_refs[1:2] or citation_refs[:1],
+                    "ai_take_refs": citation_refs[:2],
                 }
             )
     rendered: List[str] = []
@@ -5611,18 +5706,26 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
             view_b_raw = f"围绕该事件的进一步市场与政策反馈仍在形成，后续影响需结合新增交叉报道继续观察。"
         view_b = ensure_terminal_punctuation(view_b_raw)
         ai_inference = ensure_terminal_punctuation(str(entry["ai_inference"]))
-        traceability = collect_traceability_entries(candidate, 2)
+        traceability = collect_traceability_entries(candidate, 3)
+        overview_suffix = render_deep_citation_suffix(entry.get("overview_refs", []), "来源")
+        perspective_a_suffix = render_deep_citation_suffix(entry.get("perspective_a_refs", []), "基于")
+        perspective_b_suffix = render_deep_citation_suffix(entry.get("perspective_b_refs", []), "基于")
+        ai_suffix = render_deep_citation_suffix(entry.get("ai_take_refs", []), "参考")
+        if not perspective_a_suffix:
+            perspective_a_suffix = f"（基于: {primary_source} 报道）"
+        if not perspective_b_suffix:
+            perspective_b_suffix = f"（基于: {secondary_source} 报道）"
 
         rendered.append(f"### {entry['index']}. {title}")
         rendered.append("")
-        rendered.append(f"- 📰 **全景综述**：{overview}")
+        rendered.append(f"- 📰 **全景综述**：{overview}{overview_suffix}")
         if clean_text(str(entry.get("timeline", ""))):
             rendered.append(f"- ⏱️ **新闻时间线**：{entry['timeline']}")
         core_fact_suffix = "" if "信息来源:" in core_fact else f" (信息来源: {primary_source})"
         rendered.append(f"- 📌 **核心事实**：{core_fact}{core_fact_suffix}")
-        rendered.append(f"- 🔴 **{entry['label_a']}**：{view_a} (基于: {primary_source} 报道)")
-        rendered.append(f"- 🔵 **{entry['label_b']}**：{view_b} (基于: {secondary_source} 报道)")
-        rendered.append(f"- ⚖️ **AI推演**：{ai_inference}")
+        rendered.append(f"- 🔴 **{entry['label_a']}**：{view_a}{perspective_a_suffix}")
+        rendered.append(f"- 🔵 **{entry['label_b']}**：{view_b}{perspective_b_suffix}")
+        rendered.append(f"- ⚖️ **AI推演**：{ai_inference}{ai_suffix}")
         rendered.append("- 🔗 **溯源印证**：")
         for source, trace_title, url in traceability:
             rendered.append(f"    * **{source}**: [{trace_title}]({url})")
