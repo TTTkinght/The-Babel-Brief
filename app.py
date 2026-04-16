@@ -970,7 +970,7 @@ h1 {{
 .metric-value {{
     display: block;
     margin-top: var(--space-sm);
-    font-size: var(--display-md);
+    font-size: 48px;
     line-height: 0.95;
     font-weight: 700;
 }}
