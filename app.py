@@ -740,6 +740,15 @@ def shorten_archive_title(text: str, limit: int = 48) -> str:
     return shortened
 
 
+def clean_archive_index_title(text: str) -> str:
+    value = normalize_text(text)
+    return re.sub(
+        r"^\s*(?:⚡️?|🤖|📰|📌|🔴|🔵|⚖️|🔗|🚨|🚀|🌍|📈|🇨🇳|🎵|🎤|📅|💽|📝|⏱️|➡️)\s*",
+        "",
+        value,
+    )
+
+
 def clean_archive_summary(text: str) -> str:
     value = normalize_text(text)
     for marker in DECORATIVE_MARKERS:
@@ -1197,7 +1206,7 @@ h1 {{
     line-height: 1.3;
     font-weight: 400;
     text-decoration: underline;
-    text-decoration-color: currentColor;
+    text-decoration-color: transparent;
     text-decoration-thickness: 1px;
     text-underline-offset: 4px;
     transition: color var(--motion-fast) var(--ease-out), text-decoration-color var(--motion-fast) var(--ease-out);
@@ -1359,6 +1368,8 @@ def render_archive_row(entry: ArchiveEntry, today: Date, index: int) -> str:
     month = f"{MONTH_NAMES[entry.archive_date.month]} {entry.archive_date.year}"
     today_label = '<span class="today-label">Today</span>' if entry.archive_date == today else ""
     row_delay = min(index, 10) * 35 + 120
+    title = clean_archive_index_title(entry.title)
+    display_title = f"⚡ {title}" if index == 1 else title
 
     return f"""<a class="archive-item" href="archives/{archive_date}.html" style="--row-delay: {row_delay}ms">
     <span class="item-index">{index:02d}</span>
@@ -1368,7 +1379,7 @@ def render_archive_row(entry: ArchiveEntry, today: Date, index: int) -> str:
     </div>
     <div class="entry-body">
         {today_label}
-        <p class="entry-title">{escape(entry.title)}</p>
+        <p class="entry-title">{escape(display_title)}</p>
     </div>
 </a>"""
 
