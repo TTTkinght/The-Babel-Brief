@@ -217,13 +217,16 @@ h1 {
     justify-items: start;
 }
 .clock-readout {
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-lg);
     align-items: center;
-    gap: 72px;
     margin-top: var(--space-sm);
 }
 .analog-clock {
     position: relative;
+    justify-self: center;
     width: 72px;
     height: 72px;
     border-radius: 50%;
@@ -308,6 +311,7 @@ h1 {
     z-index: 10;
 }
 .clock-value {
+    justify-self: start;
     font-size: 48px;
     line-height: 0.95;
     font-weight: 700;
@@ -469,6 +473,11 @@ h1 {
     .metric-block {
         min-height: 0;
     }
+    .clock-readout {
+        grid-template-columns: minmax(144px, max-content) 72px;
+        justify-content: start;
+        column-gap: var(--space-lg);
+    }
     .archive-item {
         grid-template-columns: 1fr;
         gap: var(--space-md);
@@ -521,7 +530,7 @@ h1 {
             <div class="metric-block home-clock" aria-label="北京时间实时钟表">
                 <p class="clock-label">CN Time</p>
                 <div class="clock-readout">
-                    <time class="clock-value" data-cn-clock>21:40</time>
+                    <time class="clock-value" data-cn-clock>21:43</time>
                     <div class="analog-clock" id="home-analog-clock">
                         <!-- 60个刻度由JS生成 -->
                         <div class="clock-hand hand-hour" id="hand-h"></div>

@@ -1012,13 +1012,16 @@ h1 {{
     justify-items: start;
 }}
 .clock-readout {{
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-lg);
     align-items: center;
-    gap: 72px;
     margin-top: var(--space-sm);
 }}
 .analog-clock {{
     position: relative;
+    justify-self: center;
     width: 72px;
     height: 72px;
     border-radius: 50%;
@@ -1103,6 +1106,7 @@ h1 {{
     z-index: 10;
 }}
 .clock-value {{
+    justify-self: start;
     font-size: 48px;
     line-height: 0.95;
     font-weight: 700;
@@ -1263,6 +1267,11 @@ h1 {{
     }}
     .metric-block {{
         min-height: 0;
+    }}
+    .clock-readout {{
+        grid-template-columns: minmax(144px, max-content) 72px;
+        justify-content: start;
+        column-gap: var(--space-lg);
     }}
     .archive-item {{
         grid-template-columns: 1fr;
