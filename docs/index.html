@@ -184,6 +184,12 @@ h1 {
 .header-instruments > .metric-block:nth-child(-n + 2) {
     border-top: 0;
 }
+.header-instruments > .metric-block:nth-child(2) .metric-label,
+.header-instruments > .metric-block:nth-child(2) .metric-value,
+.header-instruments > .metric-block:nth-child(2) .metric-meta {
+    width: 72px;
+    text-align: center;
+}
 .metric-number,
 .metric-value,
 .clock-value {
@@ -226,7 +232,7 @@ h1 {
 }
 .analog-clock {
     position: relative;
-    justify-self: center;
+    justify-self: start;
     width: 72px;
     height: 72px;
     border-radius: 50%;
@@ -530,7 +536,7 @@ h1 {
             <div class="metric-block home-clock" aria-label="北京时间实时钟表">
                 <p class="clock-label">CN Time</p>
                 <div class="clock-readout">
-                    <time class="clock-value" data-cn-clock>21:43</time>
+                    <time class="clock-value" data-cn-clock>21:48</time>
                     <div class="analog-clock" id="home-analog-clock">
                         <!-- 60个刻度由JS生成 -->
                         <div class="clock-hand hand-hour" id="hand-h"></div>

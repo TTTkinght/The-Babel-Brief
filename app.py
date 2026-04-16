@@ -979,6 +979,12 @@ h1 {{
 .header-instruments > .metric-block:nth-child(-n + 2) {{
     border-top: 0;
 }}
+.header-instruments > .metric-block:nth-child(2) .metric-label,
+.header-instruments > .metric-block:nth-child(2) .metric-value,
+.header-instruments > .metric-block:nth-child(2) .metric-meta {{
+    width: 72px;
+    text-align: center;
+}}
 .metric-number,
 .metric-value,
 .clock-value {{
@@ -1021,7 +1027,7 @@ h1 {{
 }}
 .analog-clock {{
     position: relative;
-    justify-self: center;
+    justify-self: start;
     width: 72px;
     height: 72px;
     border-radius: 50%;
