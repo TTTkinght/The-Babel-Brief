@@ -444,7 +444,7 @@ hr {
         <p class="instrument-number">16</p>
         <p class="instrument-meta">04 / 2026</p>
         <p class="instrument-label">CN Time</p>
-        <time class="instrument-clock" data-cn-clock>20:49</time>
+        <time class="instrument-clock" data-cn-clock>21:11</time>
     </div>
     <h1 class="brief-detail-title">若美联储主席鲍威尔5月不离职将解雇其职务</h1>
 </header>
@@ -453,7 +453,8 @@ hr {
 <script>
 (() => {
     const clocks = document.querySelectorAll("[data-cn-clock]");
-    if (clocks.length) {
+    const clockEl = document.getElementById("home-analog-clock");
+    if (clocks.length || clockEl) {
         const timeFormatter = new Intl.DateTimeFormat("zh-CN", {
             hour: "2-digit",
             minute: "2-digit",
@@ -469,7 +470,11 @@ hr {
         const tick = () => {
             const now = new Date();
             clocks.forEach((clock) => {
-                clock.textContent = timeFormatter.format(now);
+                const nextText = timeFormatter.format(now);
+                if (clock.textContent === nextText) {
+                    return;
+                }
+                clock.textContent = nextText;
                 clock.classList.remove("is-ticking");
                 void clock.offsetWidth;
                 clock.classList.add("is-ticking");
@@ -478,10 +483,31 @@ hr {
             document.querySelectorAll("[data-cn-date]").forEach((date) => {
                 date.textContent = dateFormatter.format(now).replace(/\//g, " / ");
             });
+            if (clockEl && !clockEl.dataset.ready) {
+                for (let i = 0; i < 60; i++) {
+                    const t = document.createElement("div");
+                    t.className = "clock-tick " + (i % 5 === 0 ? "hour-tick" : "min-tick");
+                    t.style.transform = `translateX(-50%) rotate(${i * 6}deg)`;
+                    clockEl.prepend(t);
+                }
+                clockEl.dataset.ready = "1";
+            }
+
+            const handH = document.getElementById("hand-h");
+            const handM = document.getElementById("hand-m");
+            const handS = document.getElementById("hand-s");
+            if (handH && handM && handS) {
+                const s = now.getSeconds();
+                const m = now.getMinutes();
+                const h = now.getHours() % 12;
+                handH.style.rotate = `${h * 30 + m * 0.5}deg`;
+                handM.style.rotate = `${m * 6 + s * 0.1}deg`;
+                handS.style.rotate = `${s * 6}deg`;
+            }
         };
 
         tick();
-        setInterval(tick, 30000);
+        setInterval(tick, 1000);
     }
 
     const themeKey = "babel-brief-theme";

@@ -60,7 +60,8 @@ DETAIL_CLOCK_SCRIPT = """
 <script>
 (() => {
     const clocks = document.querySelectorAll("[data-cn-clock]");
-    if (clocks.length) {
+    const clockEl = document.getElementById("home-analog-clock");
+    if (clocks.length || clockEl) {
         const timeFormatter = new Intl.DateTimeFormat("zh-CN", {
             hour: "2-digit",
             minute: "2-digit",
@@ -76,7 +77,11 @@ DETAIL_CLOCK_SCRIPT = """
         const tick = () => {
             const now = new Date();
             clocks.forEach((clock) => {
-                clock.textContent = timeFormatter.format(now);
+                const nextText = timeFormatter.format(now);
+                if (clock.textContent === nextText) {
+                    return;
+                }
+                clock.textContent = nextText;
                 clock.classList.remove("is-ticking");
                 void clock.offsetWidth;
                 clock.classList.add("is-ticking");
@@ -85,10 +90,31 @@ DETAIL_CLOCK_SCRIPT = """
             document.querySelectorAll("[data-cn-date]").forEach((date) => {
                 date.textContent = dateFormatter.format(now).replace(/\\//g, " / ");
             });
+            if (clockEl && !clockEl.dataset.ready) {
+                for (let i = 0; i < 60; i++) {
+                    const t = document.createElement("div");
+                    t.className = "clock-tick " + (i % 5 === 0 ? "hour-tick" : "min-tick");
+                    t.style.transform = `translateX(-50%) rotate(${i * 6}deg)`;
+                    clockEl.prepend(t);
+                }
+                clockEl.dataset.ready = "1";
+            }
+
+            const handH = document.getElementById("hand-h");
+            const handM = document.getElementById("hand-m");
+            const handS = document.getElementById("hand-s");
+            if (handH && handM && handS) {
+                const s = now.getSeconds();
+                const m = now.getMinutes();
+                const h = now.getHours() % 12;
+                handH.style.rotate = `${h * 30 + m * 0.5}deg`;
+                handM.style.rotate = `${m * 6 + s * 0.1}deg`;
+                handS.style.rotate = `${s * 6}deg`;
+            }
         };
 
         tick();
-        setInterval(tick, 30000);
+        setInterval(tick, 1000);
     }
 
     const themeKey = "babel-brief-theme";
@@ -978,11 +1004,91 @@ h1 {{
     margin-top: var(--space-sm);
 }}
 .home-clock {{
+    position: relative;
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1fr;
     row-gap: var(--space-sm);
     justify-items: start;
+}}
+.analog-clock {{
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border-visible);
+    margin: 4px 0;
+}}
+.clock-tick {{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 50%;
+    transform-origin: bottom center;
+    background: transparent;
+}}
+.clock-tick::before {{
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 100%;
+    background: var(--text-primary);
+}}
+.clock-tick.hour-tick {{
+    width: 2px;
+}}
+.clock-tick.hour-tick::before {{
+    height: 10px;
+}}
+.clock-tick.min-tick::before {{
+    height: 6px;
+}}
+.clock-hand {{
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom center;
+    border-radius: 2px;
+    background: var(--text-display);
+    translate: -50% 0;
+}}
+.hand-hour {{
+    width: 3px;
+    height: 26%;
+}}
+.hand-minute {{
+    width: 2px;
+    height: 36%;
+}}
+.hand-second {{
+    width: 1px;
+    height: 38%;
+    background: var(--accent);
+}}
+.hand-second::after {{
+    content: '';
+    position: absolute;
+    bottom: -18%;
+    left: 50%;
+    translate: -50% 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+}}
+.clock-center {{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    z-index: 10;
 }}
 .clock-value {{
     font-size: var(--display-lg);
@@ -1197,7 +1303,13 @@ h1 {{
             </div>
             <div class="metric-block home-clock" aria-label="北京时间实时钟表">
                 <p class="clock-label">CN Time</p>
-                <time class="clock-value" data-cn-clock>{escape(clock_text)}</time>
+                <div class="analog-clock" id="home-analog-clock">
+                    <!-- 60个刻度由JS生成 -->
+                    <div class="clock-hand hand-hour" id="hand-h"></div>
+                    <div class="clock-hand hand-minute" id="hand-m"></div>
+                    <div class="clock-hand hand-second" id="hand-s"></div>
+                    <div class="clock-center"></div>
+                </div>
                 <p class="clock-date" data-cn-date>{escape(clock_date)}</p>
             </div>
         </div>
