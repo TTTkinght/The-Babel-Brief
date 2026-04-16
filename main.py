@@ -1650,14 +1650,14 @@ Subject: [中文短句；中文短句]
    - 绝对禁止把整条深度新闻写成有序列表容器，例如 `1. 标题 / 2. 全景综述 / 3. 核心事实` 这种格式一律禁止。
    - 标题下方的所有字段都必须使用单层无序列表 `- `，不得把字段编号化。
    - `溯源印证` 下方必须使用 `* **媒体名**: [外媒原报道真实标题](URL)`；绝对禁止拆成“标题”“链接”两行。
-   - `AI推演` 必须写成单个 bullet 行，写成一段有方向性判断的情景推演，禁止标签化对仗结构，禁止再嵌套子列表。
+   - `AI推演` 必须模仿 Tangle News 的 “My take / Tangle's take” 写法：先承认争议双方最强论点，再给出编辑部自己的判断。必须写成单个 bullet 行，禁止标签化对仗结构，禁止再嵌套子列表。
    ### [当前板块独立序号]. [事件标题]
-   - 📰 **全景综述**：只写“为什么这件事重要”——即事件的宏观背景、结构性意义、与当前局势的关联、读者需要的前置语境。控制在 80-120 字。禁止在此处罗列具体数字、人名、动作或时间节点。
+   - 📰 **全景综述**：直接概括原始报道本身，写清谁做了什么、发生了什么、报道给出的关键背景和直接后果。控制在 80-130 字。禁止写“这条新闻的重要性在于”“关键变量是”等点评分析句式。
    - ⏱️ **新闻时间线（条件触发）**：仅当事件本身跨越多个明确时间节点时触发；严禁把不同媒体的发布时间拼成时间线。
    - 📌 **核心事实**：只写“发生了什么”——即具体动作、关键数字、当事方、时间节点，纯事实罗列，每条事实句末括注信息来源媒体名。禁止出现任何背景介绍、意义阐释或分析性语言；如果一句话在“全景综述”里已经出现过相似意思，则必须删掉。
-   - 🔴 **[阵营A / 利益相关方A] 视角**：必须写出具体相关方名称，提炼其核心论点、利益诉求、采取的动作或报道侧重点，句末注明引述来源；禁止泛泛写“相关方认为”。若当前报道原文中无法提取出该阵营的真实直接引语或明确立场声明，则必须转为写该方的客观利益结构与行为逻辑（例如“X 的核心诉求是……因为其面临……压力”），绝对禁止以“暂无表态”或“某方认为局势复杂”收尾。
-   - 🔵 **[阵营B / 对立方 / 市场反馈] 视角**：必须写出具体相关方、对立方或市场反馈名称，提炼其反驳、防御策略、约束条件或客观反馈，句末注明引述来源；若无直接对立方，转换为“行业/市场反馈视角”。若当前报道原文中无法提取出该阵营的真实直接引语或明确立场声明，则必须转为写该方的客观利益结构与行为逻辑（例如“X 的核心诉求是……因为其面临……压力”），绝对禁止以“暂无表态”或“某方认为局势复杂”收尾。
-   - ⚖️ **AI推演**：用分析师口吻写一段 60-90 字的情景判断，在同一个 bullet 行内自然呈现。从当前事件中抓出一个最关键的结构性变量，直接说清楚这个变量往哪个方向走、谁是最直接的受力方，以及当前局势中哪个条件一旦改变会引发反转。禁止使用“机会端”“风险端”“一方面”“另一方面”“既有机遇也有挑战”等标签化或对仗式句式；禁止具名主体模糊（如“相关方”“部分企业”）；禁止写成两段对称结构；必须有明确的方向性判断，不能两边骑墙收尾。
+   - 🔴 **[一方观点 / What one side is saying]**：模仿 Tangle 的观点综述，先用一句话概括这一方的核心看法，再解释其理由。必须写出具名阵营、利益相关方、政策派别或市场群体；禁止写成媒体视角复述标题。
+   - 🔵 **[另一方观点 / What the other side is saying]**：模仿 Tangle 的观点综述，概括另一方、反对方、受影响方或市场反馈的最强论点。若不是左右派议题，也要找出真实利益冲突或政策取舍；禁止空泛写“外部反馈仍需观察”。
+   - ⚖️ **AI推演**：模仿 Tangle 的 “My take”：先公平承认两方各自说对了什么，再给出清晰编辑判断。60-100 字，必须落到一个明确结论，禁止“优势/风险”“一方面/另一方面”等对仗模板。
    - 🔗 **溯源印证**：必须列出外媒原生标题和链接。
 
 6. 结尾彩蛋：
@@ -4236,12 +4236,12 @@ def ensure_deep_source_suffixes(md_text: str, selections: Dict[str, object]) -> 
         if current_candidate and stripped.startswith("- 📌 **核心事实**：") and "信息来源:" not in stripped:
             primary_source, _ = get_candidate_primary_secondary_sources(current_candidate)
             line = f"{raw.rstrip(' 。')} (信息来源: {primary_source})"
-        elif current_candidate and stripped.startswith("- 🔴 ") and "引述自:" not in stripped:
+        elif current_candidate and stripped.startswith("- 🔴 ") and "引述自:" not in stripped and "基于:" not in stripped:
             primary_source, _ = get_candidate_primary_secondary_sources(current_candidate)
-            line = f"{raw.rstrip(' 。')} (引述自: {primary_source} 报道)"
-        elif current_candidate and stripped.startswith("- 🔵 ") and "引述自:" not in stripped:
+            line = f"{raw.rstrip(' 。')} (基于: {primary_source} 报道)"
+        elif current_candidate and stripped.startswith("- 🔵 ") and "引述自:" not in stripped and "基于:" not in stripped:
             _, secondary_source = get_candidate_primary_secondary_sources(current_candidate)
-            line = f"{raw.rstrip(' 。')} (引述自: {secondary_source} 报道)"
+            line = f"{raw.rstrip(' 。')} (基于: {secondary_source} 报道)"
 
         restored.append(line)
     return "\n".join(restored)
@@ -4800,6 +4800,8 @@ def validate_rendered_report(md_text: str, selections: Dict[str, object]) -> Non
             rendered_seen[heading] = section_title
             if has_forbidden_english_residue(heading):
                 raise RuntimeError(f"{section_title} 标题未完成中文化: {heading}")
+            if re.match(r"^(?:消息人士|知情人士|据悉|据报道|报道称|来源称)[:：]", heading):
+                raise RuntimeError(f"{section_title} 标题仍带消息来源壳: {heading}")
         for idx, heading in enumerate(headings):
             for other in headings[idx + 1:]:
                 if titles_match(heading, other):
@@ -4815,7 +4817,7 @@ def validate_rendered_report(md_text: str, selections: Dict[str, object]) -> Non
         for ai_line in ai_lines:
             if "客观共识与风险推演" in ai_line:
                 raise RuntimeError(f"{section_title} AI推演字段名未更新: {ai_line}")
-            banned_ai_shapes = ("优势（机会）", "劣势（风险）", "机会端", "风险端", "一方面", "另一方面", "既有机遇也有挑战")
+            banned_ai_shapes = ("优势（机会）", "劣势（风险）", "机会端", "风险端", "一方面", "另一方面", "既有机遇也有挑战", "关键变量是")
             if any(shape in ai_line for shape in banned_ai_shapes):
                 raise RuntimeError(f"{section_title} AI推演仍是标签化对仗结构: {ai_line}")
             if len(clean_text(ai_line)) < 45:
@@ -4825,10 +4827,21 @@ def validate_rendered_report(md_text: str, selections: Dict[str, object]) -> Non
             stripped = line.strip()
             if deep_field_has_english_residue(stripped):
                 raise RuntimeError(f"{section_title} 字段未完成中文化: {stripped}")
-            if "信息来源: news.google.com" in stripped or "引述自: news.google.com" in stripped or "**news.google.com**" in stripped:
+            if "信息来源: news.google.com" in stripped or "引述自: news.google.com" in stripped or "基于: news.google.com" in stripped or "**news.google.com**" in stripped:
                 raise RuntimeError(f"{section_title} 来源识别退化: {stripped}")
             if stripped.startswith("- 📌 **核心事实**：") and "信息来源:" not in stripped:
                 raise RuntimeError(f"{section_title} 核心事实来源格式异常: {stripped}")
+            if stripped.startswith("- 📰 **全景综述**："):
+                banned_overview_shapes = ("这条新闻的重要性在于", "这条新闻重要在于", "这条新闻的价值在于", "关键变量是")
+                if any(shape in stripped for shape in banned_overview_shapes):
+                    raise RuntimeError(f"{section_title} 全景综述仍是点评模板: {stripped}")
+            if stripped.startswith("- 🔴 ") or stripped.startswith("- 🔵 "):
+                perspective_label = re.match(r"^-\s+[🔴🔵]\s+\*\*([^*]+)\*\*：", stripped)
+                if perspective_label:
+                    label = clean_label_text(perspective_label.group(1))
+                    media_label_pattern = r"^(Reuters|Bloomberg|Financial Times|FT|WSJ|AP|Associated Press|Al Jazeera|BBC|BBC World News|AFP|Nikkei Asia|South China Morning Post|Techmeme|TechCrunch).*(视角|观点)$"
+                    if re.match(media_label_pattern, label, flags=re.IGNORECASE):
+                        raise RuntimeError(f"{section_title} 视角标签仍是媒体视角: {stripped}")
 
 
 def extract_markdown_section_lines(md_text: str, section_title: str) -> List[str]:
@@ -4981,12 +4994,12 @@ def repair_report_structure(md_text: str, history: str, selections: Dict[str, ob
    * 🚨 `[独家重磅]` **中文标题**：中文一句话。[[来源: 媒体](URL)]
 5. 四个深读板块每条都必须严格使用以下骨架：
    ### [序号]. [中文标题]
-   - 📰 **全景综述**：只写“为什么这件事重要”，即宏观背景、结构性意义、与当前局势的关联和读者需要的前置语境，80-120 字；禁止罗列具体数字、人名、动作或时间节点。
+   - 📰 **全景综述**：直接概括原始报道本身，写清谁做了什么、发生了什么、报道给出的关键背景和直接后果，80-130 字；禁止写“这条新闻的重要性在于”“关键变量是”等点评分析句式。
    - ⏱️ **新闻时间线**：...  （仅在新闻事件本身有两个以上明确时间节点时输出；不要把媒体发布时间写成时间线）
    - 📌 **核心事实**：只写“发生了什么”，即具体动作、关键数字、当事方、时间节点；每条事实句末括注信息来源媒体名，禁止背景介绍、意义阐释或分析性语言。
-   - 🔴 **[具体阵营A / 利益相关方A] 视角**：写出具名主体的核心诉求、承压点与行为逻辑；若无直接引语，必须写客观利益结构，禁止“暂无表态”。
-   - 🔵 **[具体阵营B / 对立方 / 市场反馈] 视角**：写出具名主体、对立方或市场反馈的约束条件与行为逻辑；若无直接对立方，转换为行业/市场反馈视角，禁止空泛收尾。
-   - ⚖️ **AI推演**：写成一段 60-90 字方向性情景判断，抓住一个结构性变量，说清变量方向、直接受力方和反转条件；禁止“优势/风险”“一方面/另一方面”等对仗标签。
+   - 🔴 **[一方观点 / What one side is saying]**：像 Tangle 一样概括这一方最强论点，写清具名阵营、利益相关方、政策派别或市场群体为何这样看。
+   - 🔵 **[另一方观点 / What the other side is saying]**：像 Tangle 一样概括另一方、反对方、受影响方或市场反馈的最强论点；没有左右派时，也要找出真实利益冲突或政策取舍。
+   - ⚖️ **AI推演**：模仿 Tangle 的 “My take”：先公平承认两方各自说对了什么，再给出清晰编辑判断，60-100 字；禁止“优势/风险”“一方面/另一方面”等对仗标签。
    - 🔗 **溯源印证**：
        * **媒体A**: [外媒原标题](URL)
        * **媒体B**: [外媒原标题](URL)
@@ -5116,52 +5129,20 @@ def build_section_overview_text(
     fragments: Sequence[Dict[str, str]],
     section_title: str = "",
 ) -> str:
-    corpus = build_candidate_corpus(candidate, fragments)
-    if corpus_has(corpus, r"(openai|anthropic|ai|model|cyber|chip|nvidia|semiconductor|人工智能|模型|网络安全|芯片|半导体|算力)"):
-        return (
-            "这条新闻重要在于，AI 议题已经从产品竞赛进入金融安全、监管责任和基础设施韧性的交叉地带；"
-            "技术部署速度越快，治理边界和问责机制越难继续滞后。"
-        )
-    if corpus_has(corpus, r"(hormuz|shipping|ship|oil|gas|energy|封锁|航运|船只|海峡|能源|油价)"):
-        return (
-            "这条新闻的重要性在于，安全危机正在从战场叙事外溢到运输、能源和通胀链条；"
-            "一旦通行风险被市场重新定价，外交谈判会同时承受军事压力和民生成本压力。"
-        )
-    if corpus_has(corpus, r"(ceasefire|talks?|negotiat|war|missile|drone|hostage|停火|谈判|会谈|战争|导弹|无人机|人质)"):
-        return (
-            "这条新闻的关键不只是谈判是否举行，而是冲突各方是否开始把军事消耗转化为可执行的政治交换；"
-            "它关系到地区安全安排、盟友协调和后续制裁空间。"
-        )
-    if corpus_has(corpus, r"(taiwan|china|beijing|tariff|sanction|export control|台湾|中国|北京|关税|制裁|出口管制|中企|稀土)"):
-        return (
-            "这条新闻的重要性在于，中国议题从背景变量进入直接政策或外交动作；"
-            "涉台、贸易和供应链信号会被相关政府与市场同时解读为战略边界的变化。"
-        )
-    if corpus_has(corpus, r"(fed|bank|credit|inflation|rate|market|stocks?|bonds?|美联储|银行|信贷|通胀|利率|市场|债券|股市)"):
-        return (
-            "这条新闻的意义在于，它把宏观压力转化为金融体系和资产定价问题；"
-            "监管态度、融资条件与风险敞口的变化，都会影响投资者对政策路径和企业利润的判断。"
-        )
+    summary_parts: List[str] = []
+    for fragment in fragments[:2]:
+        source = canonicalize_source_name(fragment.get("source", "")) or "相关媒体"
+        text = strip_report_scaffold(fragment.get("text", "") or fragment.get("title", ""), source)
+        if not text:
+            continue
+        text = condense_summary_sentence(text, limit=110).rstrip("。！？!?")
+        if any(titles_match(text, existing) or text in existing or existing in text for existing in summary_parts):
+            continue
+        summary_parts.append(f"{source}报道，{text}")
 
-    fallback_map = {
-        "## 🇨🇳【中国与世界 / China & The World】": (
-            "这条新闻的价值在于观察中国相关议题如何影响外交、贸易和供应链预期；"
-            "当政策信号进入跨境场景，市场往往会先重估边界条件，再等待正式表态。"
-        ),
-        "## 🌍【全球局势 / Global Affairs】": (
-            "这条新闻的价值在于判断地缘冲突是否出现新的约束条件；"
-            "谈判窗口、安全承诺和外部调停信号，都会改变各方继续升级或转向妥协的成本。"
-        ),
-        "## 📈【商业与市场 / Business & Markets】": (
-            "这条新闻的价值在于观察企业、政策和市场预期之间的传导；"
-            "只要关键变量影响资金成本或需求判断，资产价格就会先于正式数据作出反应。"
-        ),
-        "## 🚀【科技与AI / Tech & AI】": (
-            "这条新闻的价值在于观察技术扩张是否正在触碰监管、客户采用和基础设施约束；"
-            "真正的分水岭不是发布速度，而是能否进入高风险场景并保持可控。"
-        ),
-    }
-    return fallback_map.get(section_title, condense_summary_sentence(candidate.get("headline", ""), limit=120))
+    if summary_parts:
+        return ensure_terminal_punctuation("；".join(summary_parts))
+    return ensure_terminal_punctuation(condense_summary_sentence(candidate.get("headline", ""), limit=120))
 
 
 EVENT_DATE_RE = re.compile(
@@ -5319,43 +5300,230 @@ def build_ai_inference_text(section_title: str, candidate: Dict[str, object], fr
     corpus = build_candidate_corpus(candidate, fragments)
     if corpus_has(corpus, r"(anthropic|openai|ai|model|cyber|人工智能|模型|网络安全|基础设施)"):
         return (
-            "关键变量是模型风险能否被银行风控和监管程序吸收。若测试暴露不可解释或不可停用的问题，"
-            "华尔街会先放慢采用；只有审计责任清晰，AI 公司才能把试点转成长期部署。"
+            "监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、"
+            "可审计、可停用，否则华尔街会把试点保留在沙盒里。"
         )
     if corpus_has(corpus, r"(hormuz|shipping|ship|oil|gas|energy|封锁|航运|船只|海峡|能源|油价)"):
         return (
-            "关键变量是海上通行风险能否回落。若封锁继续，最先承压的是航运商、能源进口国和通胀预期；"
-            "只有停火机制出现可执行时间表，市场才会从冲突溢价转向谈判折价。"
+            "华盛顿需要把停火谈判和航道安全放在同一张表上看。只要船东、保险商和能源买家仍按封锁风险定价，"
+            "外交会谈释放的缓和信号就很难真正压低冲突溢价。"
         )
     if corpus_has(corpus, r"(ceasefire|talks?|negotiat|iran|war|停火|谈判|会谈|伊朗|战争)"):
         return (
-            "关键变量是谈判能否形成可验证的执行步骤。若各方只释放会面信号而不冻结升级动作，"
-            "美国和伊朗都会继续把军事压力带进谈判桌，地区风险不会真正降温。"
+            "会面本身不足以改变局势，真正有分量的是双方是否同步冻结升级动作。若谈判桌外的军事压力继续增加，"
+            "美国和伊朗都会把让步视为弱点，停火文本也会缺少执行可信度。"
         )
     if corpus_has(corpus, r"(taiwan|beijing|china|台湾|北京|中国|两岸)"):
         return (
-            "关键变量是象征性接触会不会转化为政策动作。若北京继续放大政治信号，台湾和美国会被迫提高安全校准；"
-            "只有军事活动同步降温，两岸沟通才可能被市场解读为缓和。"
+            "北京的政治接触只有在军事活动同步降温时才会被外界视为缓和。若军机、军舰或关税信号继续升高，"
+            "台湾和美国更可能把会面理解为压力管理，而不是关系修复。"
         )
     if corpus_has(corpus, r"(fed|private credit|bank|美联储|私人信贷|银行|风险敞口)"):
         return (
-            "关键变量是监管是否把私人信贷纳入更硬的资本约束。若美联储继续追问穿透风险，"
-            "美国银行会先收紧授信和定价；只有风险数据透明化，信用扩张才可能恢复节奏。"
+            "美联储追问私人信贷敞口，说明监管已经不满足于看银行表内风险。银行若无法解释风险穿透路径，"
+            "下一步会先体现在授信定价和资本占用上，而不是等到违约数据恶化。"
         )
     if corpus_has(corpus, r"(inflation|consumer|sentiment|market|通胀|消费者|信心|市场)"):
         return (
-            "关键变量是价格压力是否继续侵蚀消费预期。若通胀和信心同步恶化，最先受力的是零售、信贷和政策沟通；"
-            "只有能源与就业数据稳定，市场才会重新交易软着陆。"
+            "通胀和消费者信心同时转弱时，政策沟通会比单一价格数据更难处理。零售、信贷和债券市场会先调整预期，"
+            "除非能源与就业数据稳住，否则软着陆叙事会继续失去支撑。"
         )
     if section_title == "## 🚀【科技与AI / Tech & AI】":
         return (
-            "关键变量是技术部署能否越过合规和成本门槛。若客户试点无法证明稳定收益，供应商会被迫转向更窄场景；"
-            "只有安全、价格和责任边界同时清楚，采用曲线才会重新变陡。"
+            "技术部署方说速度，客户和监管者说责任，这两者不会自动合流。若试点不能证明收益、成本和安全边界，"
+            "AI 公司会被迫收窄应用场景；清晰的审计路径才会重新打开采用曲线。"
         )
     return (
-        "关键变量是当前信号能否变成可验证动作。若当事方继续停留在表态层面，市场会先提高风险折价；"
-        "只有执行路径、时间表和责任主体变清楚，事件影响才会从猜测转为定价。"
+        "这类事件最容易被表态噪音放大，判断时应先看可验证动作而不是措辞强度。当时间表、责任主体和执行路径变清楚，"
+        "市场才会把它从政治信号重新定价为实际影响。"
     )
+
+
+def build_deep_candidate_payload(candidate: Dict[str, object], index: int) -> Dict[str, object]:
+    items = []
+    for item in candidate.get("items", [])[:3]:
+        items.append(
+            {
+                "source": canonicalize_source_name(str(item.get("source", ""))),
+                "title": clean_text(item.get("title", "")),
+                "summary": clean_text(item.get("summary", ""))[:360],
+                "published": clean_text(str(item.get("published", ""))),
+                "link": clean_text(item.get("link", "")),
+            }
+        )
+    return {
+        "index": index,
+        "headline": clean_text(candidate.get("headline", "")),
+        "sources": list(candidate.get("sources", []))[:4],
+        "primary_source": canonicalize_source_name(str(candidate.get("primary_source", ""))),
+        "source_count": candidate.get("source_count", 0),
+        "items": items,
+    }
+
+
+def sanitize_deep_entry_text(value: object, limit: int = 180) -> str:
+    text = clean_text(str(value or ""))
+    text = re.sub(r"^[-*]\s*", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) > limit:
+        text = condense_summary_sentence(text, limit=limit)
+    return text
+
+
+def clean_deep_news_title(value: object) -> str:
+    title = clean_label_text(sanitize_deep_entry_text(value, 96))
+    title = re.sub(
+        r"^(?:Reuters|Bloomberg|Financial Times|FT|WSJ|AP|Associated Press|Al Jazeera|BBC|BBC World News|AFP|Nikkei Asia|South China Morning Post|Techmeme|TechCrunch)[:：]\s*",
+        "",
+        title,
+        flags=re.IGNORECASE,
+    )
+    title = re.sub(r"^(?:消息人士|知情人士|据悉|据报道|报道称|来源称)[:：]\s*", "", title)
+    return clean_label_text(title)
+
+
+def normalize_core_fact_source_marker(text: object, fallback_source: str) -> str:
+    value = clean_text(str(text or ""))
+    if "信息来源:" in value:
+        return value
+    match = re.search(r"\s*[（(]\s*([^)）]{2,48})\s*[)）]\s*$", value)
+    if not match:
+        return value
+    source = clean_label_text(match.group(1))
+    canonical_source = canonicalize_source_name(source)
+    if looks_like_known_publisher(source) or canonical_source == canonicalize_source_name(fallback_source):
+        value = value[:match.start()].rstrip(" 。") + f" (信息来源: {canonical_source})"
+    return value
+
+
+def normalize_tangle_deep_entries(
+    raw_entries: Sequence[object],
+    candidates: Sequence[Dict[str, object]],
+    section_title: str,
+) -> List[Dict[str, object]]:
+    normalized: List[Dict[str, object]] = []
+    for fallback_index, raw_entry in enumerate(raw_entries, start=1):
+        if not isinstance(raw_entry, dict):
+            continue
+        try:
+            entry_index = int(raw_entry.get("index", fallback_index))
+        except (TypeError, ValueError):
+            entry_index = fallback_index
+        candidate_index = entry_index - 1
+        if not 0 <= candidate_index < len(candidates):
+            candidate_index = fallback_index - 1
+        if not 0 <= candidate_index < len(candidates):
+            continue
+        candidate = candidates[candidate_index]
+
+        title = clean_deep_news_title(raw_entry.get("title"))
+        if not title:
+            title = clean_deep_news_title(candidate.get("headline", ""))
+
+        overview = sanitize_deep_entry_text(raw_entry.get("overview"), 180)
+        if not overview:
+            overview = build_section_overview_text(candidate, collect_candidate_report_fragments(candidate), section_title)
+
+        core_fact = sanitize_deep_entry_text(raw_entry.get("core_fact"), 180)
+        if not core_fact:
+            core_fact = build_core_fact_text(candidate, collect_candidate_report_fragments(candidate), "")
+
+        label_a = clean_label_text(sanitize_deep_entry_text(raw_entry.get("perspective_a_label"), 42)) or "一方观点"
+        view_a = sanitize_deep_entry_text(raw_entry.get("perspective_a"), 180)
+        label_b = clean_label_text(sanitize_deep_entry_text(raw_entry.get("perspective_b_label"), 42)) or "另一方观点"
+        view_b = sanitize_deep_entry_text(raw_entry.get("perspective_b"), 180)
+        ai_take = sanitize_deep_entry_text(raw_entry.get("ai_take"), 180)
+
+        if not (view_a and view_b and ai_take):
+            fragments = collect_candidate_report_fragments(candidate)
+            fallback_a, fallback_view_a, fallback_b, fallback_view_b = build_section_view_texts(
+                section_title,
+                fragments,
+                ("一方观点", "另一方观点"),
+            )
+            label_a = label_a or fallback_a
+            view_a = view_a or fallback_view_a
+            label_b = label_b or fallback_b
+            view_b = view_b or fallback_view_b
+            ai_take = ai_take or build_ai_inference_text(section_title, candidate, fragments)
+
+        normalized.append(
+            {
+                "candidate": candidate,
+                "index": fallback_index,
+                "title": title,
+                "timeline": "",
+                "overview": overview,
+                "core_fact": core_fact,
+                "label_a": label_a,
+                "view_a": view_a,
+                "label_b": label_b,
+                "view_b": view_b,
+                "ai_inference": ai_take,
+            }
+        )
+    return normalized
+
+
+def build_tangle_style_deep_entries_with_llm(
+    section_title: str,
+    candidates: Sequence[Dict[str, object]],
+) -> List[Dict[str, object]]:
+    if os.getenv("DISABLE_TANGLE_DEEP_LLM", "").strip().lower() in {"1", "true", "yes", "on"}:
+        return []
+    if not candidates:
+        return []
+
+    payload = [
+        build_deep_candidate_payload(candidate, index)
+        for index, candidate in enumerate(candidates[:SECTION_MAX_ITEMS], start=1)
+    ]
+    prompt = f"""
+你是 The Babel Brief 的中文编辑。请模仿 Tangle News 的结构写深读条目：先像 “Today’s topic” 一样概括报道原文，再像 “What one side is saying / What the other side is saying” 一样总结两种观点，最后像 “My take” 一样给出编辑判断。
+
+板块：{section_title}
+
+只返回 JSON 对象：
+{{
+  "entries": [
+    {{
+      "index": 1,
+      "title": "中文事实标题，不要带媒体名前缀",
+      "overview": "80-130字，直接概括报道原文：谁做了什么、发生了什么、报道给出的背景和直接后果",
+      "core_fact": "纯事实句；句末括注信息来源媒体名",
+      "perspective_a_label": "一方观点标签，例如 美国鹰派怎么看 / 北京怎么看 / 投资者怎么看",
+      "perspective_a": "像 Tangle 的观点综述，先概括这一方最强论点，再解释理由；不要复述标题",
+      "perspective_b_label": "另一方观点标签，例如 伊朗怎么看 / 台湾怎么看 / 监管者怎么看",
+      "perspective_b": "概括另一方、反对方、受影响方或市场反馈的最强论点；没有左右派也要写真实利益冲突",
+      "ai_take": "60-100字，像 Tangle 的 My take：先承认双方各自说对了什么，再给出清晰判断"
+    }}
+  ]
+}}
+
+硬规则：
+1. 严禁在 overview 写“这条新闻的重要性在于”“关键变量是”“这条新闻的价值在于”等点评句。overview 只概括报道原文。
+2. 严禁把 perspective 写成“Reuters视角 / Bloomberg视角 / Financial Times视角”。观点标签必须是阵营、利益相关方、政策派别、市场群体或受影响方。
+3. 严禁使用“外部反馈仍需观察”“优势（机会）”“劣势（风险）”“一方面/另一方面”“既有机遇也有挑战”等模板。
+4. 不要编造引语；如果原文没有直接引语，就写该方可从报道事实中推导出的最强论点和利益逻辑。
+5. title 必须比原始标题更像中文新闻标题，去掉“消息人士”“据报道”“FT:”这类壳。
+6. 只使用下面 JSON 里的信息，不要另造事实；不要添加 JSON 里没有出现的武器类型、技术属性、地理范围、机构或专家群体。
+
+候选新闻：
+{json.dumps(payload, ensure_ascii=False, indent=2)}
+"""
+    try:
+        data = extract_json_object(call_llm(prompt))
+    except Exception as exc:
+        print(f"[WARN] Tangle 风格深读生成失败，使用本地兜底: {exc}")
+        return []
+
+    entries = data.get("entries", [])
+    if not isinstance(entries, list):
+        return []
+    normalized = normalize_tangle_deep_entries(entries, candidates, section_title)
+    if len(normalized) < min(len(candidates), SECTION_DEFAULT_ITEMS):
+        return []
+    return normalized
 
 
 def collect_traceability_entries(candidate: Dict[str, object], limit: int = 2) -> List[Tuple[str, str, str]]:
@@ -5379,7 +5547,8 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
     if not candidates:
         return []
 
-    entries: List[Dict[str, object]] = []
+    limited_candidates = list(candidates[:SECTION_MAX_ITEMS])
+    entries = build_tangle_style_deep_entries_with_llm(section_title, limited_candidates)
 
     view_label_map = {
         "## 🇨🇳【中国与世界 / China & The World】": ("直接相关方视角", "外部回应视角"),
@@ -5389,34 +5558,36 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
     }
     label_a, label_b = view_label_map.get(section_title, ("直接相关方视角", "外部反馈视角"))
 
-    for idx, candidate in enumerate(candidates[:SECTION_MAX_ITEMS], start=1):
-        headline = clean_text(candidate.get("headline", ""))
-        fragments = collect_candidate_report_fragments(candidate)
-        timeline = build_section_timeline_text(fragments)
-        overview = build_section_overview_text(candidate, fragments, section_title)
-        core_fact = build_core_fact_text(candidate, fragments, timeline)
-        label_a_text, view_a_text, label_b_text, view_b_text = build_section_view_texts(
-            section_title,
-            fragments,
-            (label_a, label_b),
-        )
-        ai_inference = build_ai_inference_text(section_title, candidate, fragments)
+    if not entries:
+        entries = []
+        for idx, candidate in enumerate(limited_candidates, start=1):
+            headline = clean_deep_news_title(candidate.get("headline", ""))
+            fragments = collect_candidate_report_fragments(candidate)
+            timeline = build_section_timeline_text(fragments)
+            overview = build_section_overview_text(candidate, fragments, section_title)
+            core_fact = build_core_fact_text(candidate, fragments, timeline)
+            label_a_text, view_a_text, label_b_text, view_b_text = build_section_view_texts(
+                section_title,
+                fragments,
+                (label_a, label_b),
+            )
+            ai_inference = build_ai_inference_text(section_title, candidate, fragments)
 
-        entries.append(
-            {
-                "candidate": candidate,
-                "index": idx,
-                "title": headline,
-                "timeline": timeline,
-                "overview": overview,
-                "core_fact": core_fact,
-                "label_a": label_a_text,
-                "view_a": view_a_text,
-                "label_b": label_b_text,
-                "view_b": view_b_text,
-                "ai_inference": ai_inference,
-            }
-        )
+            entries.append(
+                {
+                    "candidate": candidate,
+                    "index": idx,
+                    "title": headline,
+                    "timeline": timeline,
+                    "overview": overview,
+                    "core_fact": core_fact,
+                    "label_a": label_a_text,
+                    "view_a": view_a_text,
+                    "label_b": label_b_text,
+                    "view_b": view_b_text,
+                    "ai_inference": ai_inference,
+                }
+            )
     rendered: List[str] = []
 
     for entry in entries:
@@ -5432,7 +5603,8 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
 
         title = clean_label_text(str(entry["title"]))
         overview = ensure_terminal_punctuation(str(entry["overview"]))
-        core_fact = ensure_terminal_punctuation(str(entry["core_fact"]))
+        core_fact = normalize_core_fact_source_marker(entry["core_fact"], primary_source)
+        core_fact = ensure_terminal_punctuation(core_fact)
         view_a = ensure_terminal_punctuation(str(entry["view_a"] or entry["overview"]))
         view_b_raw = str(entry["view_b"])
         if not clean_text(view_b_raw):
@@ -5448,8 +5620,8 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
             rendered.append(f"- ⏱️ **新闻时间线**：{entry['timeline']}")
         core_fact_suffix = "" if "信息来源:" in core_fact else f" (信息来源: {primary_source})"
         rendered.append(f"- 📌 **核心事实**：{core_fact}{core_fact_suffix}")
-        rendered.append(f"- 🔴 **{entry['label_a']}**：{view_a} (引述自: {primary_source} 报道)")
-        rendered.append(f"- 🔵 **{entry['label_b']}**：{view_b} (引述自: {secondary_source} 报道)")
+        rendered.append(f"- 🔴 **{entry['label_a']}**：{view_a} (基于: {primary_source} 报道)")
+        rendered.append(f"- 🔵 **{entry['label_b']}**：{view_b} (基于: {secondary_source} 报道)")
         rendered.append(f"- ⚖️ **AI推演**：{ai_inference}")
         rendered.append("- 🔗 **溯源印证**：")
         for source, trace_title, url in traceability:
