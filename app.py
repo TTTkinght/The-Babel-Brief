@@ -158,6 +158,9 @@ DETAIL_STYLE_HTML = """
     --text-display: #000000;
     --accent: #FF661F;
     --interactive: var(--text-display);
+    --ambient-grid: rgba(0, 0, 0, 0.032);
+    --ambient-dot: rgba(0, 0, 0, 0.038);
+    --ambient-scan: rgba(255, 102, 31, 0.055);
     --display-xl: 4.5rem;
     --display-lg: 3rem;
     --display-md: 2.25rem;
@@ -194,12 +197,17 @@ DETAIL_STYLE_HTML = """
     --text-primary: #E8E8E8;
     --text-display: #FFFFFF;
     --interactive: var(--text-display);
+    --ambient-grid: rgba(255, 255, 255, 0.045);
+    --ambient-dot: rgba(255, 255, 255, 0.032);
+    --ambient-scan: rgba(255, 102, 31, 0.075);
 }
 * {
     box-sizing: border-box;
     letter-spacing: 0;
 }
 body {
+    position: relative;
+    min-height: 100vh;
     margin: 0;
     padding: var(--space-4xl) var(--space-xl);
     background: var(--black);
@@ -208,6 +216,39 @@ body {
     font-size: var(--body);
     line-height: 1.5;
     transition: background-color var(--motion-base) var(--ease-out), color var(--motion-base) var(--ease-out);
+}
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+}
+body::before {
+    inset: 0;
+    background-image:
+        linear-gradient(to right, var(--ambient-grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--ambient-grid) 1px, transparent 1px),
+        radial-gradient(circle, var(--ambient-dot) 0 1px, transparent 1.2px);
+    background-size: 64px 64px, 64px 64px, 32px 32px;
+    background-position: -1px -1px, -1px -1px, 0 0;
+}
+body::after {
+    left: 0;
+    right: 0;
+    top: -36vh;
+    height: 36vh;
+    background: linear-gradient(to bottom, transparent 0%, var(--ambient-scan) 50%, transparent 100%);
+    transform: translate3d(0, -36vh, 0);
+    animation: ambient-scan 28s linear infinite;
+}
+body > * {
+    position: relative;
+    z-index: 1;
+}
+@keyframes ambient-scan {
+    from { transform: translate3d(0, -36vh, 0); }
+    to { transform: translate3d(0, 136vh, 0); }
 }
 .brief-backbar {
     display: grid;
@@ -515,6 +556,10 @@ hr {
         animation-iteration-count: 1 !important;
         transition-duration: 1ms !important;
         scroll-behavior: auto !important;
+    }
+    body::after {
+        animation: none !important;
+        opacity: 0;
     }
 }
 @media (max-width: 640px) {
@@ -828,6 +873,9 @@ def render_index(entries: Sequence[ArchiveEntry]) -> str:
     --home-label-color: rgba(102, 102, 102, 0.5);
     --home-label-size: 12px;
     --interactive: var(--text-display);
+    --ambient-grid: rgba(0, 0, 0, 0.032);
+    --ambient-dot: rgba(0, 0, 0, 0.038);
+    --ambient-scan: rgba(255, 102, 31, 0.055);
     --display-xl: 4.5rem;
     --display-lg: 3rem;
     --display-md: 2.25rem;
@@ -869,12 +917,17 @@ def render_index(entries: Sequence[ArchiveEntry]) -> str:
     --home-title-weight: 700;
     --home-label-color: var(--text-secondary);
     --home-label-size: 12px;
+    --ambient-grid: rgba(255, 255, 255, 0.045);
+    --ambient-dot: rgba(255, 255, 255, 0.032);
+    --ambient-scan: rgba(255, 102, 31, 0.075);
 }}
 * {{
     box-sizing: border-box;
     letter-spacing: 0;
 }}
 body {{
+    position: relative;
+    min-height: 100vh;
     margin: 0;
     background: var(--black);
     color: var(--text-primary);
@@ -882,6 +935,39 @@ body {{
     font-size: var(--body);
     line-height: 1.5;
     transition: background-color var(--motion-base) var(--ease-out), color var(--motion-base) var(--ease-out);
+}}
+body::before,
+body::after {{
+    content: "";
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+}}
+body::before {{
+    inset: 0;
+    background-image:
+        linear-gradient(to right, var(--ambient-grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--ambient-grid) 1px, transparent 1px),
+        radial-gradient(circle, var(--ambient-dot) 0 1px, transparent 1.2px);
+    background-size: 64px 64px, 64px 64px, 32px 32px;
+    background-position: -1px -1px, -1px -1px, 0 0;
+}}
+body::after {{
+    left: 0;
+    right: 0;
+    top: -36vh;
+    height: 36vh;
+    background: linear-gradient(to bottom, transparent 0%, var(--ambient-scan) 50%, transparent 100%);
+    transform: translate3d(0, -36vh, 0);
+    animation: ambient-scan 28s linear infinite;
+}}
+body > * {{
+    position: relative;
+    z-index: 1;
+}}
+@keyframes ambient-scan {{
+    from {{ transform: translate3d(0, -36vh, 0); }}
+    to {{ transform: translate3d(0, 136vh, 0); }}
 }}
 a {{
     color: inherit;
@@ -1251,6 +1337,10 @@ h1 {{
         animation-iteration-count: 1 !important;
         transition-duration: 1ms !important;
         scroll-behavior: auto !important;
+    }}
+    body::after {{
+        animation: none !important;
+        opacity: 0;
     }}
 }}
 @media (max-width: 640px) {{
