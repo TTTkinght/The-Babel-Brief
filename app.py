@@ -1014,15 +1014,15 @@ h1 {{
 .clock-readout {{
     display: flex;
     align-items: center;
-    gap: var(--space-lg);
+    gap: var(--space-md);
     margin-top: var(--space-sm);
 }}
 .analog-clock {{
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
-    background: var(--surface);
+    background: transparent;
     border: 1px solid var(--border-visible);
     margin: 4px 0;
 }}
@@ -1042,15 +1042,18 @@ h1 {{
     left: 0;
     width: 100%;
     background: var(--text-primary);
+    opacity: 0.16;
 }}
 .clock-tick.hour-tick {{
     width: 2px;
 }}
 .clock-tick.hour-tick::before {{
-    height: 10px;
+    height: 7px;
+    opacity: 0.44;
 }}
 .clock-tick.min-tick::before {{
-    height: 6px;
+    height: 3px;
+    opacity: 0.1;
 }}
 .clock-hand {{
     position: absolute;
@@ -1062,17 +1065,20 @@ h1 {{
     translate: -50% 0;
 }}
 .hand-hour {{
-    width: 3px;
-    height: 26%;
+    width: 2px;
+    height: 28%;
 }}
 .hand-minute {{
-    width: 2px;
-    height: 36%;
+    width: 1px;
+    height: 35%;
+    background: var(--text-secondary);
+    opacity: 0.36;
 }}
 .hand-second {{
     width: 1px;
-    height: 38%;
+    height: 37%;
     background: var(--accent);
+    opacity: 0.86;
 }}
 .hand-second::after {{
     content: '';
@@ -1080,8 +1086,8 @@ h1 {{
     bottom: -18%;
     left: 50%;
     translate: -50% 0;
-    width: 7px;
-    height: 7px;
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
     background: var(--accent);
 }}
@@ -1090,10 +1096,10 @@ h1 {{
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--text-display);
     z-index: 10;
 }}
 .clock-value {{
