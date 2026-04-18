@@ -21,9 +21,6 @@
     --text-display: #000000;
     --accent: #FF661F;
     --interactive: var(--text-display);
-    --ambient-grid: rgba(0, 0, 0, 0.032);
-    --ambient-dot: rgba(0, 0, 0, 0.038);
-    --ambient-scan: rgba(255, 102, 31, 0.055);
     --display-xl: 4.5rem;
     --display-lg: 3rem;
     --display-md: 2.25rem;
@@ -60,17 +57,12 @@
     --text-primary: #E8E8E8;
     --text-display: #FFFFFF;
     --interactive: var(--text-display);
-    --ambient-grid: rgba(255, 255, 255, 0.045);
-    --ambient-dot: rgba(255, 255, 255, 0.032);
-    --ambient-scan: rgba(255, 102, 31, 0.075);
 }
 * {
     box-sizing: border-box;
     letter-spacing: 0;
 }
 body {
-    position: relative;
-    min-height: 100vh;
     margin: 0;
     padding: var(--space-4xl) var(--space-xl);
     background: var(--black);
@@ -79,39 +71,6 @@ body {
     font-size: var(--body);
     line-height: 1.5;
     transition: background-color var(--motion-base) var(--ease-out), color var(--motion-base) var(--ease-out);
-}
-body::before,
-body::after {
-    content: "";
-    position: fixed;
-    pointer-events: none;
-    z-index: 0;
-}
-body::before {
-    inset: 0;
-    background-image:
-        linear-gradient(to right, var(--ambient-grid) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--ambient-grid) 1px, transparent 1px),
-        radial-gradient(circle, var(--ambient-dot) 0 1px, transparent 1.2px);
-    background-size: 64px 64px, 64px 64px, 32px 32px;
-    background-position: -1px -1px, -1px -1px, 0 0;
-}
-body::after {
-    left: 0;
-    right: 0;
-    top: -36vh;
-    height: 36vh;
-    background: linear-gradient(to bottom, transparent 0%, var(--ambient-scan) 50%, transparent 100%);
-    transform: translate3d(0, -36vh, 0);
-    animation: ambient-scan 28s linear infinite;
-}
-body > * {
-    position: relative;
-    z-index: 1;
-}
-@keyframes ambient-scan {
-    from { transform: translate3d(0, -36vh, 0); }
-    to { transform: translate3d(0, 136vh, 0); }
 }
 .brief-backbar {
     display: grid;
@@ -420,10 +379,6 @@ hr {
         transition-duration: 1ms !important;
         scroll-behavior: auto !important;
     }
-    body::after {
-        animation: none !important;
-        opacity: 0;
-    }
 }
 @media (max-width: 640px) {
     body {
@@ -489,7 +444,7 @@ hr {
         <p class="instrument-number">16</p>
         <p class="instrument-meta">04 / 2026</p>
         <p class="instrument-label">CN Time</p>
-        <time class="instrument-clock" data-cn-clock>09:09</time>
+        <time class="instrument-clock" data-cn-clock>12:32</time>
     </div>
     <h1 class="brief-detail-title">若美联储主席鲍威尔5月不离职将解雇其职务</h1>
 </header>
