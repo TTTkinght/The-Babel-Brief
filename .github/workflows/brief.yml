@@ -45,6 +45,8 @@ jobs:
           GEMINI_MAX_RETRIES: "2"
           GEMINI_CONNECT_TIMEOUT_SECONDS: "10"
           COMPACT_BRIEF_MODE: "1"
+          TODAY_ECHO_ALLOW_LLM_CANDIDATES: "1"
+          TODAY_ECHO_LLM_CANDIDATE_BATCHES: "1"
         run: python main.py
 
       - name: Build static site

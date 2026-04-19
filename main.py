@@ -1674,7 +1674,7 @@ Subject: [中文短句；中文短句]
      > 🎤 **[歌手/乐队]** · 📅 [首发精确日期] · 💽 [流派]
      >
      > **📝 编辑推荐 / Editor's Notes：**
-     > [撰写 100-150 字的专业乐评。可参考 Apple Music 编辑推荐语和优质音乐媒体的评论论点，但要转译成流利中文段落，不要机械点名来源。绝对拒绝浮夸辞藻，尊重客观音乐史。绝不允许使用空洞修辞，绝不允许凭空捏造主观听感。]
+     > [撰写 180-320 字的专业乐评。可参考 Apple Music 编辑推荐语和优质音乐媒体的评论论点，但要转译成流利中文段落，不要机械点名来源。绝对拒绝浮夸辞藻，尊重客观音乐史。绝不允许使用空洞修辞，绝不允许凭空捏造主观听感。]
 
 7. 邮件标题元数据：
    - 全文最后必须另起一行，仅输出以下纯文本格式：
@@ -3008,10 +3008,11 @@ def request_today_echo_candidates() -> List[Tuple[str, str]]:
 }}
 
 规则：
-1. 至少给出 8 个候选。
-2. 只列出你认为“官方首发月日”与今天相同的录音室专辑。
-3. 优先给出历史地位高、评论口碑强、信息更容易验证的专辑。
-4. 不要解释，不要 Markdown，不要额外字段。
+1. 至少给出 12 个候选，并按“音乐史地位、听众熟悉度、评论口碑、文化影响力”从高到低排序。
+2. 只列出你认为“官方首发月日”与今天相同的录音室专辑；不确定日期的也可以列出，系统会后续严格核验。
+3. 优先给出大众更可能听过、被 Pitchfork / Rolling Stone / AllMusic / Apple Music / Album of the Year / Wikipedia 广泛记录的专辑。
+4. 避免把资料完整但影响力有限的冷门专辑排在前面；除非今天确实没有更重要的候选。
+5. 不要解释，不要 Markdown，不要额外字段。
 """
     data = extract_json_object(call_llm(prompt))
     pairs: List[Tuple[str, str]] = []
@@ -3025,21 +3026,63 @@ def request_today_echo_candidates() -> List[Tuple[str, str]]:
     return pairs
 
 
+def today_echo_allows_llm_candidates() -> bool:
+    value = os.getenv("TODAY_ECHO_ALLOW_LLM_CANDIDATES", "1").strip().lower()
+    return value not in {"0", "false", "no", "off"}
+
+
+def today_echo_llm_candidate_batches() -> int:
+    return max(0, min(3, int(os.getenv("TODAY_ECHO_LLM_CANDIDATE_BATCHES", "1"))))
+
+
+def parse_rating_value(rating: str) -> float:
+    match = re.search(r"(\d+(?:\.\d+)?)\s*/\s*5", clean_text(rating))
+    return float(match.group(1)) if match else 0.0
+
+
+def today_echo_editorial_signal(verified: Dict[str, object]) -> float:
+    signal = 0.0
+    for item in verified.get("evidence", []):
+        source = clean_text(str(item.get("source", "")))
+        if source == "AllMusic":
+            rating = parse_rating_value(str(item.get("allmusic_rating", "")))
+            review = item.get("review") or {}
+            review_text = clean_text(str(review.get("text", ""))) if isinstance(review, dict) else ""
+            if review_text:
+                signal += 6
+            if rating >= 4:
+                signal += 5
+            elif rating >= 3.5:
+                signal += 2
+            elif 0 < rating < 3:
+                signal -= 8
+            if item.get("genres") or item.get("styles"):
+                signal += 1
+        elif source == "Wikidata":
+            signal += 1
+        elif source == "MusicBrainz":
+            signal += 0.5
+    return signal
+
+
 def select_verified_today_echo_candidate(timeout_s: int, allow_llm: bool = True) -> Optional[Dict[str, object]]:
     checked = set()
     best_match: Optional[Dict[str, object]] = None
+    best_rank: Tuple[float, float, float, float, float] = (-999, -999, -999, -999, -999)
 
     candidate_batches: List[List[Tuple[str, str]]] = []
+    llm_batch_count = 0
     if allow_llm:
-        for _ in range(2):
+        for _ in range(today_echo_llm_candidate_batches()):
             try:
                 candidate_batches.append(request_today_echo_candidates())
+                llm_batch_count += 1
             except Exception as exc:
                 print(f"[WARN] 今日回响候选生成失败: {exc}")
     candidate_batches.append(discover_today_echo_candidates_wikidata(timeout_s, limit=8 if not allow_llm else 16))
 
-    for candidates in candidate_batches:
-        for album, artist in candidates:
+    for batch_index, candidates in enumerate(candidate_batches):
+        for candidate_index, (album, artist) in enumerate(candidates):
             key = (album, artist)
             if key in checked:
                 continue
@@ -3048,23 +3091,17 @@ def select_verified_today_echo_candidate(timeout_s: int, allow_llm: bool = True)
             if not verified:
                 continue
 
+            is_curated = 1 if batch_index < llm_batch_count else 0
             candidate_rank = (
-                int(verified.get("verification_score", 0)),
-                len(verified.get("verification_sources", [])),
-                match_similarity(verified.get("album", ""), album),
+                is_curated,
+                today_echo_editorial_signal(verified),
+                float(int(verified.get("verification_score", 0))),
+                float(len(verified.get("verification_sources", []))),
+                -float(candidate_index + batch_index * 100),
             )
-            best_rank = (
-                int(best_match.get("verification_score", 0)),
-                len(best_match.get("verification_sources", [])),
-                0.0,
-            ) if best_match else (-1, -1, -1.0)
             if candidate_rank > best_rank:
                 best_match = verified
-                if (
-                    int(best_match.get("verification_score", 0)) >= TODAY_ECHO_MIN_CONSENSUS_SCORE
-                    and len(best_match.get("verification_sources", [])) >= TODAY_ECHO_MIN_SOURCE_COUNT
-                ):
-                    return best_match
+                best_rank = candidate_rank
 
     return best_match
 
@@ -3283,9 +3320,9 @@ def ranked_today_echo_review_sources(review_sources: Sequence[Dict[str, object]]
 
 def today_echo_note_is_acceptable(note: str) -> bool:
     text = clean_text(note)
-    if len(text) < 80:
+    if len(text) < 120:
         return False
-    if len(text) > 180:
+    if len(text) > 420:
         return False
     banned_phrases = [
         "适合作为当天的音乐史回响",
@@ -3342,6 +3379,12 @@ def today_echo_note_is_acceptable(note: str) -> bool:
         "并标注",
         "等 Styles 标签",
         "评论证据",
+        "更值得从歌曲结构",
+        "只按流派名词归类",
+        "工业语境落到可核查层面",
+        "声音组织和作品位置才是判断它的核心",
+        "的专辑评论与",
+        "评分把这张唱片",
     ]
     metadata_smell_count = sum(text.count(phrase) for phrase in metadata_smell_phrases)
     if metadata_smell_count >= 2:
@@ -3416,8 +3459,10 @@ def build_review_source_fallback_note(
 
     review_text = clean_text(str(review.get("text", "")))
     source = clean_text(str(review.get("source", "")))
-    author = clean_text(str(review.get("author", "")))
     rating = clean_text(str(editorial_facts.get("allmusic_rating", "")))
+    rating_value = parse_rating_value(rating)
+    if source == "AllMusic" and 0 < rating_value < 3.5:
+        return ""
     recording_locations = list(editorial_facts.get("recording_locations", []))
     recording_location = clean_text(str(recording_locations[0])) if recording_locations else ""
 
@@ -3435,6 +3480,18 @@ def build_review_source_fallback_note(
     for pattern, label in marker_map:
         if re.search(pattern, review_text, re.IGNORECASE):
             arrangement_facts.append(label)
+
+    high_context_sources = {
+        "Apple Music",
+        "Pitchfork",
+        "Rolling Stone",
+        "Album of the Year",
+        "The Guardian",
+        "NME",
+        "Wikipedia Critical reception",
+    }
+    if len(arrangement_facts) < 2 and source not in high_context_sources:
+        return ""
 
     narrative_subject = ""
     if re.search(r"\bwarhol\b", review_text, re.IGNORECASE):
@@ -3455,20 +3512,18 @@ def build_review_source_fallback_note(
         first = f"《{album}》以{arrangement_text}构成紧凑骨架，并围绕 {narrative_subject}展开叙事。"
     elif len(arrangement_facts) >= 2:
         first = f"《{album}》的听感重心落在{arrangement_text}的相互牵引上，歌曲不是风格标签的堆叠，而是靠编制关系推进。"
-    elif review_text:
-        first = f"《{album}》更值得从歌曲结构、编制和录音空间的关系切入，而不是只按流派名词归类。"
+    elif source in high_context_sources:
+        first = f"《{album}》的推荐价值应从作品所处的艺人阶段、歌曲结构和制作语境进入，而不是停留在资料标签。"
     else:
         return ""
 
     supplements = []
-    if source == "AllMusic" and author:
-        supplements.append(f"{author} 的专辑评论")
-    elif source == "Apple Music":
+    if source == "Apple Music":
         supplements.append("Apple Music 编辑语的作品脉络")
-    elif source:
+    elif source in high_context_sources:
         supplements.append(f"{source} 的评论线索")
-    if source == "AllMusic" and rating:
-        supplements.append(f"{rating} 评分")
+    if source == "AllMusic" and rating_value >= 4:
+        supplements.append(f"AllMusic {rating} 评价")
     if recording_location:
         location_text = re.sub(r"^(.+),\s*([^,]+,\s*[^,]+)$", r"\1（\2）", recording_location)
         supplements.append(f"{location_text}录音地点")
@@ -3476,11 +3531,11 @@ def build_review_source_fallback_note(
         supplements.append(f"{fast_genre} 风格语境")
 
     if supplements:
-        second = f"{'与 '.join(supplements)}把这张唱片的工业语境落到可核查层面；声音组织和作品位置才是判断它的核心。"
+        second = f"{'与 '.join(supplements)}提供了可用线索；推荐语仍应落在声音质感、编曲取舍、录音方式和作品影响，而不是把资料项直接拼接成结论。"
     else:
         second = "这类专辑的判断重点在声音组织、歌曲结构和艺人阶段，而不是停留在风格名词。"
 
-    note = truncate_review_note_at_sentence(f"{first}{second}", limit=180)
+    note = truncate_review_note_at_sentence(f"{first}{second}", limit=420)
     return ensure_terminal_punctuation(note)
 
 
@@ -3529,7 +3584,7 @@ def build_local_today_echo_note(
 
 def build_knowledge_based_today_echo_note(album: str, artist: str, fast_genre: str) -> str:
     prompt = f"""
-你是严谨的中文音乐评论编辑。请参考 Apple Music 编辑团队的专辑推荐语气质，凭音乐史知识为以下专辑写一段 100-150 字的简体中文短乐评。
+你是严谨的中文音乐评论编辑。请参考 Apple Music 编辑团队的专辑推荐语气质，凭音乐史知识为以下专辑写一段 180-320 字的简体中文短乐评。
 
 专辑：{album}
 艺人：{artist}
@@ -3537,7 +3592,7 @@ def build_knowledge_based_today_echo_note(album: str, artist: str, fast_genre: s
 
 只返回 JSON 对象：
 {{
-  "note": "100-150 字简体中文连续乐评"
+  "note": "180-320 字简体中文连续乐评"
 }}
 
 硬规则：
@@ -3566,7 +3621,7 @@ def build_today_echo_pause_note() -> str:
 
 def repair_today_echo_note_with_llm(note: str, evidence_lines: Sequence[str]) -> str:
     prompt = f"""
-你是中文音乐编辑。请把下面这段“今日回响”乐评压缩改写为 100-150 个汉字。
+你是中文音乐编辑。请把下面这段“今日回响”乐评改写为 180-320 个汉字。
 
 原文：
 {clean_text(note)}
@@ -3576,7 +3631,7 @@ def repair_today_echo_note_with_llm(note: str, evidence_lines: Sequence[str]) ->
 
 只返回 JSON 对象：
 {{
-  "note": "100-150 个汉字的中文乐评"
+  "note": "180-320 个汉字的中文乐评"
 }}
 
 硬规则：
@@ -3647,7 +3702,7 @@ def build_today_echo_note(
 请只返回 JSON 对象：
 {{
   "genre": "不超过 3 个短流派，用 / 连接",
-  "note": "100-150 字中文乐评"
+  "note": "180-320 字中文乐评"
 }}
 
 规则：
@@ -3659,7 +3714,7 @@ def build_today_echo_note(
 6. 只写“流派 / 风格标签 / 录音室专辑 / 发行厂牌 / 首发日期”不合格；这些只能作为辅助事实，不能作为推荐理由主体。
 7. 不要把句子写成“某来源将其归入/界定为/记录为”的罗列；要把事实转译成关于声音、结构、叙事、制作或艺人阶段的专业判断。
 8. 禁止照搬英文评论原句；只能中文转述与压缩，不要连续引用超过 10 个英文词。
-9. note 必须控制在 100-150 个汉字，超过 180 个汉字视为失败。
+9. note 必须控制在 180-320 个汉字，超过 420 个汉字视为失败。
 10. 禁止“杰作”“神作”“伟大”“完美”“震撼”“不可错过”等浮夸词。
 11. 不要改动专辑名、艺人名和首发日期。
 12. 不要输出 JSON 以外的任何内容。
@@ -3737,11 +3792,12 @@ def ensure_verified_today_echo(md_text: str, timeout_s: int) -> str:
             )
 
     if not verified:
-        if should_avoid_heavy_llm_repairs():
+        allow_llm_candidates = today_echo_allows_llm_candidates()
+        if should_avoid_heavy_llm_repairs() and allow_llm_candidates:
+            print("[INFO] 今日回响使用编辑优先模式：先请求音乐史候选，再用 MusicBrainz / AllMusic / Wikidata 严格验证日期。")
+        elif should_avoid_heavy_llm_repairs():
             print("[INFO] 今日回响改为保守模式：不额外请求模型找新专辑，但会继续使用 Wikidata / MusicBrainz / AllMusic 进行外部候选发现与交叉验证。")
-            verified = select_verified_today_echo_candidate(echo_timeout, allow_llm=False)
-        else:
-            verified = select_verified_today_echo_candidate(echo_timeout)
+        verified = select_verified_today_echo_candidate(echo_timeout, allow_llm=allow_llm_candidates)
         if verified:
             print(
                 f"[INFO] 今日回响已替换为经验证专辑: "
