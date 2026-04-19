@@ -1904,6 +1904,7 @@ def get_api_key() -> str:
 
 def get_model_candidates() -> List[str]:
     defaults = [
+        "gemini-3-flash-preview",
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
         "gemini-flash-lite-latest",
@@ -1917,10 +1918,8 @@ def get_model_candidates() -> List[str]:
         or os.getenv("GEMINI_MODEL")
         or ""
     ).strip()
-    if explicit:
-        return [explicit]
     ordered: List[str] = []
-    for model in (ACTIVE_GEMINI_MODEL, *defaults):
+    for model in (ACTIVE_GEMINI_MODEL, explicit, *defaults):
         if model and model not in ordered:
             ordered.append(model)
     return ordered
