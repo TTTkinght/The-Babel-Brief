@@ -344,6 +344,8 @@ def using_explicit_gemini_model() -> bool:
 
 
 def should_avoid_heavy_llm_repairs() -> bool:
+    if os.getenv("COMPACT_BRIEF_MODE", "").strip().lower() in {"1", "true", "yes", "on"}:
+        return True
     explicit = (
         os.getenv("LLM_MODEL")
         or os.getenv("GOOGLE_MODEL")
@@ -3817,8 +3819,8 @@ def contains_cjk(text: str) -> bool:
 
 def strip_link_markup(text: str) -> str:
     value = text or ""
-    value = re.sub(r"\[([^\]]+)\]\((https?://[^)]+)\)", r"\1", value)
-    value = re.sub(r"<a\s+href=\"[^\"]+\">([^<]+)</a>", r"\1", value)
+    value = re.sub(r"\[([^\]]+)\]\((https?://[^)]+)\)", "", value)
+    value = re.sub(r"<a\s+href=\"[^\"]+\">([^<]+)</a>", "", value)
     value = re.sub(r"https?://\S+", "", value)
     return clean_text(value)
 
@@ -4795,7 +4797,11 @@ def validate_rendered_report(md_text: str, selections: Dict[str, object]) -> Non
                 headings.append(clean_label_text(match.group(1)))
 
         expected_count = len(selections.get(candidate_key, []))
-        minimum_required = min(SECTION_MIN_ITEMS, int(section_pool_counts.get(candidate_key, expected_count)))
+        minimum_required = min(
+            SECTION_MIN_ITEMS,
+            expected_count,
+            int(section_pool_counts.get(candidate_key, expected_count)),
+        )
         if expected_count != len(headings):
             raise RuntimeError(f"{section_title} 条数异常: 期望 {expected_count}，实际 {len(headings)}")
         if len(headings) < minimum_required:
@@ -6097,15 +6103,19 @@ def main():
     load_dotenv()
     maybe_enable_socks_proxy()
     attempt = 1
+    max_attempts = int(os.getenv("BRIEF_MAX_ATTEMPTS", "0") or "0")
     while True:
         try:
             print(f"[INFO] 本轮发送尝试 #{attempt}")
             run_brief_once()
             return
         except Exception as exc:
-            delay = get_retry_delay_seconds(attempt)
             print(f"[ERROR] 第 {attempt} 次发送失败: {exc}")
             traceback.print_exc()
+            if max_attempts and attempt >= max_attempts:
+                print(f"[ERROR] 已达到最大尝试次数 {max_attempts}，停止本轮任务。")
+                raise
+            delay = get_retry_delay_seconds(attempt)
             print(f"[INFO] 将在 {delay} 秒后自动重试，直到发送成功。")
             time.sleep(delay)
             attempt += 1

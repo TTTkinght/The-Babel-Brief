@@ -2,7 +2,8 @@ name: The Babel Brief
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    # GitHub cron uses UTC; 00:30 UTC is 08:30 in Asia/Shanghai.
+    - cron: "30 0 * * *"
   workflow_dispatch:
 
 permissions:
@@ -11,7 +12,7 @@ permissions:
 jobs:
   brief:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -36,10 +37,13 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          GEMINI_MODEL: gemini-3-flash-preview
           BRIEF_TIMEZONE: Asia/Shanghai
           SKIP_NETWORK_PREFLIGHT: "1"
           ALLOW_ENV_PROXY: "0"
+          BRIEF_MAX_ATTEMPTS: "2"
+          GEMINI_MAX_RETRIES: "2"
+          GEMINI_CONNECT_TIMEOUT_SECONDS: "10"
+          COMPACT_BRIEF_MODE: "1"
         run: python main.py
 
       - name: Build static site
@@ -49,8 +53,8 @@ jobs:
         run: |
           git config user.name "babel-bot"
           git config user.email "bot@babel-brief"
-          git add archives/ docs/
+          git add index.html archives/ docs/
           if ! git diff --cached --quiet; then
-            git commit -m "brief: $(date +'%Y-%m-%d')"
+            git commit -m "brief: $(TZ=Asia/Shanghai date +'%Y-%m-%d')"
             git push
           fi
