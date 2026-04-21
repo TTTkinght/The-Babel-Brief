@@ -2546,10 +2546,248 @@ def fetch_genius_search_knowledge(album: str, artist: str, timeout_s: int) -> Di
 REVIEW_SITE_QUERIES = (
     ("Pitchfork", "pitchfork.com/reviews/albums", "site:pitchfork.com/reviews/albums"),
     ("Rolling Stone", "rollingstone.com", "site:rollingstone.com/music/music-album-reviews"),
-    ("Album of the Year", "albumoftheyear.org", "site:albumoftheyear.org/album"),
     ("The Guardian", "theguardian.com", "site:theguardian.com/music"),
     ("NME", "nme.com", "site:nme.com/reviews/album"),
 )
+
+
+AGGREGATE_SCORE_SOURCE_PATTERNS = (
+    ("Album of the Year", r"(?:Album\s+of\s+the\s+Year|AOTY)"),
+    ("Metacritic", r"Metacritic"),
+    ("Any Decent Music", r"AnyDecentMusic\??|Any\s+Decent\s+Music"),
+    ("Rate Your Music", r"Rate\s+Your\s+Music|RYM"),
+)
+
+
+def score_to_percent(raw_score: str, raw_scale: str) -> float:
+    try:
+        score = float(clean_text(raw_score))
+        scale = float(clean_text(raw_scale))
+    except ValueError:
+        return 0.0
+    if scale <= 0:
+        return 0.0
+    return round(score / scale * 100, 1)
+
+
+def format_percent_value(value: float) -> str:
+    if value <= 0:
+        return ""
+    return f"{int(value)}" if float(value).is_integer() else f"{value:g}"
+
+
+def aggregate_item_score_percent(item: Dict[str, object]) -> float:
+    value = clean_text(str(item.get("score_percent", "")))
+    if value:
+        try:
+            return float(value)
+        except ValueError:
+            pass
+
+    match = re.search(r"(\d+(?:\.\d+)?)\s*/\s*(10|100)", clean_text(str(item.get("score", ""))))
+    if not match:
+        return 0.0
+    return score_to_percent(match.group(1), match.group(2))
+
+
+def parse_aggregate_scores_from_text(text: str, url: str = "") -> List[Dict[str, str]]:
+    value = clean_text(text)
+    if not value:
+        return []
+
+    scores: List[Dict[str, str]] = []
+    seen = set()
+    for source, source_pattern in AGGREGATE_SCORE_SOURCE_PATTERNS:
+        normalized_source_pattern = f"(?:{source_pattern})"
+        patterns = (
+            rf"{normalized_source_pattern}[^。.;；]{{0,120}}?(\d+(?:\.\d+)?)\s*/\s*(100|10)",
+            rf"{normalized_source_pattern}[^。.;；]{{0,140}}?(?:score|rating|metascore|average score)\s*(?:of|:)?\s*(\d+(?:\.\d+)?)\s*(?:out of\s*)?(100|10)?",
+        )
+        matched_source = False
+        for pattern in patterns:
+            for match in re.finditer(pattern, value, flags=re.IGNORECASE):
+                raw_score = clean_text(match.group(1))
+                raw_scale = clean_text(match.group(2) if match.lastindex and match.lastindex >= 2 else "") or "100"
+                if raw_scale not in {"10", "100"}:
+                    raw_scale = "100"
+                percent = score_to_percent(raw_score, raw_scale)
+                if percent <= 0 or percent > 100:
+                    continue
+                key = (source, raw_score, raw_scale)
+                if key in seen:
+                    continue
+                seen.add(key)
+                scores.append(
+                    {
+                        "source": source,
+                        "author": "Aggregate",
+                        "url": clean_text(url),
+                        "score": f"{raw_score}/{raw_scale}",
+                        "score_percent": format_percent_value(percent),
+                        "text": f"{source} aggregate score {raw_score}/{raw_scale}",
+                    }
+                )
+                matched_source = True
+                break
+            if matched_source:
+                break
+    return scores
+
+
+def normalize_album_of_the_year_url(url: str) -> str:
+    value = clean_text(url).split("?", 1)[0]
+    match = re.search(r"(https?://www\.albumoftheyear\.org/album/[^/]+)/", value)
+    if match:
+        return f"{match.group(1)}.php"
+    return value
+
+
+def fetch_album_of_the_year_knowledge(album: str, artist: str, timeout_s: int) -> Dict[str, str]:
+    title = clean_text(album)
+    performer = clean_text(artist)
+    if not title or not performer:
+        return {}
+
+    queries = (
+        f"albumoftheyear {title} {performer}",
+        f'"{performer}" "{title}" "Album of The Year"',
+    )
+    checked_urls = set()
+    for query in queries:
+        for result in fetch_duckduckgo_results(query, timeout_s, limit=6):
+            url = clean_text(result.get("url", ""))
+            if "albumoftheyear.org/album/" not in url or url in checked_urls:
+                continue
+            checked_urls.add(url)
+
+            result_title = clean_text(result.get("title", ""))
+            snippet = clean_text(result.get("snippet", ""))
+            combined = clean_text(f"{result_title} {snippet}")
+            if (
+                match_similarity(title, combined) < 0.45
+                or (performer.lower() not in combined.lower() and match_similarity(performer, combined) < 0.35)
+            ):
+                continue
+
+            scores = parse_aggregate_scores_from_text(combined, url)
+            canonical_url = normalize_album_of_the_year_url(url)
+            item = {
+                "source": "Album of the Year",
+                "author": "Aggregate",
+                "url": canonical_url,
+                "text": combined[:900],
+            }
+            for score in scores:
+                if score.get("source") == "Album of the Year":
+                    item["score"] = score.get("score", "")
+                    item["score_percent"] = score.get("score_percent", "")
+                    item["text"] = clean_text(f"{score.get('text', '')}. {combined}")[:900]
+                    break
+            return item
+    return {}
+
+
+def parse_any_decent_music_page(page: str, url: str, album: str, artist: str) -> Dict[str, str]:
+    header_match = re.search(
+        r'<div class="review_head".*?<h2>(.*?)</h2>.*?<h3>(.*?)</h3>.*?<p>(.*?)</p>',
+        page,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    page_artist = html_fragment_to_text(header_match.group(1)) if header_match else ""
+    page_album = html_fragment_to_text(header_match.group(2)) if header_match else ""
+    page_description = html_fragment_to_text(header_match.group(3)) if header_match else ""
+    if page_album and match_similarity(album, page_album) < 0.55:
+        return {}
+    if page_artist and match_similarity(artist, page_artist) < 0.35:
+        return {}
+
+    score_match = re.search(
+        r'class="average_rating".{0,350}?<p class="score">\s*(\d+(?:\.\d+)?)\s*</p>',
+        page,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    score = clean_text(score_match.group(1)) if score_match else ""
+    score_percent = format_percent_value(score_to_percent(score, "10")) if score else ""
+
+    excerpts: List[str] = []
+    for review_match in re.finditer(r'<li class="review_item">([\s\S]*?)</li>', page, flags=re.IGNORECASE):
+        block = review_match.group(1)
+        rating_match = re.search(r'class="data_rating">\s*(\d+(?:\.\d+)?)\s*<', block, flags=re.IGNORECASE)
+        publication_match = re.search(r"<h4>[\s\S]*?<span>(.*?)</span>", block, flags=re.IGNORECASE)
+        paragraph_match = re.search(r"<p>(.*?)</p>", block, flags=re.IGNORECASE | re.DOTALL)
+        publication = html_fragment_to_text(publication_match.group(1)) if publication_match else ""
+        excerpt = ""
+        if paragraph_match:
+            excerpt_html = re.sub(r"<a\b[\s\S]*?</a>", " ", paragraph_match.group(1), flags=re.IGNORECASE)
+            excerpt = html_fragment_to_text(excerpt_html)
+        if not publication or len(excerpt) < 40:
+            continue
+        rating = clean_text(rating_match.group(1)) if rating_match else ""
+        prefix = f"{publication} {rating}/10" if rating else publication
+        excerpts.append(f"{prefix}: {excerpt}")
+        if len(excerpts) >= 4:
+            break
+
+    if not score and not excerpts:
+        return {}
+
+    parts = []
+    if score:
+        parts.append(f"Any Decent Music ADM rating {score}/10")
+    if page_description:
+        parts.append(page_description)
+    if excerpts:
+        parts.append("Critic excerpts: " + " | ".join(excerpts))
+
+    return {
+        "source": "Any Decent Music",
+        "author": "Aggregate",
+        "url": clean_text(url),
+        "score": f"{score}/10" if score else "",
+        "score_percent": score_percent,
+        "text": clean_text("; ".join(parts))[:1400],
+    }
+
+
+def fetch_any_decent_music_knowledge(album: str, artist: str, timeout_s: int) -> Dict[str, str]:
+    title = clean_text(album)
+    performer = clean_text(artist)
+    if not title or not performer:
+        return {}
+
+    queries = (
+        f'AnyDecentMusic {title} {performer}',
+        f'"{title}" "{performer}" "Any Decent Music"',
+    )
+    for query in queries:
+        for result in fetch_duckduckgo_results(query, timeout_s, limit=6):
+            url = clean_text(result.get("url", "")).split("?", 1)[0]
+            result_title = clean_text(result.get("title", ""))
+            snippet = clean_text(result.get("snippet", ""))
+            combined = clean_text(f"{result_title} {snippet}")
+            if "anydecentmusic.com/review/" not in url:
+                continue
+            if match_similarity(title, combined) < 0.45:
+                continue
+            try:
+                response = http_get(url, headers={"User-Agent": APP_USER_AGENT}, timeout=timeout_s)
+                response.raise_for_status()
+            except Exception as exc:
+                print(f"[WARN] Any Decent Music 抓取失败: {exc}")
+                continue
+            item = parse_any_decent_music_page(response.text, url, title, performer)
+            if item:
+                return item
+    return {}
+
+
+def fetch_aggregate_review_knowledge(album: str, artist: str, timeout_s: int) -> List[Dict[str, str]]:
+    items: List[Dict[str, str]] = []
+    for fetcher in (fetch_album_of_the_year_knowledge, fetch_any_decent_music_knowledge):
+        item = fetcher(album, artist, timeout_s)
+        if item:
+            items.append(item)
+    return items
 
 
 def fetch_music_review_site_knowledge(album: str, artist: str, timeout_s: int) -> List[Dict[str, str]]:
@@ -3010,7 +3248,7 @@ def request_today_echo_candidates() -> List[Tuple[str, str]]:
 规则：
 1. 至少给出 12 个候选，并按“音乐史地位、听众熟悉度、评论口碑、文化影响力”从高到低排序。
 2. 只列出你认为“官方首发月日”与今天相同的录音室专辑；不确定日期的也可以列出，系统会后续严格核验。
-3. 优先给出大众更可能听过、被 Pitchfork / Rolling Stone / AllMusic / Apple Music / Album of the Year / Wikipedia 广泛记录的专辑。
+3. 优先给出大众更可能听过、被 Pitchfork / Rolling Stone / Apple Music / Album of the Year / Metacritic / Any Decent Music / AllMusic / Wikipedia 广泛记录的专辑。
 4. 避免把资料完整但影响力有限的冷门专辑排在前面；除非今天确实没有更重要的候选。
 5. 不要解释，不要 Markdown，不要额外字段。
 """
@@ -3062,6 +3300,22 @@ def today_echo_editorial_signal(verified: Dict[str, object]) -> float:
             signal += 1
         elif source == "MusicBrainz":
             signal += 0.5
+
+    for item in verified.get("aggregate_reviews", []):
+        source = clean_text(str(item.get("source", "")))
+        score_percent = aggregate_item_score_percent(item)
+        if source in {"Album of the Year", "Metacritic", "Any Decent Music", "Rate Your Music"}:
+            signal += 2
+        if score_percent >= 90:
+            signal += 8
+        elif score_percent >= 80:
+            signal += 5
+        elif score_percent >= 70:
+            signal += 2
+        elif 0 < score_percent < 60:
+            signal -= 6
+        if clean_text(str(item.get("text", ""))):
+            signal += 1
     return signal
 
 
@@ -3090,6 +3344,11 @@ def select_verified_today_echo_candidate(timeout_s: int, allow_llm: bool = True)
             verified = verify_today_echo_candidate(album, artist, timeout_s)
             if not verified:
                 continue
+            verified["aggregate_reviews"] = fetch_aggregate_review_knowledge(
+                clean_text(str(verified.get("album", album))),
+                clean_text(str(verified.get("artist", artist))),
+                timeout_s,
+            )
 
             is_curated = 1 if batch_index < llm_batch_count else 0
             candidate_rank = (
@@ -3249,6 +3508,7 @@ def collect_today_echo_editorial_facts(album: str, artist: str, timeout_s: int) 
         "wikidata_awards": [],
         "wikidata_url": "",
         "recording_locations": [],
+        "aggregate_scores": [],
         "review_sources": [],
     }
 
@@ -3274,6 +3534,16 @@ def collect_today_echo_editorial_facts(album: str, artist: str, timeout_s: int) 
         )
         if reception:
             facts["review_sources"].append(reception)
+            for score_item in parse_aggregate_scores_from_text(
+                reception.get("text", ""),
+                reception.get("url", ""),
+            ):
+                facts["aggregate_scores"].append(score_item)
+
+    for aggregate_item in fetch_aggregate_review_knowledge(album, artist, timeout_s):
+        facts["review_sources"].append(aggregate_item)
+        if aggregate_item.get("score") or aggregate_item.get("score_percent"):
+            facts["aggregate_scores"].append(aggregate_item)
 
     apple_music = fetch_apple_music_editorial_notes(album, artist, timeout_s)
     if apple_music:
@@ -3294,6 +3564,21 @@ def collect_today_echo_editorial_facts(album: str, artist: str, timeout_s: int) 
         facts["wikidata_awards"] = wikidata.get("wikidata_awards", [])
         facts["wikidata_url"] = wikidata.get("wikidata_url", "")
 
+    unique_score_map: Dict[Tuple[str, str], Dict[str, str]] = {}
+    for item in facts["aggregate_scores"]:
+        if not isinstance(item, dict):
+            continue
+        key = (
+            clean_text(str(item.get("source", ""))),
+            clean_text(str(item.get("score", ""))),
+        )
+        if not key[0]:
+            continue
+        existing = unique_score_map.get(key)
+        if not existing or len(clean_text(str(item.get("text", "")))) > len(clean_text(str(existing.get("text", "")))):
+            unique_score_map[key] = item
+    facts["aggregate_scores"] = list(unique_score_map.values())
+
     return facts
 
 
@@ -3303,11 +3588,14 @@ def ranked_today_echo_review_sources(review_sources: Sequence[Dict[str, object]]
         "Pitchfork": 1,
         "Rolling Stone": 2,
         "Album of the Year": 3,
-        "The Guardian": 4,
-        "NME": 5,
-        "AllMusic": 6,
-        "Genius": 7,
-        "Wikipedia Critical reception": 8,
+        "Metacritic": 4,
+        "Any Decent Music": 5,
+        "Rate Your Music": 6,
+        "The Guardian": 7,
+        "NME": 8,
+        "AllMusic": 9,
+        "Genius": 10,
+        "Wikipedia Critical reception": 11,
     }
     return sorted(
         list(review_sources),
@@ -3366,7 +3654,21 @@ def today_echo_note_is_acceptable(note: str) -> bool:
     has_music_criticism = sum(1 for marker in music_criticism_markers if marker in text) >= 2
     has_substantive_fact = any(marker in text for marker in substantive_music_fact_markers)
     has_review_source_context = (
-        any(source in text for source in ("AllMusic", "Pitchfork", "Rolling Stone", "Apple Music", "Genius", "Album of the Year"))
+        any(
+            source in text
+            for source in (
+                "AllMusic",
+                "Pitchfork",
+                "Rolling Stone",
+                "Apple Music",
+                "Genius",
+                "Album of the Year",
+                "AOTY",
+                "Metacritic",
+                "Any Decent Music",
+                "Rate Your Music",
+            )
+        )
         and any(marker in text for marker in ("评论", "评价", "评分", "星", "认为", "称", "写道", "指出", "强调", "注释"))
     )
     metadata_smell_phrases = [
@@ -3447,6 +3749,16 @@ def truncate_review_note_at_sentence(note: str, limit: int = 180) -> str:
     return ensure_terminal_punctuation(text[:limit].rstrip("，,；;：: "))
 
 
+def format_aggregate_review_score(item: Dict[str, object]) -> str:
+    score = clean_text(str(item.get("score", "")))
+    score_percent = aggregate_item_score_percent(item)
+    if score:
+        return score
+    if score_percent:
+        return f"{format_percent_value(score_percent)}/100"
+    return ""
+
+
 def build_review_source_fallback_note(
     album: str,
     editorial_facts: Dict[str, object],
@@ -3486,6 +3798,9 @@ def build_review_source_fallback_note(
         "Pitchfork",
         "Rolling Stone",
         "Album of the Year",
+        "Metacritic",
+        "Any Decent Music",
+        "Rate Your Music",
         "The Guardian",
         "NME",
         "Wikipedia Critical reception",
@@ -3512,6 +3827,8 @@ def build_review_source_fallback_note(
         first = f"《{album}》以{arrangement_text}构成紧凑骨架，并围绕 {narrative_subject}展开叙事。"
     elif len(arrangement_facts) >= 2:
         first = f"《{album}》的听感重心落在{arrangement_text}的相互牵引上，歌曲不是风格标签的堆叠，而是靠编制关系推进。"
+    elif source in {"Album of the Year", "Metacritic", "Any Decent Music", "Rate Your Music"} and format_aggregate_review_score(review):
+        first = f"《{album}》在{source}获得{format_aggregate_review_score(review)}的综合口碑，这类聚合评分适合用来校准作品的评论共识。"
     elif source in high_context_sources:
         first = f"《{album}》的推荐价值应从作品所处的艺人阶段、歌曲结构和制作语境进入，而不是停留在资料标签。"
     else:
@@ -3524,6 +3841,9 @@ def build_review_source_fallback_note(
         supplements.append(f"{source} 的评论线索")
     if source == "AllMusic" and rating_value >= 4:
         supplements.append(f"AllMusic {rating} 评价")
+    aggregate_score = format_aggregate_review_score(review)
+    if aggregate_score and source in {"Album of the Year", "Metacritic", "Any Decent Music", "Rate Your Music"}:
+        supplements.append(f"{source} {aggregate_score} 综合评分")
     if recording_location:
         location_text = re.sub(r"^(.+),\s*([^,]+,\s*[^,]+)$", r"\1（\2）", recording_location)
         supplements.append(f"{location_text}录音地点")
@@ -3600,7 +3920,7 @@ def build_knowledge_based_today_echo_note(album: str, artist: str, fast_genre: s
 2. 从声音结构、制作/录音语境、歌曲叙事、艺人阶段、历史影响或流派作用切入，读起来像一段真正的编辑推荐。
 3. 禁止只写“AllMusic 流派/Styles 标签”“Wikipedia 录音室专辑”“Wikidata 厂牌/发行信息”。
 4. 禁止“好听”“经典”“杰作”“神作”“伟大”“完美”“震撼”“不可错过”“封神”等浮夸词。
-5. 不要为了显得有依据而强行写 AllMusic / Pitchfork / Rolling Stone / Apple Music / Album of the Year 等来源名；只有确有把握且自然时才提。
+5. 不要为了显得有依据而强行写 AllMusic / Pitchfork / Rolling Stone / Apple Music / Album of the Year / Metacritic / Any Decent Music 等来源名；只有确有把握且自然时才提。
 6. 若不确定具体评分、奖项、榜单名或媒体原话，不要编造；用可稳妥概括的音乐史判断替代。
 7. 不要输出 JSON 以外的任何内容。
 """
@@ -3614,7 +3934,7 @@ def build_knowledge_based_today_echo_note(album: str, artist: str, fast_genre: s
 
 def build_today_echo_pause_note() -> str:
     return (
-        "现有 AllMusic / Pitchfork / Rolling Stone / Apple Music / Genius / Wikipedia / Wikidata 音乐事实不足以支撑一段符合质量红线的专业乐评；"
+        "现有 AllMusic / Pitchfork / Rolling Stone / Album of the Year / Metacritic / Any Decent Music / Apple Music / Genius / Wikipedia / Wikidata 音乐事实不足以支撑一段符合质量红线的专业乐评；"
         "本期暂停推荐，避免用风格标签、发行信息或厂牌数据拼接成空泛段落。"
     )
 
@@ -3635,7 +3955,7 @@ def repair_today_echo_note_with_llm(note: str, evidence_lines: Sequence[str]) ->
 }}
 
 硬规则：
-1. 必须保留至少 2 条可验证事实或评论判断，优先保留 Apple Music 编辑推荐、Pitchfork / Rolling Stone / Album of the Year / AllMusic 等评论论点、录音地点、制作/录音/榜单/奖项事实。
+1. 必须保留至少 2 条可验证事实或评论判断，优先保留 Apple Music 编辑推荐、Pitchfork / Rolling Stone / Album of the Year / Metacritic / Any Decent Music / Rate Your Music / AllMusic 等评论论点、综合评分、录音地点、制作/录音/榜单/奖项事实。
 2. 禁止“杰作”“神作”“伟大”“完美”“震撼”“不可错过”等浮夸词。
 3. 禁止写日期验证、资料不足、适合作为今日回响等解释。
 4. 不要求在正文里点名任何媒体或评分；媒体名和评分只是证据，不是必须出现的文案元素。
@@ -3669,16 +3989,30 @@ def build_today_echo_note(
             "source": clean_text(str(item.get("source", ""))),
             "author": clean_text(str(item.get("author", ""))),
             "url": clean_text(str(item.get("url", ""))),
+            "score": clean_text(str(item.get("score", ""))),
+            "score_percent": clean_text(str(item.get("score_percent", ""))),
             "text": clean_text(str(item.get("text", "")))[:1200],
         }
         for item in review_sources[:5]
         if clean_text(str(item.get("text", "")))
+    ]
+    aggregate_payload = [
+        {
+            "source": clean_text(str(item.get("source", ""))),
+            "url": clean_text(str(item.get("url", ""))),
+            "score": clean_text(str(item.get("score", ""))),
+            "score_percent": clean_text(str(item.get("score_percent", ""))),
+            "text": clean_text(str(item.get("text", "")))[:500],
+        }
+        for item in editorial_facts.get("aggregate_scores", [])[:5]
+        if clean_text(str(item.get("source", "")))
     ]
     evidence_lines = [
         f"- 日期交叉验证来源：{source_line}",
         f"- AllMusic 流派：{genres or '未知'}",
         f"- AllMusic 风格：{styles or '未知'}",
         f"- AllMusic 评分：{editorial_facts.get('allmusic_rating', '') or '未知'}",
+        f"- 综合评分证据（不局限 AllMusic；优先 Album of the Year / Metacritic / Any Decent Music / Rate Your Music 等聚合口碑）：{json.dumps(aggregate_payload, ensure_ascii=False)}",
         f"- 录音地点：{' / '.join(editorial_facts.get('recording_locations', [])) or '未知'}",
         f"- AllMusic 页面摘要：{editorial_facts.get('allmusic_summary', '') or '无'}",
         f"- Wikipedia 摘要：{editorial_facts.get('wikipedia_summary', '') or '无'}",
@@ -3686,7 +4020,7 @@ def build_today_echo_note(
         f"- Wikidata 制作人：{' / '.join(editorial_facts.get('wikidata_producers', [])[:3]) or '无'}",
         f"- Wikidata 厂牌：{' / '.join(editorial_facts.get('wikidata_labels', [])[:3]) or '无'}",
         f"- Wikidata 奖项：{' / '.join(editorial_facts.get('wikidata_awards', [])[:3]) or '无'}",
-        f"- 专业乐评证据池（按优先级：Apple Music 编辑推荐语、Pitchfork、Rolling Stone、Album of the Year、The Guardian、NME、AllMusic、Genius、Wikipedia reception）：{json.dumps(review_payload, ensure_ascii=False)}",
+        f"- 专业乐评证据池（按优先级：Apple Music 编辑推荐语、Pitchfork、Rolling Stone、Album of the Year、Metacritic、Any Decent Music、Rate Your Music、The Guardian、NME、AllMusic、Genius、Wikipedia reception）：{json.dumps(review_payload, ensure_ascii=False)}",
     ]
 
     prompt = f"""
@@ -3709,7 +4043,7 @@ def build_today_echo_note(
 1. note 必须是简体中文，克制、准确、专业，写成连续乐评短段，不要写成“资料清单”。
 2. 绝对禁止写“适合作为今天回响”“历史地位稳定”“持续讨论度”“首发日期已验证”“当前可核查资料”等空话或校验说明。
 3. 必须优先基于“专业乐评证据池”汇总；若 Apple Music 编辑推荐语存在，优先吸收其叙述角度和编辑语气，但不要照搬。
-4. Pitchfork / Rolling Stone / Album of the Year / AllMusic / Genius 等只是可用证据来源；正文不必强行点名任何媒体、评分或作者，除非这样写自然且有助于表达。
+4. Pitchfork / Rolling Stone / Album of the Year / Metacritic / Any Decent Music / Rate Your Music / AllMusic / Genius 等只是可用证据来源；正文不必强行点名任何媒体、评分或作者，除非这样写自然且有助于表达。
 5. 若证据池没有可用乐评，再基于录音室技术、制作班底、历史评分地位、奖项、榜单、重要单曲等硬事实写作。
 6. 只写“流派 / 风格标签 / 录音室专辑 / 发行厂牌 / 首发日期”不合格；这些只能作为辅助事实，不能作为推荐理由主体。
 7. 不要把句子写成“某来源将其归入/界定为/记录为”的罗列；要把事实转译成关于声音、结构、叙事、制作或艺人阶段的专业判断。
@@ -3717,7 +4051,8 @@ def build_today_echo_note(
 9. note 必须控制在 180-320 个汉字，超过 420 个汉字视为失败。
 10. 禁止“杰作”“神作”“伟大”“完美”“震撼”“不可错过”等浮夸词。
 11. 不要改动专辑名、艺人名和首发日期。
-12. 不要输出 JSON 以外的任何内容。
+12. 综合评分只能用于判断评论共识强弱，不能把正文写成分数清单；若分数来自 AOTY / Metacritic / Any Decent Music 等聚合站，应优先转译成“评论界如何理解这张唱片”的判断。
+13. 不要输出 JSON 以外的任何内容。
 """
     try:
         data = extract_json_object(call_llm(prompt))
