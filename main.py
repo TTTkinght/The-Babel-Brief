@@ -2552,10 +2552,10 @@ REVIEW_SITE_QUERIES = (
 
 
 AGGREGATE_SCORE_SOURCE_PATTERNS = (
-    ("Album of the Year", r"(?:Album\s+of\s+the\s+Year|AOTY)"),
-    ("Metacritic", r"Metacritic"),
-    ("Any Decent Music", r"AnyDecentMusic\??|Any\s+Decent\s+Music"),
-    ("Rate Your Music", r"Rate\s+Your\s+Music|RYM"),
+    ("Album of the Year", r"(?:Album\s+of\s+the\s+Year|AOTY)", "critic"),
+    ("Metacritic", r"Metacritic", "critic"),
+    ("Any Decent Music", r"AnyDecentMusic\??|Any\s+Decent\s+Music", "critic"),
+    ("Rate Your Music", r"Rate\s+Your\s+Music|RYM", "user"),
 )
 
 
@@ -2568,6 +2568,30 @@ def score_to_percent(raw_score: str, raw_scale: str) -> float:
     if scale <= 0:
         return 0.0
     return round(score / scale * 100, 1)
+
+
+def aggregate_item_role(item: Dict[str, object]) -> str:
+    role = clean_text(str(item.get("score_role", ""))).lower()
+    if role in {"critic", "user"}:
+        return role
+
+    source = clean_text(str(item.get("source", "")))
+    defaults = {
+        "Album of the Year": "critic",
+        "Metacritic": "critic",
+        "Any Decent Music": "critic",
+        "Rate Your Music": "user",
+    }
+    return defaults.get(source, "critic")
+
+
+def aggregate_item_context_label(item: Dict[str, object]) -> str:
+    role = aggregate_item_role(item)
+    if role == "user":
+        return "用户反馈"
+    if clean_text(str(item.get("source", ""))) == "Album of the Year":
+        return "媒体汇总"
+    return "综合口碑"
 
 
 def format_percent_value(value: float) -> str:
@@ -2584,7 +2608,7 @@ def aggregate_item_score_percent(item: Dict[str, object]) -> float:
         except ValueError:
             pass
 
-    match = re.search(r"(\d+(?:\.\d+)?)\s*/\s*(10|100)", clean_text(str(item.get("score", ""))))
+    match = re.search(r"(\d+(?:\.\d+)?)\s*/\s*(5|10|100)", clean_text(str(item.get("score", ""))))
     if not match:
         return 0.0
     return score_to_percent(match.group(1), match.group(2))
@@ -2597,18 +2621,18 @@ def parse_aggregate_scores_from_text(text: str, url: str = "") -> List[Dict[str,
 
     scores: List[Dict[str, str]] = []
     seen = set()
-    for source, source_pattern in AGGREGATE_SCORE_SOURCE_PATTERNS:
+    for source, source_pattern, score_role in AGGREGATE_SCORE_SOURCE_PATTERNS:
         normalized_source_pattern = f"(?:{source_pattern})"
         patterns = (
-            rf"{normalized_source_pattern}[^。.;；]{{0,120}}?(\d+(?:\.\d+)?)\s*/\s*(100|10)",
-            rf"{normalized_source_pattern}[^。.;；]{{0,140}}?(?:score|rating|metascore|average score)\s*(?:of|:)?\s*(\d+(?:\.\d+)?)\s*(?:out of\s*)?(100|10)?",
+            rf"{normalized_source_pattern}[^。.;；]{{0,120}}?(\d+(?:\.\d+)?)\s*/\s*(100|10|5)",
+            rf"{normalized_source_pattern}[^。.;；]{{0,140}}?(?:score|rating|metascore|average score)\s*(?:of|:)?\s*(\d+(?:\.\d+)?)\s*(?:out of\s*)?(100|10|5)?",
         )
         matched_source = False
         for pattern in patterns:
             for match in re.finditer(pattern, value, flags=re.IGNORECASE):
                 raw_score = clean_text(match.group(1))
                 raw_scale = clean_text(match.group(2) if match.lastindex and match.lastindex >= 2 else "") or "100"
-                if raw_scale not in {"10", "100"}:
+                if raw_scale not in {"5", "10", "100"}:
                     raw_scale = "100"
                 percent = score_to_percent(raw_score, raw_scale)
                 if percent <= 0 or percent > 100:
@@ -2624,6 +2648,7 @@ def parse_aggregate_scores_from_text(text: str, url: str = "") -> List[Dict[str,
                         "url": clean_text(url),
                         "score": f"{raw_score}/{raw_scale}",
                         "score_percent": format_percent_value(percent),
+                        "score_role": score_role,
                         "text": f"{source} aggregate score {raw_score}/{raw_scale}",
                     }
                 )
@@ -2640,6 +2665,60 @@ def normalize_album_of_the_year_url(url: str) -> str:
     if match:
         return f"{match.group(1)}.php"
     return value
+
+
+def slice_text_between_markers(text: str, start_marker: str, end_markers: Sequence[str], default_window: int = 500) -> str:
+    value = clean_text(text)
+    lowered = value.lower()
+    start_index = lowered.find(start_marker.lower())
+    if start_index < 0:
+        return ""
+    end_index = min(len(value), start_index + default_window)
+    for marker in end_markers:
+        marker_index = lowered.find(marker.lower(), start_index + len(start_marker))
+        if marker_index >= 0:
+            end_index = min(end_index, marker_index)
+    return clean_text(value[start_index:end_index])
+
+
+def parse_album_of_the_year_reader_item(reader_text: str, url: str) -> Dict[str, str]:
+    critic_section = slice_text_between_markers(reader_text, "Critic Score", ("User Score", "More ## Details", "## Details"))
+    if not critic_section:
+        return {}
+
+    score_match = re.search(r"Critic Score\s*\[(\d+(?:\.\d+)?)\]", critic_section, flags=re.IGNORECASE)
+    if not score_match:
+        score_match = re.search(r"Critic Score\s*(\d+(?:\.\d+)?)", critic_section, flags=re.IGNORECASE)
+    if not score_match:
+        return {}
+
+    review_count = ""
+    review_count_match = re.search(r"Based on\s*\**([\d,]+)\**\s*reviews", critic_section, flags=re.IGNORECASE)
+    if review_count_match:
+        review_count = clean_text(review_count_match.group(1))
+
+    year_rank = ""
+    rank_match = re.search(r"Year-End Rank:\s*\**\[#(\d+)\]", critic_section, flags=re.IGNORECASE)
+    if rank_match:
+        year_rank = clean_text(rank_match.group(1))
+
+    score = clean_text(score_match.group(1))
+    parts = [f"Album of the Year critic score {score}/100"]
+    if review_count:
+        parts.append(f"based on {review_count} critic reviews")
+    if year_rank:
+        parts.append(f"year-end rank #{year_rank}")
+
+    return {
+        "source": "Album of the Year",
+        "author": "Aggregate",
+        "url": clean_text(url),
+        "score": f"{score}/100",
+        "score_percent": format_percent_value(score_to_percent(score, "100")),
+        "score_role": "critic",
+        "score_count": review_count,
+        "text": clean_text("; ".join(parts)),
+    }
 
 
 def fetch_album_of_the_year_knowledge(album: str, artist: str, timeout_s: int) -> Dict[str, str]:
@@ -2669,20 +2748,19 @@ def fetch_album_of_the_year_knowledge(album: str, artist: str, timeout_s: int) -
             ):
                 continue
 
-            scores = parse_aggregate_scores_from_text(combined, url)
             canonical_url = normalize_album_of_the_year_url(url)
+            item = parse_album_of_the_year_reader_item(fetch_reader_markdown(canonical_url, timeout_s), canonical_url)
+            if item:
+                item["text"] = clean_text(f"{item.get('text', '')}; {combined}")[:900]
+                return item
+
             item = {
                 "source": "Album of the Year",
                 "author": "Aggregate",
                 "url": canonical_url,
+                "score_role": "critic",
                 "text": combined[:900],
             }
-            for score in scores:
-                if score.get("source") == "Album of the Year":
-                    item["score"] = score.get("score", "")
-                    item["score_percent"] = score.get("score_percent", "")
-                    item["text"] = clean_text(f"{score.get('text', '')}. {combined}")[:900]
-                    break
             return item
     return {}
 
@@ -2745,6 +2823,7 @@ def parse_any_decent_music_page(page: str, url: str, album: str, artist: str) ->
         "url": clean_text(url),
         "score": f"{score}/10" if score else "",
         "score_percent": score_percent,
+        "score_role": "critic",
         "text": clean_text("; ".join(parts))[:1400],
     }
 
@@ -3304,16 +3383,29 @@ def today_echo_editorial_signal(verified: Dict[str, object]) -> float:
     for item in verified.get("aggregate_reviews", []):
         source = clean_text(str(item.get("source", "")))
         score_percent = aggregate_item_score_percent(item)
-        if source in {"Album of the Year", "Metacritic", "Any Decent Music", "Rate Your Music"}:
-            signal += 2
-        if score_percent >= 90:
-            signal += 8
-        elif score_percent >= 80:
-            signal += 5
-        elif score_percent >= 70:
-            signal += 2
-        elif 0 < score_percent < 60:
-            signal -= 6
+        role = aggregate_item_role(item)
+        if role == "critic":
+            if source in {"Album of the Year", "Metacritic", "Any Decent Music"}:
+                signal += 3
+            if score_percent >= 90:
+                signal += 8
+            elif score_percent >= 80:
+                signal += 5
+            elif score_percent >= 70:
+                signal += 2
+            elif 0 < score_percent < 60:
+                signal -= 6
+        else:
+            if source == "Rate Your Music":
+                signal += 1
+            if score_percent >= 90:
+                signal += 3
+            elif score_percent >= 80:
+                signal += 2
+            elif score_percent >= 70:
+                signal += 1
+            elif 0 < score_percent < 60:
+                signal -= 2
         if clean_text(str(item.get("text", ""))):
             signal += 1
     return signal
@@ -3571,6 +3663,7 @@ def collect_today_echo_editorial_facts(album: str, artist: str, timeout_s: int) 
         key = (
             clean_text(str(item.get("source", ""))),
             clean_text(str(item.get("score", ""))),
+            aggregate_item_role(item),
         )
         if not key[0]:
             continue
@@ -3590,10 +3683,10 @@ def ranked_today_echo_review_sources(review_sources: Sequence[Dict[str, object]]
         "Album of the Year": 3,
         "Metacritic": 4,
         "Any Decent Music": 5,
-        "Rate Your Music": 6,
-        "The Guardian": 7,
-        "NME": 8,
-        "AllMusic": 9,
+        "The Guardian": 6,
+        "NME": 7,
+        "AllMusic": 8,
+        "Rate Your Music": 9,
         "Genius": 10,
         "Wikipedia Critical reception": 11,
     }
@@ -3800,7 +3893,6 @@ def build_review_source_fallback_note(
         "Album of the Year",
         "Metacritic",
         "Any Decent Music",
-        "Rate Your Music",
         "The Guardian",
         "NME",
         "Wikipedia Critical reception",
@@ -3828,7 +3920,10 @@ def build_review_source_fallback_note(
     elif len(arrangement_facts) >= 2:
         first = f"《{album}》的听感重心落在{arrangement_text}的相互牵引上，歌曲不是风格标签的堆叠，而是靠编制关系推进。"
     elif source in {"Album of the Year", "Metacritic", "Any Decent Music", "Rate Your Music"} and format_aggregate_review_score(review):
-        first = f"《{album}》在{source}获得{format_aggregate_review_score(review)}的综合口碑，这类聚合评分适合用来校准作品的评论共识。"
+        if aggregate_item_role(review) == "user":
+            first = f"《{album}》在{source}获得{format_aggregate_review_score(review)}的用户反馈，这更适合补充听众长期接受度，而不是替代媒体共识。"
+        else:
+            first = f"《{album}》在{source}获得{format_aggregate_review_score(review)}的媒体汇总口碑，这类聚合评分适合用来校准作品的评论共识。"
     elif source in high_context_sources:
         first = f"《{album}》的推荐价值应从作品所处的艺人阶段、歌曲结构和制作语境进入，而不是停留在资料标签。"
     else:
@@ -3843,7 +3938,8 @@ def build_review_source_fallback_note(
         supplements.append(f"AllMusic {rating} 评价")
     aggregate_score = format_aggregate_review_score(review)
     if aggregate_score and source in {"Album of the Year", "Metacritic", "Any Decent Music", "Rate Your Music"}:
-        supplements.append(f"{source} {aggregate_score} 综合评分")
+        label = "用户评分" if aggregate_item_role(review) == "user" else "媒体汇总评分"
+        supplements.append(f"{source} {aggregate_score} {label}")
     if recording_location:
         location_text = re.sub(r"^(.+),\s*([^,]+,\s*[^,]+)$", r"\1（\2）", recording_location)
         supplements.append(f"{location_text}录音地点")
@@ -3991,6 +4087,8 @@ def build_today_echo_note(
             "url": clean_text(str(item.get("url", ""))),
             "score": clean_text(str(item.get("score", ""))),
             "score_percent": clean_text(str(item.get("score_percent", ""))),
+            "score_role": aggregate_item_role(item),
+            "score_count": clean_text(str(item.get("score_count", ""))),
             "text": clean_text(str(item.get("text", "")))[:1200],
         }
         for item in review_sources[:5]
@@ -4002,6 +4100,9 @@ def build_today_echo_note(
             "url": clean_text(str(item.get("url", ""))),
             "score": clean_text(str(item.get("score", ""))),
             "score_percent": clean_text(str(item.get("score_percent", ""))),
+            "context": aggregate_item_context_label(item),
+            "score_role": aggregate_item_role(item),
+            "score_count": clean_text(str(item.get("score_count", ""))),
             "text": clean_text(str(item.get("text", "")))[:500],
         }
         for item in editorial_facts.get("aggregate_scores", [])[:5]
@@ -4012,7 +4113,7 @@ def build_today_echo_note(
         f"- AllMusic 流派：{genres or '未知'}",
         f"- AllMusic 风格：{styles or '未知'}",
         f"- AllMusic 评分：{editorial_facts.get('allmusic_rating', '') or '未知'}",
-        f"- 综合评分证据（不局限 AllMusic；优先 Album of the Year / Metacritic / Any Decent Music / Rate Your Music 等聚合口碑）：{json.dumps(aggregate_payload, ensure_ascii=False)}",
+        f"- 综合评分证据（AOTY / Metacritic / Any Decent Music 视为媒体汇总；Rate Your Music 视为用户反馈；不要用 AOTY 的 User Score 代替 RYM）：{json.dumps(aggregate_payload, ensure_ascii=False)}",
         f"- 录音地点：{' / '.join(editorial_facts.get('recording_locations', [])) or '未知'}",
         f"- AllMusic 页面摘要：{editorial_facts.get('allmusic_summary', '') or '无'}",
         f"- Wikipedia 摘要：{editorial_facts.get('wikipedia_summary', '') or '无'}",
@@ -4020,7 +4121,7 @@ def build_today_echo_note(
         f"- Wikidata 制作人：{' / '.join(editorial_facts.get('wikidata_producers', [])[:3]) or '无'}",
         f"- Wikidata 厂牌：{' / '.join(editorial_facts.get('wikidata_labels', [])[:3]) or '无'}",
         f"- Wikidata 奖项：{' / '.join(editorial_facts.get('wikidata_awards', [])[:3]) or '无'}",
-        f"- 专业乐评证据池（按优先级：Apple Music 编辑推荐语、Pitchfork、Rolling Stone、Album of the Year、Metacritic、Any Decent Music、Rate Your Music、The Guardian、NME、AllMusic、Genius、Wikipedia reception）：{json.dumps(review_payload, ensure_ascii=False)}",
+        f"- 专业乐评证据池（按优先级：Apple Music 编辑推荐语、Pitchfork、Rolling Stone、Album of the Year、Metacritic、Any Decent Music、The Guardian、NME、AllMusic、Rate Your Music（用户反馈）、Genius、Wikipedia reception）：{json.dumps(review_payload, ensure_ascii=False)}",
     ]
 
     prompt = f"""
@@ -4051,8 +4152,9 @@ def build_today_echo_note(
 9. note 必须控制在 180-320 个汉字，超过 420 个汉字视为失败。
 10. 禁止“杰作”“神作”“伟大”“完美”“震撼”“不可错过”等浮夸词。
 11. 不要改动专辑名、艺人名和首发日期。
-12. 综合评分只能用于判断评论共识强弱，不能把正文写成分数清单；若分数来自 AOTY / Metacritic / Any Decent Music 等聚合站，应优先转译成“评论界如何理解这张唱片”的判断。
-13. 不要输出 JSON 以外的任何内容。
+12. AOTY / Metacritic / Any Decent Music 主要用于判断媒体共识，RYM 主要用于补充用户反馈；不要把 AOTY 的 User Score 当成 RYM 替代品。
+13. 综合评分只能用于判断评论共识强弱或听众接受度，不能把正文写成分数清单；若分数来自 AOTY / Metacritic / Any Decent Music 等聚合站，应优先转译成“评论界如何理解这张唱片”的判断。
+14. 不要输出 JSON 以外的任何内容。
 """
     try:
         data = extract_json_object(call_llm(prompt))
