@@ -424,8 +424,8 @@ h1 {
 }
 @media (prefers-reduced-motion: no-preference) {
     @keyframes nd-power-on {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from { opacity: 0; transform: translate3d(0, 6px, 0); }
+        to { opacity: 1; transform: translate3d(0, 0, 0); }
     }
     .site-header,
     .archive-list {
@@ -536,7 +536,7 @@ h1 {
             <div class="metric-block home-clock" aria-label="北京时间实时钟表">
                 <p class="clock-label">CN Time</p>
                 <div class="clock-readout">
-                    <time class="clock-value" data-cn-clock>21:30</time>
+                    <time class="clock-value" data-cn-clock>00:54</time>
                     <div class="analog-clock" id="home-analog-clock">
                         <!-- 60个刻度由JS生成 -->
                         <div class="clock-hand hand-hour" id="hand-h"></div>
@@ -545,7 +545,7 @@ h1 {
                         <div class="clock-center"></div>
                     </div>
                 </div>
-                <p class="clock-date" data-cn-date>2026 / 04 / 25</p>
+                <p class="clock-date" data-cn-date>2026 / 04 / 26</p>
             </div>
         </div>
     </header>
@@ -557,7 +557,7 @@ h1 {
         <span class="month">Apr. 2026</span>
     </div>
     <div class="entry-body">
-        <span class="today-label">Today</span>
+        
         <p class="entry-title">⚡ Google承诺向Anthropic投资至多400亿美元</p>
     </div>
 </a>
