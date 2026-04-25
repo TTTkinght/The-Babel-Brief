@@ -49,11 +49,38 @@ MONTH_NAMES = {
 }
 
 BACK_LINK_HTML = """
+<div class="reading-progress" aria-hidden="true"></div>
 <div class="brief-backbar">
     <a class="brief-brand" href="../">The Babel Brief</a>
     <a class="brief-back-link" href="../">&lt; back</a>
     <button class="theme-toggle" type="button" data-theme-toggle>[ DARK ]</button>
 </div>
+<button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+    <span class="back-to-top-glyph" aria-hidden="true">&uarr;</span>
+    <span class="back-to-top-text">TOP</span>
+</button>
+<script>
+(() => {
+    const btn = document.querySelector("[data-back-to-top]");
+    if (!btn) return;
+    const onScroll = () => btn.classList.toggle("is-visible", window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    btn.addEventListener("click", () => {
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    });
+    onScroll();
+})();
+</script>
+<script type="module">
+(async () => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try {
+        const { animate, scroll } = await import("https://cdn.jsdelivr.net/npm/motion@latest/+esm");
+        scroll(animate(".reading-progress", { scaleX: [0, 1] }, { ease: "linear" }));
+    } catch (e) { /* offline / blocked CDN — silently degrade */ }
+})();
+</script>
 """
 
 DETAIL_CLOCK_SCRIPT = """
@@ -490,10 +517,65 @@ hr {
     border-top: 1px solid var(--border-visible);
     margin: var(--space-3xl) 0;
 }
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--accent);
+    z-index: 50;
+    pointer-events: none;
+    will-change: transform;
+}
+.back-to-top {
+    position: fixed;
+    right: var(--space-xl);
+    bottom: var(--space-xl);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 180ms linear, transform 180ms linear, color 120ms linear, border-color 120ms linear;
+    z-index: 60;
+}
+.back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+.back-to-top-glyph {
+    font-size: 14px;
+    line-height: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+        transition: opacity 1ms linear;
+        transform: none;
+    }
+}
 @media (prefers-reduced-motion: no-preference) {
     @keyframes nd-power-on {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from { opacity: 0; transform: translate3d(0, 6px, 0); }
+        to { opacity: 1; transform: translate3d(0, 0, 0); }
     }
     .brief-backbar,
     .brief-detail-header,
@@ -1228,8 +1310,8 @@ h1 {{
 }}
 @media (prefers-reduced-motion: no-preference) {{
     @keyframes nd-power-on {{
-        from {{ opacity: 0; }}
-        to {{ opacity: 1; }}
+        from {{ opacity: 0; transform: translate3d(0, 6px, 0); }}
+        to {{ opacity: 1; transform: translate3d(0, 0, 0); }}
     }}
     .site-header,
     .archive-list {{
