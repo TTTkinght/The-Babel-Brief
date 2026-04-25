@@ -226,6 +226,7 @@ DEEP_SECTION_TITLES = {
     "## 🚀【科技与AI / Tech & AI】",
 }
 
+EDITOR_NOTE_TITLE = "## ✨【今日要点 / Editor's Note】"
 QUICK_HITS_TITLE = "## 【Quick Hits】"
 QUICK_HITS_MAX_TOTAL = 12
 QUICK_HITS_MAX_EXCLUSIVE = 2
@@ -1531,14 +1532,20 @@ def build_prompt(clusters, history):
         compact_prompt = f"""
 你是严谨的中文新闻简报编辑。今天是现实世界中的 {today_str}。
 
-你只需要完成 2 件事：
+你只需要完成 3 件事：
 1. 根据【今日历史数据】写 1 段“历史上的今天”开场。
-2. 根据【重点候选新闻】写 1 行中文 Subject。
+2. 根据【重点候选新闻】写 1 段“今日要点 / Editor's Note”——80-120 字的整合性导读。
+3. 根据【重点候选新闻】写 1 行中文 Subject。
 
 输出要求：
 1. 只输出 Markdown，不要解释，不要代码块。
 2. 必须严格输出以下骨架，顺序不能变：
 历史上的今天（[年份]）：[100字左右中文客观描述]。 —— [来源: Wikipedia](URL)
+---
+## ✨【今日要点 / Editor's Note】
+
+[80-120 字的单段编辑导读：用编辑口吻概括今天的主要叙事线索，点明 1 条最值得读者优先关注的事件，结尾用 1 句"明日观察:..."给出值得跟踪的下一个节点。绝对禁止逐条复述新闻标题；禁止用项目符号；禁止任何客套或套话。]
+
 ---
 ## 【Quick Hits】
 
@@ -1554,6 +1561,7 @@ Subject: [中文短句；中文短句]
 3. 不要给四个新闻板块填写任何正文，保持为空，系统会后续填充。
 4. 全文必须为简体中文；只有 Subject 行保留 `Subject:` 英文前缀。
 5. Subject 必须用中文提炼最重要的 1-2 个事件短句，用全角分号连接；系统会自动补上固定前缀【The Babel Brief】。
+6. "今日要点"必须是单段散文，长度严格在 80-120 个汉字之间，并以"明日观察:"开头的一句结束；不要在该段任何位置使用 emoji、括号链接或编号。
 
 【今日历史数据（Wikipedia）】：
 {history or '无可用数据'}
@@ -5636,6 +5644,42 @@ def strip_report_scaffold(text: str, source: str = "") -> str:
     return value
 
 
+def build_bottom_line_text(headline: str, overview: str) -> str:
+    """Derive a ≤30-character conclusive Bottom Line for a deep story.
+
+    Deterministic for the first round (no extra LLM call). Picks the most
+    information-dense early clause, strips source attributions, and clamps
+    length. Quality is "structural" not editorial — readers get a TL;DR scaffold
+    they can iterate on later.
+    """
+    candidates: List[str] = []
+    for source_text in (overview or "", headline or ""):
+        cleaned = clean_text(source_text)
+        if not cleaned:
+            continue
+        cleaned = re.sub(r"\(?\s*(?:信息)?来源[:：][^)）]*[)）]?", "", cleaned)
+        cleaned = re.sub(r"\[[^\]]*\]\([^)]+\)", "", cleaned)
+        cleaned = re.sub(r"^[A-Za-z一-鿿··\s]+(?:报道|称|表示|指出|宣布)[:：，,]\s*", "", cleaned)
+        for clause in re.split(r"[。！？!?；;]", cleaned):
+            clause = clause.strip(" ，,、:：")
+            if len(clause) >= 6:
+                candidates.append(clause)
+    for clause in candidates:
+        han_count = len(re.sub(r"[^一-鿿]", "", clause))
+        if han_count == 0:
+            continue
+        if han_count <= 30:
+            return clause + "。"
+        truncated = ""
+        for ch in clause:
+            if len(re.sub(r"[^一-鿿]", "", truncated)) >= 28:
+                break
+            truncated += ch
+        return truncated.rstrip("，,、:：") + "…"
+    fallback = clean_text(headline)[:28]
+    return (fallback + "。") if fallback else "—"
+
+
 def build_section_overview_text(
     candidate: Dict[str, object],
     fragments: Sequence[Dict[str, str]],
@@ -6222,6 +6266,9 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
             perspective_b_suffix = f"（基于: {secondary_source} 报道）"
 
         rendered.append(f"### {entry['index']}. {title}")
+        rendered.append("")
+        bottom_line = build_bottom_line_text(title, overview)
+        rendered.append(f"> ▶ **底线 / Bottom Line**：{bottom_line}")
         rendered.append("")
         rendered.append(f"- 📰 **全景综述**：{overview}{overview_suffix}")
         if clean_text(str(entry.get("timeline", ""))):
