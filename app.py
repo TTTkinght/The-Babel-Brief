@@ -595,9 +595,9 @@ body::before {
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-image: radial-gradient(circle, currentColor 0.6px, transparent 0.6px);
+    background-image: radial-gradient(circle, currentColor 0.8px, transparent 0.9px);
     background-size: 18px 18px;
-    opacity: 0.06;
+    opacity: 0.12;
 }
 body { position: relative; }
 .brief-backbar,
@@ -610,8 +610,8 @@ main {
     z-index: 1;
 }
 @keyframes bb-breathe {
-    0%, 100% { opacity: 0.06; }
-    50%      { opacity: 0.10; }
+    0%, 100% { opacity: 0.10; }
+    50%      { opacity: 0.18; }
 }
 @media (prefers-reduced-motion: no-preference) {
     body::before { animation: bb-breathe 6s ease-in-out infinite; }
@@ -1358,9 +1358,9 @@ body::before {{
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-image: radial-gradient(circle, currentColor 0.6px, transparent 0.6px);
+    background-image: radial-gradient(circle, currentColor 0.8px, transparent 0.9px);
     background-size: 18px 18px;
-    opacity: 0.06;
+    opacity: 0.12;
 }}
 body {{ position: relative; }}
 .page,
@@ -1371,8 +1371,8 @@ body {{ position: relative; }}
     z-index: 1;
 }}
 @keyframes bb-breathe {{
-    0%, 100% {{ opacity: 0.06; }}
-    50%      {{ opacity: 0.10; }}
+    0%, 100% {{ opacity: 0.10; }}
+    50%      {{ opacity: 0.18; }}
 }}
 @media (prefers-reduced-motion: no-preference) {{
     body::before {{ animation: bb-breathe 6s ease-in-out infinite; }}
