@@ -439,6 +439,31 @@ h1 {
         animation-delay: var(--row-delay, 120ms);
     }
 }
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, currentColor 0.6px, transparent 0.6px);
+    background-size: 18px 18px;
+    opacity: 0.06;
+}
+body { position: relative; }
+.page,
+.site-header,
+.archive-list,
+.archive-item {
+    position: relative;
+    z-index: 1;
+}
+@keyframes bb-breathe {
+    0%, 100% { opacity: 0.06; }
+    50%      { opacity: 0.10; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    body::before { animation: bb-breathe 6s ease-in-out infinite; }
+}
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -536,7 +561,7 @@ h1 {
             <div class="metric-block home-clock" aria-label="北京时间实时钟表">
                 <p class="clock-label">CN Time</p>
                 <div class="clock-readout">
-                    <time class="clock-value" data-cn-clock>00:54</time>
+                    <time class="clock-value" data-cn-clock>01:21</time>
                     <div class="analog-clock" id="home-analog-clock">
                         <!-- 60个刻度由JS生成 -->
                         <div class="clock-hand hand-hour" id="hand-h"></div>

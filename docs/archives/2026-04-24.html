@@ -425,6 +425,33 @@ hr {
         animation-delay: 120ms;
     }
 }
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, currentColor 0.6px, transparent 0.6px);
+    background-size: 18px 18px;
+    opacity: 0.06;
+}
+body { position: relative; }
+.brief-backbar,
+.brief-detail-header,
+.reading-progress,
+.back-to-top,
+.email-container,
+main {
+    position: relative;
+    z-index: 1;
+}
+@keyframes bb-breathe {
+    0%, 100% { opacity: 0.06; }
+    50%      { opacity: 0.10; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    body::before { animation: bb-breathe 6s ease-in-out infinite; }
+}
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -526,7 +553,7 @@ hr {
         <p class="instrument-number">24</p>
         <p class="instrument-meta">04 / 2026</p>
         <p class="instrument-label">CN Time</p>
-        <time class="instrument-clock" data-cn-clock>00:54</time>
+        <time class="instrument-clock" data-cn-clock>01:21</time>
     </div>
     <h1 class="brief-detail-title">特朗普称黎巴嫩与以色列同意将停火协议延长3周</h1>
 </header>

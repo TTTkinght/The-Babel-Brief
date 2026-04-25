@@ -589,6 +589,33 @@ hr {
         animation-delay: 120ms;
     }
 }
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, currentColor 0.6px, transparent 0.6px);
+    background-size: 18px 18px;
+    opacity: 0.06;
+}
+body { position: relative; }
+.brief-backbar,
+.brief-detail-header,
+.reading-progress,
+.back-to-top,
+.email-container,
+main {
+    position: relative;
+    z-index: 1;
+}
+@keyframes bb-breathe {
+    0%, 100% { opacity: 0.06; }
+    50%      { opacity: 0.10; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    body::before { animation: bb-breathe 6s ease-in-out infinite; }
+}
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1324,6 +1351,31 @@ h1 {{
         animation: nd-power-on var(--motion-slow) var(--ease-out) both;
         animation-delay: var(--row-delay, 120ms);
     }}
+}}
+body::before {{
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, currentColor 0.6px, transparent 0.6px);
+    background-size: 18px 18px;
+    opacity: 0.06;
+}}
+body {{ position: relative; }}
+.page,
+.site-header,
+.archive-list,
+.archive-item {{
+    position: relative;
+    z-index: 1;
+}}
+@keyframes bb-breathe {{
+    0%, 100% {{ opacity: 0.06; }}
+    50%      {{ opacity: 0.10; }}
+}}
+@media (prefers-reduced-motion: no-preference) {{
+    body::before {{ animation: bb-breathe 6s ease-in-out infinite; }}
 }}
 @media (prefers-reduced-motion: reduce) {{
     *,
