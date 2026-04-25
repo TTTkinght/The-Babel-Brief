@@ -36,7 +36,7 @@ jobs:
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }},datura128@163.com
           GEMINI_MODEL: gemini-3-flash-preview
           BRIEF_TIMEZONE: Asia/Shanghai
           SKIP_NETWORK_PREFLIGHT: "1"

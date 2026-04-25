@@ -6464,7 +6464,11 @@ def send_email(subject: str, html_content: str) -> None:
     user = os.getenv("SMTP_USERNAME", "").strip()
     pwd = normalize_smtp_password(os.getenv("SMTP_PASSWORD", ""), user)
     header_from, envelope_from = build_sender_addresses(os.getenv("EMAIL_FROM", ""), user)
-    to_addrs = [value.strip() for value in os.getenv("EMAIL_TO", "").split(",") if value.strip()]
+    to_addrs = unique_preserving_order(
+        value.strip()
+        for value in os.getenv("EMAIL_TO", "").split(",")
+        if value.strip()
+    )
 
     if not all([host, user, pwd]) or not to_addrs:
         raise RuntimeError("SMTP/EMAIL 配置不完整，无法发送邮件。")
