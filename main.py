@@ -5668,6 +5668,9 @@ def build_bottom_line_text(headline: str, overview: str) -> str:
         han_count = len(re.sub(r"[^一-鿿]", "", clause))
         if han_count == 0:
             continue
+        # Skip English-dominated clauses (e.g. raw RSS titles bleeding through).
+        if han_count / max(len(clause), 1) < 0.5:
+            continue
         if han_count <= 30:
             return clause + "。"
         truncated = ""
