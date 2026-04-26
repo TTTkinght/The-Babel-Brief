@@ -5,6 +5,11 @@ on:
     # GitHub cron uses UTC; 00:30 UTC is 08:30 in Asia/Shanghai.
     - cron: "30 0 * * *"
   workflow_dispatch:
+    inputs:
+      test_mode:
+        description: "Test mode: skip extra recipients (only send to primary EMAIL_TO secret)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -36,7 +41,7 @@ jobs:
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }},datura128@163.com
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}${{ inputs.test_mode && '' || ',datura128@163.com' }}
           GEMINI_MODEL: gemini-3-flash-preview
           BRIEF_TIMEZONE: Asia/Shanghai
           SKIP_NETWORK_PREFLIGHT: "1"
