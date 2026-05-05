@@ -1112,6 +1112,98 @@ def rebalance_section_candidates(
     return selected_map
 
 
+# =============================================================================
+# § 4b  跨日去重 / 滚动事件 / 粗糙标题过滤
+# =============================================================================
+
+RECENT_COVERAGE_LOOKBACK_DAYS = 14
+RECENT_COVERAGE_SIMILARITY_THRESHOLD = 0.65
+
+VAGUE_AGGREGATOR_PATTERNS = (
+    re.compile(r"^分析[:：]"),
+    re.compile(r"^市场综述[:：]"),
+    re.compile(r"^综述[:：]"),
+    re.compile(r"^解读[:：]"),
+    re.compile(r"^聚焦[:：]"),
+    re.compile(r"直播$"),
+    re.compile(r"动态$"),
+    re.compile(r"实时动态$"),
+    re.compile(r"实时更新$"),
+)
+
+
+def normalize_headline_for_dedup(text: str) -> str:
+    text = clean_text(text or "")
+    text = re.sub(r"^\d+[.\)、]\s*", "", text)
+    text = re.sub(r"^[【\[][^【\[】\]]*[】\]]\s*", "", text)
+    return text.strip()
+
+
+def load_recent_archive_headlines(days: int = RECENT_COVERAGE_LOOKBACK_DAYS) -> List[str]:
+    """Read past N days' archive HTMLs and return normalized H3 headlines."""
+    now = get_local_now()
+    out: List[str] = []
+    seen: set = set()
+    for offset in range(1, days + 1):
+        date_text = (now - timedelta(days=offset)).strftime("%Y-%m-%d")
+        path = f"archives/{date_text}.html"
+        if not os.path.isfile(path):
+            continue
+        try:
+            with open(path, encoding="utf-8", errors="replace") as f:
+                content = f.read()
+        except Exception:
+            continue
+        for raw in re.findall(r"<h3[^>]*>([^<]+)</h3>", content):
+            normalized = normalize_headline_for_dedup(raw)
+            if not normalized or len(normalized) < 6 or normalized in seen:
+                continue
+            seen.add(normalized)
+            out.append(normalized)
+    return out
+
+
+def is_headline_recently_covered(headline: str, recent: Sequence[str],
+                                  threshold: float = RECENT_COVERAGE_SIMILARITY_THRESHOLD) -> bool:
+    norm = normalize_headline_for_dedup(headline)
+    if not norm or not recent:
+        return False
+    for past in recent:
+        if SequenceMatcher(None, norm, past).ratio() >= threshold:
+            return True
+    return False
+
+
+def has_vague_aggregator_title(text: str) -> bool:
+    norm = normalize_headline_for_dedup(text)
+    return any(p.search(norm) for p in VAGUE_AGGREGATOR_PATTERNS)
+
+
+def annotate_recent_coverage_and_vague_titles(
+    raw_clusters: Sequence[Dict[str, object]],
+    recent_headlines: Sequence[str],
+) -> Tuple[int, int]:
+    """Mark clusters whose headline matches recent coverage or vague pattern.
+
+    Sets `llm_importance_score.eligible = False` for matches and adds
+    diagnostic flags. Returns (recently_covered_count, vague_count).
+    """
+    recently_covered = 0
+    vague = 0
+    for cluster in raw_clusters:
+        title = str(cluster.get("headline", ""))
+        score_dict = cluster.setdefault("llm_importance_score", {})
+        if is_headline_recently_covered(title, recent_headlines):
+            score_dict["eligible"] = False
+            score_dict["recently_covered"] = True
+            recently_covered += 1
+        if has_vague_aggregator_title(title):
+            score_dict["eligible"] = False
+            score_dict["vague_aggregator_title"] = True
+            vague += 1
+    return recently_covered, vague
+
+
 def build_editorial_selections(raw_clusters: Sequence[Dict[str, object]]) -> Dict[str, object]:
     quick_hits_consensus: List[Dict[str, object]] = []
     quick_hits_exclusive: List[Dict[str, object]] = []
@@ -1125,6 +1217,17 @@ def build_editorial_selections(raw_clusters: Sequence[Dict[str, object]]) -> Dic
         "business": [],
         "tech": [],
     }
+
+    # Cross-day dedup + vague-title filter: drop candidates already covered in the
+    # last 7 days or whose RSS headline is a generic aggregator like "分析:..." /
+    # "市场综述:..." / "...直播". Marked clusters become ineligible below.
+    recent_headlines = load_recent_archive_headlines()
+    recently_covered_count, vague_count = annotate_recent_coverage_and_vague_titles(
+        raw_clusters, recent_headlines
+    )
+    if recent_headlines:
+        print(f"[INFO] 跨日去重: 比对最近 {RECENT_COVERAGE_LOOKBACK_DAYS} 天 {len(recent_headlines)} 条历史标题; "
+              f"剔除 {recently_covered_count} 条重复 + {vague_count} 条粗糙聚合标题。")
 
     eligible_clusters = [
         cluster
@@ -1528,6 +1631,11 @@ def build_prompt(clusters, history):
             }
             for candidate in rank_candidates(raw_clusters, "quick_hits_score")[:8]
         ]
+        recent_headlines = load_recent_archive_headlines()
+        recent_topics_block = (
+            "\n".join(f"- {h}" for h in recent_headlines[:30])
+            if recent_headlines else "（暂无历史归档）"
+        )
         compact_prompt = f"""
 你是严谨的中文新闻简报编辑。今天是现实世界中的 {today_str}。
 
@@ -1554,6 +1662,11 @@ Subject: [中文短句；中文短句]
 3. 不要给四个新闻板块填写任何正文，保持为空，系统会后续填充。
 4. 全文必须为简体中文；只有 Subject 行保留 `Subject:` 英文前缀。
 5. Subject 必须用中文提炼最重要的 1-2 个事件短句，用全角分号连接；系统会自动补上固定前缀【The Babel Brief】。
+6. **跨日去重**：Subject 行禁止聚焦【过去 7 天已写过的主题】里出现过的事件；如果今天的 Top 候选都属于已写过主题，请挑选有显著新进展的细节角度切入，并以"最新进展:"或"第 N 天"等表述写明这是延续报道，避免读者感觉重复。
+7. "历史上的今天"也避免与【过去 7 天已写过的主题】里的核心议题撞题；优先选其它领域的真实事件。
+
+【过去 7 天已写过的主题】（用于去重参考，不是今日素材）：
+{recent_topics_block}
 
 【今日历史数据（Wikipedia）】：
 {history or '无可用数据'}
