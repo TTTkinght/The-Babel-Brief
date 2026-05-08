@@ -310,5 +310,20 @@
         "ArchiveBackfill"
       ]
     }
+  ],
+  "05-08": [
+    {
+      "album": "Let It Be",
+      "artist": "The Beatles",
+      "cached_at": "2026-05-08T23:48:59",
+      "genre_hint": "Pop/Rock / Stage & Screen",
+      "release_date": "1970-05-08",
+      "verification_score": 8,
+      "verification_sources": [
+        "AllMusic",
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
