@@ -56,7 +56,7 @@ jobs:
         run: |
           git config user.name "babel-bot"
           git config user.email "bot@babel-brief"
-          git add index.html archives/ docs/
+          git add index.html archives/ docs/ cache/
           if ! git diff --cached --quiet; then
             git commit -m "brief: $(TZ=Asia/Shanghai date +'%Y-%m-%d')"
             git push

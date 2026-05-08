@@ -1117,7 +1117,13 @@ def rebalance_section_candidates(
 # =============================================================================
 
 RECENT_COVERAGE_LOOKBACK_DAYS = 14
-RECENT_COVERAGE_SIMILARITY_THRESHOLD = 0.65
+# Jaccard threshold over (Chinese bigrams + Latin tokens). Empirically:
+#  - 0.40 catches "中国加强反制美国制裁..." vs "中国加强反击美国制裁..." (0.53)
+#  - misses "亚洲股市创纪录新高..." vs "亚洲股市创下历史新高..." (0.20) — caught by substring rule
+RECENT_COVERAGE_JACCARD_THRESHOLD = 0.40
+# Any 5+ contiguous Chinese characters appearing in both headlines marks them as the
+# same topic. "霍尔木兹海峡" / "亚洲股市创" / "中国加强反" all qualify.
+RECENT_COVERAGE_SUBSTRING_MIN = 5
 
 VAGUE_AGGREGATOR_PATTERNS = (
     re.compile(r"^分析[:：]"),
@@ -1137,6 +1143,38 @@ def normalize_headline_for_dedup(text: str) -> str:
     text = re.sub(r"^\d+[.\)、]\s*", "", text)
     text = re.sub(r"^[【\[][^【\[】\]]*[】\]]\s*", "", text)
     return text.strip()
+
+
+def chinese_token_set(text: str) -> set:
+    """Bigram-of-Chinese + lowercased Latin tokens — language-mixed friendly."""
+    norm = normalize_headline_for_dedup(text)
+    norm = re.sub(r"[，。！？、:：；;\(\)（）\"'“”‘’『』《》【】\[\]\s]+", " ", norm)
+    han_only = re.sub(r"[^一-鿿]", "", norm)
+    tokens: set = set()
+    for i in range(len(han_only) - 1):
+        tokens.add(han_only[i:i + 2])
+    for tok in re.findall(r"[A-Za-z0-9]{2,}", norm):
+        tokens.add(tok.lower())
+    return tokens
+
+
+def headline_jaccard(a: str, b: str) -> float:
+    sa, sb = chinese_token_set(a), chinese_token_set(b)
+    if not sa or not sb:
+        return 0.0
+    return len(sa & sb) / len(sa | sb)
+
+
+def has_long_shared_chinese_substring(a: str, b: str, min_len: int = RECENT_COVERAGE_SUBSTRING_MIN) -> bool:
+    """Return True if any contiguous Chinese substring of `min_len`+ chars appears in both."""
+    han_a = re.sub(r"[^一-鿿]", "", a or "")
+    han_b = re.sub(r"[^一-鿿]", "", b or "")
+    if len(han_a) < min_len or len(han_b) < min_len:
+        return False
+    for i in range(len(han_a) - min_len + 1):
+        if han_a[i:i + min_len] in han_b:
+            return True
+    return False
 
 
 def load_recent_archive_headlines(days: int = RECENT_COVERAGE_LOOKBACK_DAYS) -> List[str]:
@@ -1164,12 +1202,17 @@ def load_recent_archive_headlines(days: int = RECENT_COVERAGE_LOOKBACK_DAYS) -> 
 
 
 def is_headline_recently_covered(headline: str, recent: Sequence[str],
-                                  threshold: float = RECENT_COVERAGE_SIMILARITY_THRESHOLD) -> bool:
+                                  jaccard_threshold: float = RECENT_COVERAGE_JACCARD_THRESHOLD,
+                                  substring_min: int = RECENT_COVERAGE_SUBSTRING_MIN) -> bool:
+    """A headline is "recently covered" if it shares enough vocabulary OR a long
+    contiguous Chinese substring with any past archive H3."""
     norm = normalize_headline_for_dedup(headline)
     if not norm or not recent:
         return False
     for past in recent:
-        if SequenceMatcher(None, norm, past).ratio() >= threshold:
+        if headline_jaccard(norm, past) >= jaccard_threshold:
+            return True
+        if has_long_shared_chinese_substring(norm, past, substring_min):
             return True
     return False
 
@@ -3368,6 +3411,80 @@ def collect_today_echo_evidence(album: str, artist: str, timeout_s: int) -> List
     return evidence
 
 
+# =============================================================================
+# § 5b  今日回响 持久化缓存(避免外部 API 失败时整段消失)
+# =============================================================================
+
+VERIFIED_ALBUMS_CACHE_PATH = "cache/verified_albums.json"
+
+
+def _load_verified_albums_cache() -> Dict[str, List[Dict[str, object]]]:
+    try:
+        if os.path.isfile(VERIFIED_ALBUMS_CACHE_PATH):
+            with open(VERIFIED_ALBUMS_CACHE_PATH, "r", encoding="utf-8") as fh:
+                data = json.load(fh)
+                if isinstance(data, dict):
+                    return data
+    except Exception as exc:
+        print(f"[WARN] 加载 verified_albums 缓存失败: {exc}")
+    return {}
+
+
+def _save_verified_albums_cache(cache: Dict[str, List[Dict[str, object]]]) -> None:
+    try:
+        os.makedirs(os.path.dirname(VERIFIED_ALBUMS_CACHE_PATH) or ".", exist_ok=True)
+        with open(VERIFIED_ALBUMS_CACHE_PATH, "w", encoding="utf-8") as fh:
+            json.dump(cache, fh, ensure_ascii=False, indent=2, sort_keys=True)
+    except Exception as exc:
+        print(f"[WARN] 写入 verified_albums 缓存失败: {exc}")
+
+
+def cached_album_for_today(today_md: str) -> Optional[Dict[str, object]]:
+    """Return the most-verified cached entry for today's month-day, or None."""
+    cache = _load_verified_albums_cache()
+    entries = cache.get(today_md) or []
+    if not entries:
+        return None
+    # Prefer entries with the most verification sources, then most recent verify time.
+    entries_sorted = sorted(
+        entries,
+        key=lambda e: (len(e.get("verification_sources", [])), e.get("cached_at", "")),
+        reverse=True,
+    )
+    pick = entries_sorted[0]
+    print(f"[INFO] 今日回响命中本地缓存: {pick.get('album')} / {pick.get('artist')} / "
+          f"{pick.get('release_date')} (sources: {', '.join(pick.get('verification_sources', []))})")
+    return pick
+
+
+def remember_verified_album(verified: Dict[str, object]) -> None:
+    """Append a successfully-verified album to cache (idempotent on album+artist)."""
+    release_date = clean_text(verified.get("release_date", ""))
+    if not release_date or len(release_date) < 5:
+        return
+    today_md = release_date[5:]  # "YYYY-MM-DD" → "MM-DD"
+    cache = _load_verified_albums_cache()
+    bucket = cache.setdefault(today_md, [])
+    entry_key = (
+        clean_text(verified.get("album", "")).lower(),
+        clean_text(verified.get("artist", "")).lower(),
+    )
+    for existing in bucket:
+        if (clean_text(existing.get("album", "")).lower(),
+                clean_text(existing.get("artist", "")).lower()) == entry_key:
+            return  # already cached
+    bucket.append({
+        "album": clean_text(verified.get("album", "")),
+        "artist": clean_text(verified.get("artist", "")),
+        "release_date": release_date,
+        "genre_hint": clean_text(verified.get("genre_hint", "")),
+        "verification_sources": list(verified.get("verification_sources", [])),
+        "verification_score": int(verified.get("verification_score", 0)),
+        "cached_at": get_local_now().strftime("%Y-%m-%dT%H:%M:%S"),
+    })
+    _save_verified_albums_cache(cache)
+
+
 def verify_today_echo_candidate(album: str, artist: str, timeout_s: int) -> Optional[Dict[str, object]]:
     evidence = collect_today_echo_evidence(album, artist, timeout_s)
     if not evidence:
@@ -4335,6 +4452,7 @@ def ensure_verified_today_echo(md_text: str, timeout_s: int) -> str:
                 f"[INFO] 今日回响日期已通过多源验证: "
                 f"{verified['album']} / {verified['release_date']} / {', '.join(verified.get('verification_sources', []))}"
             )
+            remember_verified_album(verified)
         else:
             print(
                 f"[WARN] 今日回响候选未通过日期验证: "
@@ -4352,6 +4470,25 @@ def ensure_verified_today_echo(md_text: str, timeout_s: int) -> str:
             print(
                 f"[INFO] 今日回响已替换为经验证专辑: "
                 f"{verified['album']} / {verified['release_date']} / {', '.join(verified.get('verification_sources', []))}"
+            )
+            remember_verified_album(verified)
+
+    if not verified:
+        # External APIs all bombed out — try the local cache as a last-line fallback.
+        cached = cached_album_for_today(get_today_month_day())
+        if cached:
+            verified = {
+                "album": cached.get("album", ""),
+                "artist": cached.get("artist", ""),
+                "release_date": cached.get("release_date", ""),
+                "verification_sources": list(cached.get("verification_sources", [])) + ["LocalCache"],
+                "verification_score": int(cached.get("verification_score", 0)),
+                "genre_hint": cached.get("genre_hint", ""),
+                "evidence": [],
+            }
+            print(
+                f"[INFO] 今日回响外部源不可达,启用本地缓存兜底: "
+                f"{verified['album']} / {verified['release_date']}"
             )
 
     if not verified:
@@ -6301,6 +6438,29 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
                     "ai_take_refs": citation_refs[:2],
                 }
             )
+
+    # Output-layer cross-day dedup: now titles are LLM-rewritten Chinese, so the
+    # Jaccard + Chinese-substring check actually fires. The input-layer pass in
+    # build_editorial_selections only catches a subset because cluster headlines
+    # are mostly raw RSS (English).
+    recent_headlines_for_output_dedup = load_recent_archive_headlines()
+    if recent_headlines_for_output_dedup:
+        deduped_entries: List[Dict[str, object]] = []
+        skipped: List[str] = []
+        next_index = 1
+        for entry in entries:
+            cn_title = clean_label_text(str(entry.get("title", "")))
+            if cn_title and is_headline_recently_covered(cn_title, recent_headlines_for_output_dedup):
+                skipped.append(cn_title)
+                continue
+            entry["index"] = next_index
+            next_index += 1
+            deduped_entries.append(entry)
+        if skipped:
+            print(f"[INFO] 跨日去重(输出层 / {section_title.replace('## ', '').strip()}): "
+                  f"跳过 {len(skipped)} 条历史重复 — " + " | ".join(s[:30] for s in skipped))
+        entries = deduped_entries
+
     rendered: List[str] = []
 
     for entry in entries:
