@@ -6443,14 +6443,22 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
     # Jaccard + Chinese-substring check actually fires. The input-layer pass in
     # build_editorial_selections only catches a subset because cluster headlines
     # are mostly raw RSS (English).
+    #
+    # Hard rule: never drop below SECTION_MIN_ITEMS, otherwise
+    # validate_rendered_report fails the entire brief with "条数异常: 期望 3，
+    # 实际 2". We'd rather ship a slight repeat than miss the brief entirely.
     recent_headlines_for_output_dedup = load_recent_archive_headlines()
-    if recent_headlines_for_output_dedup:
+    if recent_headlines_for_output_dedup and len(entries) > SECTION_MIN_ITEMS:
+        max_drops_allowed = len(entries) - SECTION_MIN_ITEMS
         deduped_entries: List[Dict[str, object]] = []
         skipped: List[str] = []
         next_index = 1
         for entry in entries:
             cn_title = clean_label_text(str(entry.get("title", "")))
-            if cn_title and is_headline_recently_covered(cn_title, recent_headlines_for_output_dedup):
+            is_dup = bool(cn_title) and is_headline_recently_covered(
+                cn_title, recent_headlines_for_output_dedup
+            )
+            if is_dup and len(skipped) < max_drops_allowed:
                 skipped.append(cn_title)
                 continue
             entry["index"] = next_index
@@ -6460,6 +6468,19 @@ def build_deep_section_lines_from_candidates(section_title: str, candidates: Seq
             print(f"[INFO] 跨日去重(输出层 / {section_title.replace('## ', '').strip()}): "
                   f"跳过 {len(skipped)} 条历史重复 — " + " | ".join(s[:30] for s in skipped))
         entries = deduped_entries
+    elif recent_headlines_for_output_dedup:
+        # Section is at the minimum already; log if any duplicates exist but keep all entries.
+        would_drop = sum(
+            1 for entry in entries
+            if clean_label_text(str(entry.get("title", "")))
+            and is_headline_recently_covered(
+                clean_label_text(str(entry.get("title", ""))),
+                recent_headlines_for_output_dedup,
+            )
+        )
+        if would_drop:
+            print(f"[INFO] 跨日去重(输出层 / {section_title.replace('## ', '').strip()}): "
+                  f"检测到 {would_drop} 条与历史相似,但分区已达最低条数 {SECTION_MIN_ITEMS},全部保留以避免简报失败。")
 
     rendered: List[str] = []
 
