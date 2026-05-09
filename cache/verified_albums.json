@@ -325,5 +325,19 @@
         "Wikidata"
       ]
     }
+  ],
+  "05-09": [
+    {
+      "album": "Surprise",
+      "artist": "Paul Simon",
+      "cached_at": "2026-05-09T12:05:07",
+      "genre_hint": "Pop/Rock",
+      "release_date": "2006-05-09",
+      "verification_score": 6,
+      "verification_sources": [
+        "MusicBrainz",
+        "AllMusic"
+      ]
+    }
   ]
 }
