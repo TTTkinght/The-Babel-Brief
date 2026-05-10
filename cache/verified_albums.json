@@ -339,5 +339,19 @@
         "AllMusic"
       ]
     }
+  ],
+  "05-10": [
+    {
+      "album": "Weezer [Blue Album]",
+      "artist": "Weezer",
+      "cached_at": "2026-05-10T12:39:55",
+      "genre_hint": "Pop/Rock",
+      "release_date": "1994-05-10",
+      "verification_score": 5,
+      "verification_sources": [
+        "Wikidata",
+        "AllMusic"
+      ]
+    }
   ]
 }
