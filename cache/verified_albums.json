@@ -367,5 +367,19 @@
         "AllMusic"
       ]
     }
+  ],
+  "05-12": [
+    {
+      "album": "Exile on Main St.",
+      "artist": "The Rolling Stones",
+      "cached_at": "2026-05-12T12:15:34",
+      "genre_hint": "",
+      "release_date": "1972-05-12",
+      "verification_score": 5,
+      "verification_sources": [
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
