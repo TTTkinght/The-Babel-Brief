@@ -396,5 +396,19 @@
         "AllMusic"
       ]
     }
+  ],
+  "05-14": [
+    {
+      "album": "Modern Vampires of the City",
+      "artist": "Vampire Weekend",
+      "cached_at": "2026-05-14T12:32:27",
+      "genre_hint": "Pop/Rock",
+      "release_date": "2013-05-14",
+      "verification_score": 5,
+      "verification_sources": [
+        "Wikidata",
+        "AllMusic"
+      ]
+    }
   ]
 }

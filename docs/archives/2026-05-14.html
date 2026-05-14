@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>【The Babel Brief】习特会最新进展：特朗普称美中关系将“好于以往”；谷歌拟发布新一代Gemini模型</title>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+:root {
+    color-scheme: light;
+    --black: #F5F5F5;
+    --surface: #FFFFFF;
+    --surface-raised: #F0F0F0;
+    --border: #E8E8E8;
+    --border-visible: #CCCCCC;
+    --text-disabled: #999999;
+    --text-secondary: #666666;
+    --text-primary: #1A1A1A;
+    --text-display: #000000;
+    --accent: #FF661F;
+    --interactive: var(--text-display);
+    --display-xl: 4.5rem;
+    --display-lg: 3rem;
+    --display-md: 2.25rem;
+    --heading: 1.5rem;
+    --subheading: 1.125rem;
+    --body: 1rem;
+    --body-sm: 0.875rem;
+    --caption: 0.75rem;
+    --label: 0.6875rem;
+    --button: 0.8125rem;
+    --space-2xs: 2px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    --space-4xl: 96px;
+    --motion-fast: 160ms;
+    --motion-base: 240ms;
+    --motion-slow: 360ms;
+    --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --black: #000000;
+    --surface: #111111;
+    --surface-raised: #1A1A1A;
+    --border: #222222;
+    --border-visible: #333333;
+    --text-disabled: #666666;
+    --text-secondary: #999999;
+    --text-primary: #E8E8E8;
+    --text-display: #FFFFFF;
+    --interactive: var(--text-display);
+}
+* {
+    box-sizing: border-box;
+    letter-spacing: 0;
+}
+body {
+    margin: 0;
+    padding: var(--space-4xl) var(--space-xl);
+    background: var(--black);
+    color: var(--text-primary);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.5;
+    transition: background-color var(--motion-base) var(--ease-out), color var(--motion-base) var(--ease-out);
+}
+.brief-backbar {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto calc(var(--space-xl) + var(--space-sm));
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border-visible);
+}
+.brief-backbar .brief-back-link {
+    grid-column: 4 / 9;
+    width: fit-content;
+    color: var(--accent);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 0;
+    transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+}
+.theme-toggle {
+    grid-column: 10 / 13;
+    justify-self: end;
+    align-self: start;
+    min-height: 44px;
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--button);
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out);
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+    border-color: var(--text-display);
+}
+.brief-backbar .brief-brand {
+    grid-column: 1 / 3;
+    width: fit-content;
+    padding-left: 14px;
+    color: var(--accent);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 0;
+}
+.brief-backbar .brief-brand:hover,
+.brief-backbar .brief-brand:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+.email-container {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    row-gap: 0;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+.brief-detail-header {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto var(--space-3xl);
+}
+.brief-detail-instruments {
+    grid-column: 1 / 3;
+    display: grid;
+    gap: var(--space-sm);
+    align-content: start;
+}
+.instrument-label {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.instrument-number {
+    margin: 0;
+    color: var(--text-display);
+    font-family: "Doto", "Space Mono", monospace;
+    font-size: var(--display-lg);
+    line-height: 0.95;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.instrument-meta,
+.instrument-clock {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+}
+.instrument-clock {
+    width: fit-content;
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-visible);
+    color: var(--text-display);
+    transition: opacity var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
+}
+.instrument-clock.is-ticking {
+    opacity: 0.55;
+}
+.brief-detail-title {
+    grid-column: 4 / 12;
+    align-self: center;
+    margin: 0;
+    width: min(788.268px, 100%);
+    max-width: 100%;
+    opacity: 1;
+    color: var(--text-display);
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 700;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.email-container > * {
+    grid-column: 4 / 12;
+    max-width: 65ch;
+}
+.hero,
+.email-container > hr {
+    grid-column: 1 / -1;
+    max-width: none;
+}
+.email-container > h2 {
+    grid-column: 4 / 12;
+    max-width: 65ch;
+}
+.hero {
+    margin: 0 0 var(--space-3xl);
+}
+.hero img {
+    width: 100%;
+    display: block;
+    border-radius: 0;
+}
+h1 {
+    max-width: 12em;
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    border: 0;
+    color: var(--text-display);
+    font-size: var(--heading);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+h2 {
+    margin: var(--space-3xl) 0 var(--space-lg);
+    padding: var(--space-md) 0 0;
+    border-top: 1px solid var(--border-visible);
+    border-left: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+h2:first-of-type {
+    margin-top: var(--space-2xl);
+}
+h3 {
+    margin: var(--space-xl) 0 var(--space-md);
+    color: var(--accent);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.3;
+    font-weight: 700;
+}
+p,
+li {
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.6;
+}
+p {
+    margin: 0 0 var(--space-md);
+}
+ul {
+    margin: 0 0 var(--space-lg);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+li {
+    margin: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+ul ul {
+    margin-top: var(--space-sm);
+    margin-bottom: 0;
+    padding-left: var(--space-lg);
+    border-top: 1px solid var(--border);
+}
+.history-note {
+    margin: 0 0 var(--space-xl);
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.5;
+}
+.history-label {
+    color: var(--text-display);
+    font-weight: 700;
+}
+blockquote {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md);
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-primary);
+}
+a {
+    color: var(--interactive);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+}
+a:hover {
+    color: var(--text-display);
+    border-bottom-color: var(--text-display);
+}
+strong {
+    color: var(--text-display);
+    font-weight: 700;
+}
+.email-container > ul:first-of-type > li > strong {
+    color: var(--accent);
+}
+.email-container > ul:first-of-type {
+    border-top: 0;
+}
+.email-container > ul:first-of-type > li {
+    border-bottom: 0;
+}
+code {
+    padding: 1px 4px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+}
+hr {
+    border: 0;
+    border-top: 1px solid var(--border-visible);
+    margin: var(--space-3xl) 0;
+}
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--accent);
+    z-index: 50;
+    pointer-events: none;
+    will-change: transform;
+}
+.back-to-top {
+    position: fixed;
+    right: var(--space-xl);
+    bottom: var(--space-xl);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 180ms linear, transform 180ms linear, color 120ms linear, border-color 120ms linear;
+    z-index: 60;
+}
+.back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+.back-to-top-glyph {
+    font-size: 14px;
+    line-height: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+        transition: opacity 1ms linear;
+        transform: none;
+    }
+}
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes nd-power-on {
+        from { opacity: 0; transform: translate3d(0, 6px, 0); }
+        to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .brief-backbar,
+    .brief-detail-header,
+    .email-container {
+        animation: nd-power-on var(--motion-base) var(--ease-out) both;
+    }
+    .brief-detail-header {
+        animation-delay: 60ms;
+    }
+    .email-container {
+        animation-delay: 120ms;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+@media (max-width: 640px) {
+    body {
+        padding: var(--space-3xl) var(--space-md);
+    }
+    .brief-backbar {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+        margin-bottom: var(--space-2xl);
+    }
+    .brief-backbar span,
+    .brief-backbar a,
+    .theme-toggle {
+        grid-column: 1;
+    }
+    .theme-toggle {
+        justify-self: start;
+    }
+    .email-container {
+        display: block;
+    }
+    .brief-detail-header {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+        margin-bottom: var(--space-3xl);
+    }
+    .brief-detail-instruments,
+    .brief-detail-title {
+        grid-column: 1;
+    }
+    .email-container > * {
+        max-width: none;
+    }
+    h1 {
+        font-size: var(--heading);
+    }
+    .brief-detail-title {
+        font-size: var(--heading);
+    }
+    h2 {
+        margin-top: var(--space-2xl);
+    }
+    h3 {
+        font-size: var(--body);
+    }
+}
+</style>
+
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body>
+
+<div class="reading-progress" aria-hidden="true"></div>
+<div class="brief-backbar">
+    <a class="brief-brand" href="../">The Babel Brief</a>
+    <a class="brief-back-link" href="../">&lt; back</a>
+    <button class="theme-toggle" type="button" data-theme-toggle>[ DARK ]</button>
+</div>
+<button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+    <span class="back-to-top-glyph" aria-hidden="true">&uarr;</span>
+    <span class="back-to-top-text">TOP</span>
+</button>
+<script>
+(() => {
+    const btn = document.querySelector("[data-back-to-top]");
+    if (!btn) return;
+    const onScroll = () => btn.classList.toggle("is-visible", window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    btn.addEventListener("click", () => {
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    });
+    onScroll();
+})();
+</script>
+<script type="module">
+(async () => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try {
+        const { animate, scroll } = await import("https://cdn.jsdelivr.net/npm/motion@latest/+esm");
+        scroll(animate(".reading-progress", { scaleX: [0, 1] }, { ease: "linear" }));
+    } catch (e) { /* offline / blocked CDN — silently degrade */ }
+})();
+</script>
+
+
+<header class="brief-detail-header">
+    <div class="brief-detail-instruments">
+        <p class="instrument-label">Issue</p>
+        <p class="instrument-number">14</p>
+        <p class="instrument-meta">05 / 2026</p>
+        <p class="instrument-label">CN Time</p>
+        <time class="instrument-clock" data-cn-clock>12:32</time>
+    </div>
+    <h1 class="brief-detail-title">特朗普-习近平峰会直播</h1>
+</header>
+
+
+<script>
+(() => {
+    const clocks = document.querySelectorAll("[data-cn-clock]");
+    const clockEl = document.getElementById("home-analog-clock");
+    if (clocks.length || clockEl) {
+        const timeFormatter = new Intl.DateTimeFormat("zh-CN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: "Asia/Shanghai"
+        });
+        const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            timeZone: "Asia/Shanghai"
+        });
+        const tick = () => {
+            const now = new Date();
+            clocks.forEach((clock) => {
+                const nextText = timeFormatter.format(now);
+                if (clock.textContent === nextText) {
+                    return;
+                }
+                clock.textContent = nextText;
+                clock.classList.remove("is-ticking");
+                void clock.offsetWidth;
+                clock.classList.add("is-ticking");
+                setTimeout(() => clock.classList.remove("is-ticking"), 120);
+            });
+            document.querySelectorAll("[data-cn-date]").forEach((date) => {
+                date.textContent = dateFormatter.format(now).replace(/\//g, " / ");
+            });
+            if (clockEl && !clockEl.dataset.ready) {
+                for (let i = 0; i < 60; i++) {
+                    const t = document.createElement("div");
+                    t.className = "clock-tick " + (i % 5 === 0 ? "hour-tick" : "min-tick");
+                    t.style.transform = `translateX(-50%) rotate(${i * 6}deg)`;
+                    clockEl.prepend(t);
+                }
+                clockEl.dataset.ready = "1";
+            }
+
+            const handH = document.getElementById("hand-h");
+            const handM = document.getElementById("hand-m");
+            const handS = document.getElementById("hand-s");
+            if (handH && handM && handS) {
+                const s = now.getSeconds();
+                const m = now.getMinutes();
+                const h = now.getHours() % 12;
+                handH.style.rotate = `${h * 30 + m * 0.5}deg`;
+                handM.style.rotate = `${m * 6 + s * 0.1}deg`;
+                handS.style.rotate = `${s * 6}deg`;
+            }
+        };
+
+        tick();
+        setInterval(tick, 1000);
+    }
+
+    const themeKey = "babel-brief-theme";
+    const buttons = document.querySelectorAll("[data-theme-toggle]");
+    const storedTheme = localStorage.getItem(themeKey);
+    const hashTheme = new URLSearchParams(window.location.hash.slice(1)).get("figmatheme");
+    const forcedTheme = ["dark", "light"].includes(hashTheme) ? hashTheme : "";
+    const initialTheme = forcedTheme || storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem(themeKey, theme);
+        buttons.forEach((button) => {
+            button.textContent = theme === "dark" ? "[ LIGHT ]" : "[ DARK ]";
+            button.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+        });
+    };
+
+    setTheme(initialTheme);
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+        });
+    });
+})();
+</script>
+
+<div class="email-container">
+
+<p class="history-note"><span class="history-label">历史上的今天（2021年）</span>：中国首辆火星车“祝融号”成功降落在火星北半球的乌托邦平原南部，标志着中国首次火星探测任务（天问一号）取得关键性成功。中国由此成为世界上第二个实现火星着陆和巡视探测的国家。“祝融号”随后在火星表面开展了科学探测，为研究火星地质结构及演化提供了宝贵数据。 —— [来源: Wikipedia](https://en.wikipedia.org/wiki/Zhurong_(rover))</p>
+
+<hr />
+<h2>🦉 Quick Hits</h2>
+<ul>
+<li> <strong>特朗普-习近平峰会直播：中美领导人就贸易、科技及伊朗问题举行会谈</strong>：特朗普与习近平的峰会正值全球经济的关键时刻，且正值战争期间。（<a href="https://www.aljazeera.com/news/liveblog/2026/5/14/trump-xi-summit-live-us-china-leaders-to-hold-talks-on-trade-tech-iran?traffic_source=rss">来源: Al Jazeera</a>, <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxQS3lkbXo1Qi03THB1M3ZabG5xUFNTNzloZl96QTUyTGItdm5WMWd4eVhWTEtDd0plRHBmYTVYUU94bXAtN3AxYzQ1aUdUR203NmM5YjFfZGNaT3F5a01BcnJxTTVRUUsyU1d5b01zRU9nNDNNLU54ZkNkckxDS0J2NTI0MGU1OGp0X3VVRFlxNHJkU3ZvMkF2Y1lrdEE2TDhUX3VoS2cxdWZ5Zw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Reuters</a>）</li>
+</ul>
+<h2>🇨🇳 中国与世界 / China & The World</h2>
+<h3>1. 特朗普告诉习近平美中关系将“好于以往”</h3>
+<ul>
+<li><strong>全景综述</strong>：Trump向习近平表示美中关系将比以往任何时候都更好。（来源: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNUTZLZFpENDBNa2JxMkstZ2thUjNiTjd6M1E0WUN0OE1tQ3NDZFlKX3F4dTk2N2I1R2FVeERmYzdsZ3BPQWYwSHdDVlFzYWRFelBrUVVzbmdhX0VqdVItc215ZU84R0dsZ2ZUT1dJbGt2RVd5STBMYTVObU9GREJXRFc0UHc2b0FUYjE3WGljTkJBS0RURTdlMVV3Z0N6enJIbktWX2xxRUpwMW1PdGpXNVF3bFk?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>核心事实</strong>：Trump告诉习近平美中关系将达到历史最好水平 (信息来源: Bloomberg)</li>
+<li><strong>美国谈判与能源安全视角</strong>：美国的核心诉求是把停火窗口和海上通行风险同时压住，因为运输中断会把军事压力快速转化为能源价格和盟友协调成本。（基于: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNUTZLZFpENDBNa2JxMkstZ2thUjNiTjd6M1E0WUN0OE1tQ3NDZFlKX3F4dTk2N2I1R2FVeERmYzdsZ3BPQWYwSHdDVlFzYWRFelBrUVVzbmdhX0VqdVItc215ZU84R0dsZ2ZUT1dJbGt2RVd5STBMYTVObU9GREJXRFc0UHc2b0FUYjE3WGljTkJBS0RURTdlMVV3Z0N6enJIbktWX2xxRUpwMW1PdGpXNVF3bFk?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>伊朗与航运市场视角</strong>：伊朗的谈判筹码来自地区安全风险上升；运输商、保险方和能源买家会先把不确定性计入运价、保费和库存安排。（基于: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNUTZLZFpENDBNa2JxMkstZ2thUjNiTjd6M1E0WUN0OE1tQ3NDZFlKX3F4dTk2N2I1R2FVeERmYzdsZ3BPQWYwSHdDVlFzYWRFelBrUVVzbmdhX0VqdVItc215ZU84R0dsZ2ZUT1dJbGt2RVd5STBMYTVObU9GREJXRFc0UHc2b0FUYjE3WGljTkJBS0RURTdlMVV3Z0N6enJIbktWX2xxRUpwMW1PdGpXNVF3bFk?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>AI推演</strong>：华盛顿需要把停火谈判和航道安全放在同一张表上看。只要船东、保险商和能源买家仍按封锁风险定价，外交会谈释放的缓和信号就很难真正压低冲突溢价。（参考: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNUTZLZFpENDBNa2JxMkstZ2thUjNiTjd6M1E0WUN0OE1tQ3NDZFlKX3F4dTk2N2I1R2FVeERmYzdsZ3BPQWYwSHdDVlFzYWRFelBrUVVzbmdhX0VqdVItc215ZU84R0dsZ2ZUT1dJbGt2RVd5STBMYTVObU9GREJXRFc0UHc2b0FUYjE3WGljTkJBS0RURTdlMVV3Z0N6enJIbktWX2xxRUpwMW1PdGpXNVF3bFk?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNUTZLZFpENDBNa2JxMkstZ2thUjNiTjd6M1E0WUN0OE1tQ3NDZFlKX3F4dTk2N2I1R2FVeERmYzdsZ3BPQWYwSHdDVlFzYWRFelBrUVVzbmdhX0VqdVItc215ZU84R0dsZ2ZUT1dJbGt2RVd5STBMYTVObU9GREJXRFc0UHc2b0FUYjE3WGljTkJBS0RURTdlMVV3Z0N6enJIbktWX2xxRUpwMW1PdGpXNVF3bFk?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Trump Tells Xi US-China Relationship Will Be ‘Better Than Ever’</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 习近平举行仪式欢迎特朗普，双方将举行关键会晤</h3>
+<ul>
+<li><strong>全景综述</strong>：中国国家主席习近平在北京欢迎美国总统Trump进行高层会谈。（来源: <a href="https://www.aljazeera.com/video/newsfeed/2026/5/14/xi-jinping-welcomes-donald-trump-with-ceremony-ahead-of-high-stakes-meeting?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>核心事实</strong>：习近平在北京欢迎Trump进行高层会谈 (信息来源: Al Jazeera)</li>
+<li><strong>美国谈判策略视角</strong>：美国的核心诉求是把军事威慑转化为可执行的谈判约束，同时避免冲突成本继续传导到能源、通胀和盟友安全承诺。（基于: <a href="https://www.aljazeera.com/video/newsfeed/2026/5/14/xi-jinping-welcomes-donald-trump-with-ceremony-ahead-of-high-stakes-meeting?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>伊朗政权安全视角</strong>：伊朗的行为逻辑是保留谈判筹码并降低国内安全压力；若让步被解读为被迫退让，其后续执行空间会明显收窄。（基于: <a href="https://www.aljazeera.com/video/newsfeed/2026/5/14/xi-jinping-welcomes-donald-trump-with-ceremony-ahead-of-high-stakes-meeting?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>AI推演</strong>：会面本身不足以改变局势，真正有分量的是双方是否同步冻结升级动作。若谈判桌外的军事压力继续增加，美国和伊朗都会把让步视为弱点，停火文本也会缺少执行可信度。（参考: <a href="https://www.aljazeera.com/video/newsfeed/2026/5/14/xi-jinping-welcomes-donald-trump-with-ceremony-ahead-of-high-stakes-meeting?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Al Jazeera</strong>: <a href="https://www.aljazeera.com/video/newsfeed/2026/5/14/xi-jinping-welcomes-donald-trump-with-ceremony-ahead-of-high-stakes-meeting?traffic_source=rss">Xi Jinping welcomes Donald Trump with ceremony ahead of high-stakes meeting</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 投资者关注北京“特习会”，油价小幅上涨</h3>
+<ul>
+<li><strong>全景综述</strong>：投资者关注Trump与习近平在北京的会晤，国际油价小幅上涨。（来源: <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQR3FQdlE4YVVQTnZmV2dNWjZVWVB3dTQxZVRtX1lveWdUbGdrSW9tR1VyT0x4T21nYWJnLVl4Tk1rdFMtSUZyYlpQMmpDanMweU4yZXZFLTZIam1LX1VVajdNeHZkeGJMNUZPU2V3Mzd2MFJTNHVKamczNXRKa08yalloRlpHMUZ5eWVPS0pUd2F2amxoYml0TXUtQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：随着投资者聚焦Trump与习近平在北京的会面，油价微涨 (信息来源: Reuters)</li>
+<li><strong>美国谈判与能源安全视角</strong>：美国的核心诉求是把停火窗口和海上通行风险同时压住，因为运输中断会把军事压力快速转化为能源价格和盟友协调成本。（基于: <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQR3FQdlE4YVVQTnZmV2dNWjZVWVB3dTQxZVRtX1lveWdUbGdrSW9tR1VyT0x4T21nYWJnLVl4Tk1rdFMtSUZyYlpQMmpDanMweU4yZXZFLTZIam1LX1VVajdNeHZkeGJMNUZPU2V3Mzd2MFJTNHVKamczNXRKa08yalloRlpHMUZ5eWVPS0pUd2F2amxoYml0TXUtQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>伊朗与航运市场视角</strong>：伊朗的谈判筹码来自地区安全风险上升；运输商、保险方和能源买家会先把不确定性计入运价、保费和库存安排。（基于: <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQR3FQdlE4YVVQTnZmV2dNWjZVWVB3dTQxZVRtX1lveWdUbGdrSW9tR1VyT0x4T21nYWJnLVl4Tk1rdFMtSUZyYlpQMmpDanMweU4yZXZFLTZIam1LX1VVajdNeHZkeGJMNUZPU2V3Mzd2MFJTNHVKamczNXRKa08yalloRlpHMUZ5eWVPS0pUd2F2amxoYml0TXUtQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：华盛顿需要把停火谈判和航道安全放在同一张表上看。只要船东、保险商和能源买家仍按封锁风险定价，外交会谈释放的缓和信号就很难真正压低冲突溢价。（参考: <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQR3FQdlE4YVVQTnZmV2dNWjZVWVB3dTQxZVRtX1lveWdUbGdrSW9tR1VyT0x4T21nYWJnLVl4Tk1rdFMtSUZyYlpQMmpDanMweU4yZXZFLTZIam1LX1VVajdNeHZkeGJMNUZPU2V3Mzd2MFJTNHVKamczNXRKa08yalloRlpHMUZ5eWVPS0pUd2F2amxoYml0TXUtQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQR3FQdlE4YVVQTnZmV2dNWjZVWVB3dTQxZVRtX1lveWdUbGdrSW9tR1VyT0x4T21nYWJnLVl4Tk1rdFMtSUZyYlpQMmpDanMweU4yZXZFLTZIam1LX1VVajdNeHZkeGJMNUZPU2V3Mzd2MFJTNHVKamczNXRKa08yalloRlpHMUZ5eWVPS0pUd2F2amxoYml0TXUtQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Oil edges up as investors focus on Trump-Xi meeting in Beijing</a></li>
+</ul>
+</li>
+</ul>
+<h2>🌍 全球局势 / Global Affairs</h2>
+<h3>1. 特习会直播：中美领导人就贸易、科技及伊朗问题举行会谈</h3>
+<ul>
+<li><strong>全景综述</strong>：Trump与习近平的峰会在全球经济关键时刻举行，双方就贸易和伊朗问题展开讨论。（来源: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/trump-xi-summit-live-us-china-leaders-to-hold-talks-on-trade-tech-iran?traffic_source=rss">Al Jazeera</a>, <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxQS3lkbXo1Qi03THB1M3ZabG5xUFNTNzloZl96QTUyTGItdm5WMWd4eVhWTEtDd0plRHBmYTVYUU94bXAtN3AxYzQ1aUdUR203NmM5YjFfZGNaT3F5a01BcnJxTTVRUUsyU1d5b01zRU9nNDNNLU54ZkNkckxDS0J2NTI0MGU1OGp0X3VVRFlxNHJkU3ZvMkF2Y1lrdEE2TDhUX3VoS2cxdWZ5Zw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：Trump抵达中国与习近平举行高层会谈，议程涵盖贸易、伊朗及台湾问题 (信息来源: Al Jazeera)</li>
+<li><strong>美国监管层视角</strong>：美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。（基于: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/trump-xi-summit-live-us-china-leaders-to-hold-talks-on-trade-tech-iran?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>华尔街银行与AI公司视角</strong>：银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。（基于: <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxQS3lkbXo1Qi03THB1M3ZabG5xUFNTNzloZl96QTUyTGItdm5WMWd4eVhWTEtDd0plRHBmYTVYUU94bXAtN3AxYzQ1aUdUR203NmM5YjFfZGNaT3F5a01BcnJxTTVRUUsyU1d5b01zRU9nNDNNLU54ZkNkckxDS0J2NTI0MGU1OGp0X3VVRFlxNHJkU3ZvMkF2Y1lrdEE2TDhUX3VoS2cxdWZ5Zw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、可审计、可停用，否则华尔街会把试点保留在沙盒里。（参考: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/trump-xi-summit-live-us-china-leaders-to-hold-talks-on-trade-tech-iran?traffic_source=rss">Al Jazeera</a>, <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxQS3lkbXo1Qi03THB1M3ZabG5xUFNTNzloZl96QTUyTGItdm5WMWd4eVhWTEtDd0plRHBmYTVYUU94bXAtN3AxYzQ1aUdUR203NmM5YjFfZGNaT3F5a01BcnJxTTVRUUsyU1d5b01zRU9nNDNNLU54ZkNkckxDS0J2NTI0MGU1OGp0X3VVRFlxNHJkU3ZvMkF2Y1lrdEE2TDhUX3VoS2cxdWZ5Zw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Al Jazeera</strong>: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/trump-xi-summit-live-us-china-leaders-to-hold-talks-on-trade-tech-iran?traffic_source=rss">Trump-Xi summit live: US, China leaders holding talks on trade, tech, Iran</a></li>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxQS3lkbXo1Qi03THB1M3ZabG5xUFNTNzloZl96QTUyTGItdm5WMWd4eVhWTEtDd0plRHBmYTVYUU94bXAtN3AxYzQ1aUdUR203NmM5YjFfZGNaT3F5a01BcnJxTTVRUUsyU1d5b01zRU9nNDNNLU54ZkNkckxDS0J2NTI0MGU1OGp0X3VVRFlxNHJkU3ZvMkF2Y1lrdEE2TDhUX3VoS2cxdWZ5Zw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Trump lauds ‘biggest summit’ as Xi talks tackle trade, Iran</a></li>
+<li><strong>BBC World News</strong>: <a href="https://www.bbc.com/news/articles/c1w28qw1e0xo?at_medium=RSS&amp;at_campaign=rss">Trade, Iran and Taiwan on the agenda as Trump arrives in China for high-stakes talks with Xi</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 伊朗局势直播：内塔尼亚胡“秘密”访问阿联酋，德黑兰抨击其“勾结”</h3>
+<ul>
+<li><strong>全景综述</strong>：德黑兰谴责Netanyahu秘密访问阿联酋的“勾结”行为。（来源: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/iran-war-live-tehran-slams-collusion-as-netanyahu-secretly-visits-uae?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>核心事实</strong>：针对Netanyahu秘密访问阿联酋，德黑兰方面抨击其为“勾结” (信息来源: Al Jazeera)</li>
+<li><strong>美国谈判策略视角</strong>：美国的核心诉求是把军事威慑转化为可执行的谈判约束，同时避免冲突成本继续传导到能源、通胀和盟友安全承诺。（基于: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/iran-war-live-tehran-slams-collusion-as-netanyahu-secretly-visits-uae?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>伊朗政权安全视角</strong>：伊朗的行为逻辑是保留谈判筹码并降低国内安全压力；若让步被解读为被迫退让，其后续执行空间会明显收窄。（基于: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/iran-war-live-tehran-slams-collusion-as-netanyahu-secretly-visits-uae?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>AI推演</strong>：会面本身不足以改变局势，真正有分量的是双方是否同步冻结升级动作。若谈判桌外的军事压力继续增加，美国和伊朗都会把让步视为弱点，停火文本也会缺少执行可信度。（参考: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/iran-war-live-tehran-slams-collusion-as-netanyahu-secretly-visits-uae?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Al Jazeera</strong>: <a href="https://www.aljazeera.com/news/liveblog/2026/5/14/iran-war-live-tehran-slams-collusion-as-netanyahu-secretly-visits-uae?traffic_source=rss">Iran war live: Tehran slams ‘collusion’ as Netanyahu ‘secretly’ visits UAE</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 穆尔科斯基倒戈，参议院共和党人对伊朗战争的抵制增加</h3>
+<ul>
+<li><strong>全景综述</strong>：随着参议员Murkowski立场转变，美国参议院共和党内部反对伊朗战争的声音日益增强。（来源: <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNOExxSUJiM3ptREFKbmloTVBfaWJ5dXBMUW1STkQwM2xQREU5X3NGMTdKaVhZS2hnZzBwRlcxZ3RCZHp4TGh4U2xaWGpheGhCUjZDdnR1SWRIZnMzM2VYTE83cndlR19jZld1cm9mQ29nRTJXcXNVbjhlOVZNXzV4dTRhU2l6d1RkVlh1UFIyZFZpWHFMd05B?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>核心事实</strong>：参议员Murkowski的转向标志着参议院共和党人对伊朗战争的抵制情绪正在升温 (信息来源: Associated Press)</li>
+<li><strong>美国谈判策略视角</strong>：美国的核心诉求是把军事威慑转化为可执行的谈判约束，同时避免冲突成本继续传导到能源、通胀和盟友安全承诺。（基于: <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNOExxSUJiM3ptREFKbmloTVBfaWJ5dXBMUW1STkQwM2xQREU5X3NGMTdKaVhZS2hnZzBwRlcxZ3RCZHp4TGh4U2xaWGpheGhCUjZDdnR1SWRIZnMzM2VYTE83cndlR19jZld1cm9mQ29nRTJXcXNVbjhlOVZNXzV4dTRhU2l6d1RkVlh1UFIyZFZpWHFMd05B?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>伊朗政权安全视角</strong>：伊朗的行为逻辑是保留谈判筹码并降低国内安全压力；若让步被解读为被迫退让，其后续执行空间会明显收窄。（基于: <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNOExxSUJiM3ptREFKbmloTVBfaWJ5dXBMUW1STkQwM2xQREU5X3NGMTdKaVhZS2hnZzBwRlcxZ3RCZHp4TGh4U2xaWGpheGhCUjZDdnR1SWRIZnMzM2VYTE83cndlR19jZld1cm9mQ29nRTJXcXNVbjhlOVZNXzV4dTRhU2l6d1RkVlh1UFIyZFZpWHFMd05B?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>AI推演</strong>：会面本身不足以改变局势，真正有分量的是双方是否同步冻结升级动作。若谈判桌外的军事压力继续增加，美国和伊朗都会把让步视为弱点，停火文本也会缺少执行可信度。（参考: <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNOExxSUJiM3ptREFKbmloTVBfaWJ5dXBMUW1STkQwM2xQREU5X3NGMTdKaVhZS2hnZzBwRlcxZ3RCZHp4TGh4U2xaWGpheGhCUjZDdnR1SWRIZnMzM2VYTE83cndlR19jZld1cm9mQ29nRTJXcXNVbjhlOVZNXzV4dTRhU2l6d1RkVlh1UFIyZFZpWHFMd05B?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Associated Press</strong>: <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNOExxSUJiM3ptREFKbmloTVBfaWJ5dXBMUW1STkQwM2xQREU5X3NGMTdKaVhZS2hnZzBwRlcxZ3RCZHp4TGh4U2xaWGpheGhCUjZDdnR1SWRIZnMzM2VYTE83cndlR19jZld1cm9mQ29nRTJXcXNVbjhlOVZNXzV4dTRhU2l6d1RkVlh1UFIyZFZpWHFMd05B?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Republican resistance to Iran war grows in the Senate as Murkowski flips</a></li>
+</ul>
+</li>
+</ul>
+<h2>💰 商业与市场 / Business & Markets</h2>
+<h3>1. 台积电预计2030年全球芯片市场规模将达1.5万亿美元</h3>
+<ul>
+<li><strong>全景综述</strong>：全球代工巨头台积电近期发布预测，受人工智能（AI）需求的强劲驱动，全球半导体市场规模有望在2030年达到1.5万亿美元。这一增长预期反映了AI技术在各行业渗透带来的算力需求激增。作为产业链核心，台积电正通过产能扩张和技术迭代应对这一浪潮，其预测为未来数年全球科技产业的供应链布局提供了重要参考。（来源: <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxQVUh3UjVGTi1HbGJ6WC1hSmtfTkx6dU5BMEpsQkpsSlZWeGVYanJZencxb0dCX2JLTkZISmF0WXFNZUpjNUxVd0F3S3haZWRRX2NOdjZzNUlRY1MxcWxicDlpUnRIcTRJWE9ieTctT3N2WDlFNFUzZzhTU2JQQ05uSmZqcEh5NFVFTVNPS1RzWVdvamt0NGJsbmJFOHNsUjZzN2Z5b2F2eHBIYWxjWk1NOXFzVTlHYUk0LUFkYlR0T3NjUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：台积电预测在AI驱动下，全球芯片市场将在2030年达到1.5万亿美元规模。（路透社）。 (信息 (信息来源: Reuters)</li>
+<li><strong>行业乐观派</strong>：AI不仅是短期的增长点，更是半导体产业进入新增长周期的引擎。随着大模型训练和推理需求从云端向边缘侧扩散，对高性能芯片的需求将呈指数级增长。台积电的预测实际上是对未来十年数字化转型深度的背书，意味着半导体将成为像石油一样的基础战略资源，支撑起整个数字经济的运行。（基于: <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxQVUh3UjVGTi1HbGJ6WC1hSmtfTkx6dU5BMEpsQkpsSlZWeGVYanJZencxb0dCX2JLTkZISmF0WXFNZUpjNUxVd0F3S3haZWRRX2NOdjZzNUlRY1MxcWxicDlpUnRIcTRJWE9ieTctT3N2WDlFNFUzZzhTU2JQQ05uSmZqcEh5NFVFTVNPS1RzWVdvamt0NGJsbmJFOHNsUjZzN2Z5b2F2eHBIYWxjWk1NOXFzVTlHYUk0LUFkYlR0T3NjUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>市场风险分析师</strong>：尽管需求旺盛，但全球范围内的晶圆厂扩建可能导致未来几年出现周期性供应过剩。此外，高度集中的供应链面临地缘政治不确定性，任何贸易限制或地区冲突都可能打破这一万亿市场的增长路径。高昂的资本支出如果不能转化为持续的订单，将使半导体企业面临巨大的财务压力。（基于: <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxQVUh3UjVGTi1HbGJ6WC1hSmtfTkx6dU5BMEpsQkpsSlZWeGVYanJZencxb0dCX2JLTkZISmF0WXFNZUpjNUxVd0F3S3haZWRRX2NOdjZzNUlRY1MxcWxicDlpUnRIcTRJWE9ieTctT3N2WDlFNFUzZzhTU2JQQ05uSmZqcEh5NFVFTVNPS1RzWVdvamt0NGJsbmJFOHNsUjZzN2Z5b2F2eHBIYWxjWk1NOXFzVTlHYUk0LUFkYlR0T3NjUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：台积电的预测抓住了AI重塑算力底座的趋势，其技术领先地位使其论点极具说服力。然而，1.5万亿的目标不仅取决于技术进步，更取决于全球贸易环境的稳定。虽然AI需求目前处于爆发期，但投资者应警惕半导体行业固有的周期性波动，以及高估值背后对持续高增长的过度依赖。（参考: <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxQVUh3UjVGTi1HbGJ6WC1hSmtfTkx6dU5BMEpsQkpsSlZWeGVYanJZencxb0dCX2JLTkZISmF0WXFNZUpjNUxVd0F3S3haZWRRX2NOdjZzNUlRY1MxcWxicDlpUnRIcTRJWE9ieTctT3N2WDlFNFUzZzhTU2JQQ05uSmZqcEh5NFVFTVNPS1RzWVdvamt0NGJsbmJFOHNsUjZzN2Z5b2F2eHBIYWxjWk1NOXFzVTlHYUk0LUFkYlR0T3NjUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxQVUh3UjVGTi1HbGJ6WC1hSmtfTkx6dU5BMEpsQkpsSlZWeGVYanJZencxb0dCX2JLTkZISmF0WXFNZUpjNUxVd0F3S3haZWRRX2NOdjZzNUlRY1MxcWxicDlpUnRIcTRJWE9ieTctT3N2WDlFNFUzZzhTU2JQQ05uSmZqcEh5NFVFTVNPS1RzWVdvamt0NGJsbmJFOHNsUjZzN2Z5b2F2eHBIYWxjWk1NOXFzVTlHYUk0LUFkYlR0T3NjUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">TSMC says global chip market to hit $1.5 trillion by 2030 as AI drives growth</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. AI芯片初创公司Cerebras完成55.5亿美元年度最大规模IPO</h3>
+<ul>
+<li><strong>全景综述</strong>：AI芯片制造商Cerebras通过IPO筹资55.5亿美元，创下今年最大规模上市纪录并旨在挑战英伟达的市场地位。（来源: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNa1lvblF3UXJBdlRXRmhXZkZ6bDRIN0hRLUpvZ2RVRDYxbGtZSlRHWVppM3VBencxM1dkQnZNbEhUdjQ2ZmZXb0FXcUYzR2QxZUVOcFN6S3pSNDYxVVVoUDlyRXhoY1JmNlZlMmM5MFFIUG14cjhTRFpENjdaWWhnRmRybjQ3WWZST2lEUUJydkdOcEQ0eERHQ2xBV2dDSm5HVGY2a1ZJdWFpNWdGb1JnNGVFQkU?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>核心事实</strong>：Cerebras完成55.5亿美元IPO，成为今年全球规模最大的上市交易 (信息来源: Bloomberg)</li>
+<li><strong>风险投资者</strong>：Cerebras的成功上市体现了市场对英伟达替代方案的渴求及其晶圆级技术的战略价值。（基于: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNa1lvblF3UXJBdlRXRmhXZkZ6bDRIN0hRLUpvZ2RVRDYxbGtZSlRHWVppM3VBencxM1dkQnZNbEhUdjQ2ZmZXb0FXcUYzR2QxZUVOcFN6S3pSNDYxVVVoUDlyRXhoY1JmNlZlMmM5MFFIUG14cjhTRFpENjdaWWhnRmRybjQ3WWZST2lEUUJydkdOcEQ0eERHQ2xBV2dDSm5HVGY2a1ZJdWFpNWdGb1JnNGVFQkU?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>竞争分析师</strong>：Cerebras在上市后面临着英伟达CUDA生态竞争及超大芯片制造良率等严峻的商业化挑战。（基于: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNa1lvblF3UXJBdlRXRmhXZkZ6bDRIN0hRLUpvZ2RVRDYxbGtZSlRHWVppM3VBencxM1dkQnZNbEhUdjQ2ZmZXb0FXcUYzR2QxZUVOcFN6S3pSNDYxVVVoUDlyRXhoY1JmNlZlMmM5MFFIUG14cjhTRFpENjdaWWhnRmRybjQ3WWZST2lEUUJydkdOcEQ0eERHQ2xBV2dDSm5HVGY2a1ZJdWFpNWdGb1JnNGVFQkU?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>AI推演</strong>：Cerebras的巨额融资反映了资本市场对AI算力缺口的焦虑。虽然其技术路径极具创新性，但挑战英伟达的生态霸权绝非易事。这次IPO的成功更多是市场情绪驱动而非业绩验证，未来其股价表现将取决于能否在顶级云服务商中获得实质性的订单突破，而不仅仅是停留在技术展示阶段。（参考: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNa1lvblF3UXJBdlRXRmhXZkZ6bDRIN0hRLUpvZ2RVRDYxbGtZSlRHWVppM3VBencxM1dkQnZNbEhUdjQ2ZmZXb0FXcUYzR2QxZUVOcFN6S3pSNDYxVVVoUDlyRXhoY1JmNlZlMmM5MFFIUG14cjhTRFpENjdaWWhnRmRybjQ3WWZST2lEUUJydkdOcEQ0eERHQ2xBV2dDSm5HVGY2a1ZJdWFpNWdGb1JnNGVFQkU?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNa1lvblF3UXJBdlRXRmhXZkZ6bDRIN0hRLUpvZ2RVRDYxbGtZSlRHWVppM3VBencxM1dkQnZNbEhUdjQ2ZmZXb0FXcUYzR2QxZUVOcFN6S3pSNDYxVVVoUDlyRXhoY1JmNlZlMmM5MFFIUG14cjhTRFpENjdaWWhnRmRybjQ3WWZST2lEUUJydkdOcEQ0eERHQ2xBV2dDSm5HVGY2a1ZJdWFpNWdGb1JnNGVFQkU?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI Chipmaker Cerebras Raises $5.55 Billion in Year’s Biggest IPO</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. AI热潮推动SK海力士市值逼近1万亿美元大关</h3>
+<ul>
+<li><strong>全景综述</strong>：受益于AI领域对高带宽内存（HBM）的爆发式需求，韩国存储芯片巨头SK海力士的市值正逼近1万亿美元。作为英伟达主要的HBM供应商，SK海力士在这一细分市场占据了显著的先发优势。随着AI服务器对内存性能要求的不断提升，该公司的盈利能力和市场估值在过去一年中实现了跨越式增长，使其成为全球半导体版图中的关键力量。（来源: <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxPeURJY1NBWmQxU1FxbHluOFhnTDY5SlgwUnh1bmZaRDVmMU5DT2pXNV9qLTFIUHFCOWt3X2JsZHBxdF9MZ0FSYWZXMGhOdGNmeHBQdGVEQl9LeHVqVlEwV1FqOUNtOV9KRW5Gd2E3QWFKRWJkNVYtRHRFQUxtcHpEUDJOdDNhYXJnaURVZ3F3c2lHWG5HeS1UTkxtbEdFa1c3dmt6SHJjR0M?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：在AI需求的推动下，SK海力士市值已接近1万亿美元里程碑。（路透社）。 (信息 (信息来源: Reuters)</li>
+<li><strong>技术战略家</strong>：SK海力士的崛起标志着存储芯片从“大宗商品”向“定制化高性能组件”的转型。在AI时代，内存不再是计算的配角，而是决定系统性能的关键瓶颈。SK海力士通过深度绑定英伟达，成功将技术优势转化为市场份额，其万亿市值反映了存储技术在AI架构中地位的根本性提升，具有长期增长潜力。（基于: <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxPeURJY1NBWmQxU1FxbHluOFhnTDY5SlgwUnh1bmZaRDVmMU5DT2pXNV9qLTFIUHFCOWt3X2JsZHBxdF9MZ0FSYWZXMGhOdGNmeHBQdGVEQl9LeHVqVlEwV1FqOUNtOV9KRW5Gd2E3QWFKRWJkNVYtRHRFQUxtcHpEUDJOdDNhYXJnaURVZ3F3c2lHWG5HeS1UTkxtbEdFa1c3dmt6SHJjR0M?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>行业竞争对手</strong>：存储市场具有极强的周期性，目前HBM的高溢价主要源于供应短缺。随着三星和美光加大投入并解决良率问题，HBM的利润率可能会迅速收窄。此外，过度依赖单一下游客户（如英伟达）存在巨大风险，一旦AI基础设施投资放缓或客户转向其他供应商，SK海力士将面临巨大的估值回调压力。（基于: <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxPeURJY1NBWmQxU1FxbHluOFhnTDY5SlgwUnh1bmZaRDVmMU5DT2pXNV9qLTFIUHFCOWt3X2JsZHBxdF9MZ0FSYWZXMGhOdGNmeHBQdGVEQl9LeHVqVlEwV1FqOUNtOV9KRW5Gd2E3QWFKRWJkNVYtRHRFQUxtcHpEUDJOdDNhYXJnaURVZ3F3c2lHWG5HeS1UTkxtbEdFa1c3dmt6SHJjR0M?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：SK海力士确实抓住了HBM的窗口期，将存储芯片从周期性泥潭中拉了出来。但万亿市值是一个沉重的心理关口，要求公司证明其增长具有可持续性。虽然目前其领先地位稳固，但存储行业的竞争本质从未改变，未来的胜负将取决于其能否在下一代内存标准上继续保持对竞争对手的代差优势。（参考: <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxPeURJY1NBWmQxU1FxbHluOFhnTDY5SlgwUnh1bmZaRDVmMU5DT2pXNV9qLTFIUHFCOWt3X2JsZHBxdF9MZ0FSYWZXMGhOdGNmeHBQdGVEQl9LeHVqVlEwV1FqOUNtOV9KRW5Gd2E3QWFKRWJkNVYtRHRFQUxtcHpEUDJOdDNhYXJnaURVZ3F3c2lHWG5HeS1UTkxtbEdFa1c3dmt6SHJjR0M?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxPeURJY1NBWmQxU1FxbHluOFhnTDY5SlgwUnh1bmZaRDVmMU5DT2pXNV9qLTFIUHFCOWt3X2JsZHBxdF9MZ0FSYWZXMGhOdGNmeHBQdGVEQl9LeHVqVlEwV1FqOUNtOV9KRW5Gd2E3QWFKRWJkNVYtRHRFQUxtcHpEUDJOdDNhYXJnaURVZ3F3c2lHWG5HeS1UTkxtbEdFa1c3dmt6SHJjR0M?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI boom puts SK Hynix on the cusp $1 trillion market value</a></li>
+</ul>
+</li>
+</ul>
+<h2>🚀 科技与AI / Tech & AI</h2>
+<h3>1. 谷歌计划在 I/O 大会发布新一代 Gemini 模型，性能定位 GPT-5.5 级别</h3>
+<ul>
+<li><strong>全景综述</strong>：谷歌计划在下周I/O大会发布性能对标GPT-5.5的新型Gemini模型，以重夺生成式AI领域的技术话语权。（来源: <a href="https://www.techmeme.com/260513/p55#a260513p55">Techmeme</a>）</li>
+<li><strong>核心事实</strong>：谷歌拟于下周I/O大会推出性能对标GPT-5.5的新Gemini模型，但其表现仍逊于内部顶级模型Mythos (信息来源: Techmeme)</li>
+<li><strong>谷歌及技术乐观派怎么看</strong>：谷歌正通过高频迭代重塑其在 AI 领域的领导地位。通过推出 GPT-5.5 级别的模型，谷歌证明了其拥有紧跟甚至在部分指标上超越 OpenAI 的研发节奏。这种性能的提升将直接增强谷歌全线产品的多模态处理能力，为开发者提供更具吸引力的替代方案，并利用其庞大的生态系统实现技术落地。（基于: <a href="https://www.techmeme.com/260513/p55#a260513p55">Techmeme</a>）</li>
+<li><strong>行业观察者及怀疑论者怎么看</strong>：这种“对标式”的发布可能反映了谷歌在核心技术突破上的瓶颈。虽然定位 GPT-5.5 听起来很强，但未能达到 Mythos 级别说明谷歌在追求极致性能的道路上仍显吃力。此外，这种命名上的文字游戏更多是为了安抚投资者和市场情绪，而非真正的代际跨越，实际应用中的推理能力和效率仍有待观察。（基于: <a href="https://www.techmeme.com/260513/p55#a260513p55">Techmeme</a>）</li>
+<li><strong>AI推演</strong>：谷歌急于在 I/O 大会展示肌肉，反映了其对 OpenAI 领先地位的深层焦虑。虽然 GPT-5.5 级别的定位在参数上具有诱惑力，但关键在于实际生态整合。我认为谷歌目前仍处于“防御性进攻”阶段，这种小步快跑的策略虽然稳健，但除非 Mythos 级别的模型真正落地，否则很难彻底扭转其在顶尖 AI 竞赛中的追赶者形象。（参考: <a href="https://www.techmeme.com/260513/p55#a260513p55">Techmeme</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Techmeme</strong>: <a href="https://www.techmeme.com/260513/p55#a260513p55">Sources: Google plans to announce a new Gemini model at its I/O conference next week; the model will land roughly in the class of GPT-5.5, but short of Mythos (Alex Heath/Sources)</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. OpenAI 提议建立由美国领导、中国参与的全球 AI 监管机构</h3>
+<ul>
+<li><strong>全景综述</strong>：OpenAI 提议建立由美国领导、中国参与的类 IAEA 全球 AI 监管机构，以应对先进技术带来的安全风险。（来源: <a href="https://www.techmeme.com/260513/p56#a260513p56">Bloomberg</a>）</li>
+<li><strong>核心事实</strong>：OpenAI 建议仿照 IAEA 模式建立由美方领衔、中方参与的全球 AI 治理体系，以应对技术安全风险 (信息来源: Bloomberg)</li>
+<li><strong>OpenAI 及全球治理倡导者怎么看</strong>：建立跨国监管机制是防止 AI 失控的唯一出路。AI 风险不分国界，只有将美中这两个 AI 强国纳入同一监管框架，才能有效制定并执行安全准则。仿照 IAEA 模式既能保证核心技术的安全性，也能通过国际核查机制降低类似核武级别的 AI 灾难风险，这对于维护全球长期稳定至关重要。（基于: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxQX2oxMnR3MFgza1EtTzFyTENrcmFuZTlPWkltdmhRSTExNVNSby00QUV5R3pQLVQwb2tZZGQ1Qm1xWHIxNUV6VzdzYm9LVmY2UGZtQnN0WEo4a1NZVjl0aWMxTy1EanFVRlR0TjduUzZzVnY2d0dZREtGRm4ydWl5bDIwYVR1Qzhxa0VSaXF1Mmh4OUtBVlExUVpHdWc0VUdYYldzS2I4X2NJdU5mX2lSc0l3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>地缘政治现实主义者及监管怀疑派怎么看</strong>：该提议在当前政治环境下过于理想化且缺乏可行性。由美国领导的架构极易被视为维持技术霸权的工具，中国很难接受由竞争对手主导的监管规则。此外，AI 技术与核能有本质区别，软件代码的迭代极快且难以像核设施那样进行实地核查，这种治理模式可能在实际操作中沦为空谈或政治博弈的筹码。（基于: <a href="https://www.techmeme.com/260513/p56#a260513p56">Bloomberg</a>）</li>
+<li><strong>AI推演</strong>：OpenAI 的提议承认了 AI 治理无法在孤立状态下完成，这在逻辑上是务实的。然而，将治理权与地缘政治领导权直接挂钩，注定会让该提议在多边谈判中陷入僵局。我认为这更像是 OpenAI 的一种战略公关，旨在通过提出宏大叙事，将自己塑造为负责任的行业领导者，而非提供一个真正可落地的外交方案。（参考: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxQX2oxMnR3MFgza1EtTzFyTENrcmFuZTlPWkltdmhRSTExNVNSby00QUV5R3pQLVQwb2tZZGQ1Qm1xWHIxNUV6VzdzYm9LVmY2UGZtQnN0WEo4a1NZVjl0aWMxTy1EanFVRlR0TjduUzZzVnY2d0dZREtGRm4ydWl5bDIwYVR1Qzhxa0VSaXF1Mmh4OUtBVlExUVpHdWc0VUdYYldzS2I4X2NJdU5mX2lSc0l3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://www.techmeme.com/260513/p56#a260513p56">OpenAI says it would support a global AI governance body that is led by the US and includes China as a member, similar to the International Atomic Energy Agency</a></li>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxQX2oxMnR3MFgza1EtTzFyTENrcmFuZTlPWkltdmhRSTExNVNSby00QUV5R3pQLVQwb2tZZGQ1Qm1xWHIxNUV6VzdzYm9LVmY2UGZtQnN0WEo4a1NZVjl0aWMxTy1EanFVRlR0TjduUzZzVnY2d0dZREtGRm4ydWl5bDIwYVR1Qzhxa0VSaXF1Mmh4OUtBVlExUVpHdWc0VUdYYldzS2I4X2NJdU5mX2lSc0l3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">OpenAI Floats Idea of Global AI Governance Body With US, China</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>今日回响</strong></p>
+<h3>《Modern Vampires of the City》</h3>
+<blockquote>
+<p><strong>Vampire Weekend</strong> · 2013-05-14 · Indie Rock / Chamber Pop / Art Pop</p>
+<p><strong>编辑推荐 / Editor's Notes：</strong><br />
+在《Modern Vampires of the City》中，Vampire Weekend 褪去了前两张专辑中那种明亮且略显张扬的杂食性，转而探索一种更为内敛、深邃的声音景观。这不仅是乐队成名三部曲的终章，更是他们步入成熟期的标志。制作上，他们克制了对异域节奏的堆砌，取而代之的是管风琴、大键琴与采样交织出的室内流行乐质感。主唱 Ezra Koenig 的词作重心从常春藤盟校的闲适转向了对时间流逝与死亡命题的严肃审视。在《Step》中，大键琴的古典韵致与嘻哈律动奇妙融合，精准捕捉了成长中的阵痛；而《Obvious Bicycle》与《Young Lion》则以一种近乎孤绝的姿态，为整张专辑勾勒出静谧且略带忧郁的轮廓。这张作品证明了，在剥离了早期的学院派标签后，Vampire Weekend 依然能凭借精巧的旋律与敏锐的叙事，完成一次关于存在主义的优雅转型。</p>
+</blockquote>
+</div>
+</body>
+</html>
