@@ -410,5 +410,20 @@
         "AllMusic"
       ]
     }
+  ],
+  "05-16": [
+    {
+      "album": "Pet Sounds",
+      "artist": "The Beach Boys",
+      "cached_at": "2026-05-16T12:16:50",
+      "genre_hint": "Pop/Rock",
+      "release_date": "1966-05-16",
+      "verification_score": 8,
+      "verification_sources": [
+        "AllMusic",
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
