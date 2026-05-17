@@ -425,5 +425,19 @@
         "Wikidata"
       ]
     }
+  ],
+  "05-17": [
+    {
+      "album": "IGOR",
+      "artist": "Tyler, The Creator",
+      "cached_at": "2026-05-17T12:46:20",
+      "genre_hint": "Rap",
+      "release_date": "2019-05-17",
+      "verification_score": 6,
+      "verification_sources": [
+        "MusicBrainz",
+        "AllMusic"
+      ]
+    }
   ]
 }
