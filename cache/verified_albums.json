@@ -439,5 +439,19 @@
         "AllMusic"
       ]
     }
+  ],
+  "05-18": [
+    {
+      "album": "Monoliths & Dimensions",
+      "artist": "Sunn O)))",
+      "cached_at": "2026-05-18T12:52:22",
+      "genre_hint": "",
+      "release_date": "2009-05-18",
+      "verification_score": 5,
+      "verification_sources": [
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
