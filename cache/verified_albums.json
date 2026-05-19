@@ -453,5 +453,32 @@
         "Wikidata"
       ]
     }
+  ],
+  "05-20": [
+    {
+      "album": "Fuzzy Logic",
+      "artist": "Super Furry Animals",
+      "cached_at": "2026-05-20T00:05:12",
+      "genre_hint": "Pop/Rock",
+      "release_date": "1996-05-20",
+      "verification_score": 8,
+      "verification_sources": [
+        "AllMusic",
+        "Wikidata",
+        "MusicBrainz"
+      ]
+    },
+    {
+      "album": "Harry's House",
+      "artist": "Harry Styles",
+      "cached_at": "2026-05-20T00:14:24",
+      "genre_hint": "Pop/Rock",
+      "release_date": "2022-05-20",
+      "verification_score": 5,
+      "verification_sources": [
+        "Wikidata",
+        "AllMusic"
+      ]
+    }
   ]
 }
