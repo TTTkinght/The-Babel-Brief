@@ -480,5 +480,19 @@
         "AllMusic"
       ]
     }
+  ],
+  "05-21": [
+    {
+      "album": "OK Computer",
+      "artist": "Radiohead",
+      "cached_at": "2026-05-21T12:59:40",
+      "genre_hint": "",
+      "release_date": "1997-05-21",
+      "verification_score": 5,
+      "verification_sources": [
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
