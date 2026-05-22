@@ -494,5 +494,20 @@
         "Wikidata"
       ]
     }
+  ],
+  "05-22": [
+    {
+      "album": "The Miracle",
+      "artist": "Queen",
+      "cached_at": "2026-05-22T12:45:27",
+      "genre_hint": "Pop/Rock",
+      "release_date": "1989-05-22",
+      "verification_score": 8,
+      "verification_sources": [
+        "AllMusic",
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
