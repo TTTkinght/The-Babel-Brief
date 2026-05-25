@@ -523,5 +523,19 @@
         "AllMusic"
       ]
     }
+  ],
+  "05-25": [
+    {
+      "album": "DAYTONA",
+      "artist": "Pusha T",
+      "cached_at": "2026-05-25T13:07:11",
+      "genre_hint": "Rap",
+      "release_date": "2018-05-25",
+      "verification_score": 6,
+      "verification_sources": [
+        "AllMusic",
+        "MusicBrainz"
+      ]
+    }
   ]
 }

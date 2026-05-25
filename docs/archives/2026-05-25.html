@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>【The Babel Brief】俄罗斯使用“榛名”高超音速导弹袭击乌克兰；最新进展：特朗普指示放缓美伊协议谈判进程</title>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+:root {
+    color-scheme: light;
+    --black: #F5F5F5;
+    --surface: #FFFFFF;
+    --surface-raised: #F0F0F0;
+    --border: #E8E8E8;
+    --border-visible: #CCCCCC;
+    --text-disabled: #999999;
+    --text-secondary: #666666;
+    --text-primary: #1A1A1A;
+    --text-display: #000000;
+    --accent: #FF661F;
+    --interactive: var(--text-display);
+    --display-xl: 4.5rem;
+    --display-lg: 3rem;
+    --display-md: 2.25rem;
+    --heading: 1.5rem;
+    --subheading: 1.125rem;
+    --body: 1rem;
+    --body-sm: 0.875rem;
+    --caption: 0.75rem;
+    --label: 0.6875rem;
+    --button: 0.8125rem;
+    --space-2xs: 2px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    --space-4xl: 96px;
+    --motion-fast: 160ms;
+    --motion-base: 240ms;
+    --motion-slow: 360ms;
+    --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --black: #000000;
+    --surface: #111111;
+    --surface-raised: #1A1A1A;
+    --border: #222222;
+    --border-visible: #333333;
+    --text-disabled: #666666;
+    --text-secondary: #999999;
+    --text-primary: #E8E8E8;
+    --text-display: #FFFFFF;
+    --interactive: var(--text-display);
+}
+* {
+    box-sizing: border-box;
+    letter-spacing: 0;
+}
+body {
+    margin: 0;
+    padding: var(--space-4xl) var(--space-xl);
+    background: var(--black);
+    color: var(--text-primary);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.5;
+    transition: background-color var(--motion-base) var(--ease-out), color var(--motion-base) var(--ease-out);
+}
+.brief-backbar {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto calc(var(--space-xl) + var(--space-sm));
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border-visible);
+}
+.brief-backbar .brief-back-link {
+    grid-column: 4 / 9;
+    width: fit-content;
+    color: var(--accent);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 0;
+    transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+}
+.theme-toggle {
+    grid-column: 10 / 13;
+    justify-self: end;
+    align-self: start;
+    min-height: 44px;
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--button);
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out);
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+    border-color: var(--text-display);
+}
+.brief-backbar .brief-brand {
+    grid-column: 1 / 3;
+    width: fit-content;
+    padding-left: 14px;
+    color: var(--accent);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 0;
+}
+.brief-backbar .brief-brand:hover,
+.brief-backbar .brief-brand:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+.email-container {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    row-gap: 0;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+.brief-detail-header {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto var(--space-3xl);
+}
+.brief-detail-instruments {
+    grid-column: 1 / 3;
+    display: grid;
+    gap: var(--space-sm);
+    align-content: start;
+}
+.instrument-label {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.instrument-number {
+    margin: 0;
+    color: var(--text-display);
+    font-family: "Doto", "Space Mono", monospace;
+    font-size: var(--display-lg);
+    line-height: 0.95;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.instrument-meta,
+.instrument-clock {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+}
+.instrument-clock {
+    width: fit-content;
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-visible);
+    color: var(--text-display);
+    transition: opacity var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
+}
+.instrument-clock.is-ticking {
+    opacity: 0.55;
+}
+.brief-detail-title {
+    grid-column: 4 / 12;
+    align-self: center;
+    margin: 0;
+    width: min(788.268px, 100%);
+    max-width: 100%;
+    opacity: 1;
+    color: var(--text-display);
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 700;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.email-container > * {
+    grid-column: 4 / 12;
+    max-width: 65ch;
+}
+.hero,
+.email-container > hr {
+    grid-column: 1 / -1;
+    max-width: none;
+}
+.email-container > h2 {
+    grid-column: 4 / 12;
+    max-width: 65ch;
+}
+.hero {
+    margin: 0 0 var(--space-3xl);
+}
+.hero img {
+    width: 100%;
+    display: block;
+    border-radius: 0;
+}
+h1 {
+    max-width: 12em;
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    border: 0;
+    color: var(--text-display);
+    font-size: var(--heading);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+h2 {
+    margin: var(--space-3xl) 0 var(--space-lg);
+    padding: var(--space-md) 0 0;
+    border-top: 1px solid var(--border-visible);
+    border-left: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+h2:first-of-type {
+    margin-top: var(--space-2xl);
+}
+h3 {
+    margin: var(--space-xl) 0 var(--space-md);
+    color: var(--accent);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.3;
+    font-weight: 700;
+}
+p,
+li {
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.6;
+}
+p {
+    margin: 0 0 var(--space-md);
+}
+ul {
+    margin: 0 0 var(--space-lg);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+li {
+    margin: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+ul ul {
+    margin-top: var(--space-sm);
+    margin-bottom: 0;
+    padding-left: var(--space-lg);
+    border-top: 1px solid var(--border);
+}
+.history-note {
+    margin: 0 0 var(--space-xl);
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.5;
+}
+.history-label {
+    color: var(--text-display);
+    font-weight: 700;
+}
+blockquote {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md);
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-primary);
+}
+a {
+    color: var(--interactive);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+}
+a:hover {
+    color: var(--text-display);
+    border-bottom-color: var(--text-display);
+}
+strong {
+    color: var(--text-display);
+    font-weight: 700;
+}
+.email-container > ul:first-of-type > li > strong {
+    color: var(--accent);
+}
+.email-container > ul:first-of-type {
+    border-top: 0;
+}
+.email-container > ul:first-of-type > li {
+    border-bottom: 0;
+}
+code {
+    padding: 1px 4px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+}
+hr {
+    border: 0;
+    border-top: 1px solid var(--border-visible);
+    margin: var(--space-3xl) 0;
+}
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--accent);
+    z-index: 50;
+    pointer-events: none;
+    will-change: transform;
+}
+.back-to-top {
+    position: fixed;
+    right: var(--space-xl);
+    bottom: var(--space-xl);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 180ms linear, transform 180ms linear, color 120ms linear, border-color 120ms linear;
+    z-index: 60;
+}
+.back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+.back-to-top-glyph {
+    font-size: 14px;
+    line-height: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+        transition: opacity 1ms linear;
+        transform: none;
+    }
+}
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes nd-power-on {
+        from { opacity: 0; transform: translate3d(0, 6px, 0); }
+        to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .brief-backbar,
+    .brief-detail-header,
+    .email-container {
+        animation: nd-power-on var(--motion-base) var(--ease-out) both;
+    }
+    .brief-detail-header {
+        animation-delay: 60ms;
+    }
+    .email-container {
+        animation-delay: 120ms;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+@media (max-width: 640px) {
+    body {
+        padding: var(--space-3xl) var(--space-md);
+    }
+    .brief-backbar {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+        margin-bottom: var(--space-2xl);
+    }
+    .brief-backbar span,
+    .brief-backbar a,
+    .theme-toggle {
+        grid-column: 1;
+    }
+    .theme-toggle {
+        justify-self: start;
+    }
+    .email-container {
+        display: block;
+    }
+    .brief-detail-header {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+        margin-bottom: var(--space-3xl);
+    }
+    .brief-detail-instruments,
+    .brief-detail-title {
+        grid-column: 1;
+    }
+    .email-container > * {
+        max-width: none;
+    }
+    h1 {
+        font-size: var(--heading);
+    }
+    .brief-detail-title {
+        font-size: var(--heading);
+    }
+    h2 {
+        margin-top: var(--space-2xl);
+    }
+    h3 {
+        font-size: var(--body);
+    }
+}
+</style>
+
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body>
+
+<div class="reading-progress" aria-hidden="true"></div>
+<div class="brief-backbar">
+    <a class="brief-brand" href="../">The Babel Brief</a>
+    <a class="brief-back-link" href="../">&lt; back</a>
+    <button class="theme-toggle" type="button" data-theme-toggle>[ DARK ]</button>
+</div>
+<button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+    <span class="back-to-top-glyph" aria-hidden="true">&uarr;</span>
+    <span class="back-to-top-text">TOP</span>
+</button>
+<script>
+(() => {
+    const btn = document.querySelector("[data-back-to-top]");
+    if (!btn) return;
+    const onScroll = () => btn.classList.toggle("is-visible", window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    btn.addEventListener("click", () => {
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    });
+    onScroll();
+})();
+</script>
+<script type="module">
+(async () => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try {
+        const { animate, scroll } = await import("https://cdn.jsdelivr.net/npm/motion@latest/+esm");
+        scroll(animate(".reading-progress", { scaleX: [0, 1] }, { ease: "linear" }));
+    } catch (e) { /* offline / blocked CDN — silently degrade */ }
+})();
+</script>
+
+
+<header class="brief-detail-header">
+    <div class="brief-detail-instruments">
+        <p class="instrument-label">Issue</p>
+        <p class="instrument-number">25</p>
+        <p class="instrument-meta">05 / 2026</p>
+        <p class="instrument-label">CN Time</p>
+        <time class="instrument-clock" data-cn-clock>13:07</time>
+    </div>
+    <h1 class="brief-detail-title">特朗普敦促美谈判代表勿急于达成伊朗协议</h1>
+</header>
+
+
+<script>
+(() => {
+    const clocks = document.querySelectorAll("[data-cn-clock]");
+    const clockEl = document.getElementById("home-analog-clock");
+    if (clocks.length || clockEl) {
+        const timeFormatter = new Intl.DateTimeFormat("zh-CN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: "Asia/Shanghai"
+        });
+        const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            timeZone: "Asia/Shanghai"
+        });
+        const tick = () => {
+            const now = new Date();
+            clocks.forEach((clock) => {
+                const nextText = timeFormatter.format(now);
+                if (clock.textContent === nextText) {
+                    return;
+                }
+                clock.textContent = nextText;
+                clock.classList.remove("is-ticking");
+                void clock.offsetWidth;
+                clock.classList.add("is-ticking");
+                setTimeout(() => clock.classList.remove("is-ticking"), 120);
+            });
+            document.querySelectorAll("[data-cn-date]").forEach((date) => {
+                date.textContent = dateFormatter.format(now).replace(/\//g, " / ");
+            });
+            if (clockEl && !clockEl.dataset.ready) {
+                for (let i = 0; i < 60; i++) {
+                    const t = document.createElement("div");
+                    t.className = "clock-tick " + (i % 5 === 0 ? "hour-tick" : "min-tick");
+                    t.style.transform = `translateX(-50%) rotate(${i * 6}deg)`;
+                    clockEl.prepend(t);
+                }
+                clockEl.dataset.ready = "1";
+            }
+
+            const handH = document.getElementById("hand-h");
+            const handM = document.getElementById("hand-m");
+            const handS = document.getElementById("hand-s");
+            if (handH && handM && handS) {
+                const s = now.getSeconds();
+                const m = now.getMinutes();
+                const h = now.getHours() % 12;
+                handH.style.rotate = `${h * 30 + m * 0.5}deg`;
+                handM.style.rotate = `${m * 6 + s * 0.1}deg`;
+                handS.style.rotate = `${s * 6}deg`;
+            }
+        };
+
+        tick();
+        setInterval(tick, 1000);
+    }
+
+    const themeKey = "babel-brief-theme";
+    const buttons = document.querySelectorAll("[data-theme-toggle]");
+    const storedTheme = localStorage.getItem(themeKey);
+    const hashTheme = new URLSearchParams(window.location.hash.slice(1)).get("figmatheme");
+    const forcedTheme = ["dark", "light"].includes(hashTheme) ? hashTheme : "";
+    const initialTheme = forcedTheme || storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem(themeKey, theme);
+        buttons.forEach((button) => {
+            button.textContent = theme === "dark" ? "[ LIGHT ]" : "[ DARK ]";
+            button.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+        });
+    };
+
+    setTheme(initialTheme);
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+        });
+    });
+})();
+</script>
+
+<div class="email-container">
+
+<p class="history-note"><span class="history-label">历史上的今天（2012年）</span>：美国太空探索技术公司（SpaceX）研发的“龙”号飞船成功与国际空间站完成对接，成为历史上首艘实现该目标的商业航天器。此次任务标志着商业公司正式进入轨道补给领域，开启了私人企业参与深空探索的新纪元，并为后续载人航天商业化及国际空间站的运营模式转变奠定了基础。 —— <a href="https://en.wikipedia.org/wiki/SpaceX_Dragon_1">来源: Wikipedia</a></p>
+
+<hr />
+<h2>🦉 Quick Hits</h2>
+<ul>
+<li> <strong>特朗普敦促美谈判代表勿急于达成伊朗协议</strong>：正在讨论的协议将包括延长60天停火。（<a href="https://www.bbc.com/news/articles/clyp0040x7po?at_medium=RSS&amp;at_campaign=rss">来源: BBC World News</a>, <a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNNFJLcXNSaEFNZkMyZGZOMWtkUHhjLV9aS0RobHJUMWtQckEtWTFCaUcyVDVUcVFCcHQtbW1LaVptenhHWXd5aHJ5NXNDZ2dfdnR5YTJ3MVBnNzZGR2JndEVoZUNJMmhmNy1BX2dWRzZVSEI1ZVRjZmlodUpsUVpRT21hLUV1bzI5bmR5TmNYT1FjS0lYUmdQSHdoRC1YV0o1MmJZ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Associated Press</a>）</li>
+<li> <strong>俄罗斯高超音速“奥列什尼克”导弹袭击乌克兰</strong>：俄罗斯使用“Oreshnik”高超音速导弹袭击乌克兰。（<a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNazlhU1E0cFZQcGJodlpTQ3I5a2dEaHk4d0s0Vl9JREIzTDBvbXZ1ZzN6QkJuakJZa25hbEo2RGR5Zi1tY2VvZFAtNDhhdUQtVnJrSkcxYmFXZGpfcWU2ekV2aG1YbXdHbVFIWUJBTmhUUm1hV1B5YWFDOG5PRmkwLXlQUFM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Financial Times</a>, <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQQ2JXX3JSekpLS3g3WUdNMHhscHJNNk53TEx0bUxidktWMndCaFZfbTV1cFZhUGhuVWN2aE1RbEhZR2R0OTJQR2dpY2hKZDJQMUZuMmtoa25IOENLT3R3WkFoRWdGYXRZaVk2VG85MzFpODY1WFNQTHhzazlBVzFIX29aSDRSTWRpTWx6ZmJqNkptT0NFMC0wVnYwWmJ0YkxjRjRwUV8wZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Associated Press</a>）</li>
+<li>⚡ <strong>美伊和平协议信号复杂，油价下跌</strong>：日本股市因对美以战争结束的希望而飙升至历史新高。（<a href="https://www.aljazeera.com/economy/2026/5/25/oil-prices-fall-amid-mixed-signals-on-us-iran-peace-deal?traffic_source=rss">来源: Al Jazeera</a>, <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQZm9XX0ZzVmNoTnljTTdPaDRsYTRiMHA0ajVydVFGWjh2cjEteHJ0THhXemlXUmlzMThlUHU3S2RtNXRmRE1oUGlrWUFjdFBwSEpkN18zTTVzZWRzT29LZ3YwekNuVWdSZnpFRVA4cGs1R3laWFMtb2QwTVB6V1htQlpfRXJRQk5YVWg2ek94OWJSNTl6LWFVSThkb0s0QUMwOFY3eUhMMlkxQW1teFE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Reuters</a>）</li>
+</ul>
+<h2>🇨🇳 中国与世界 / China & The World</h2>
+<h3>1. 欧盟成员国推动对华贸易制裁升级</h3>
+<ul>
+<li><strong>全景综述</strong>：欧盟成员国正向欧盟委员会施压，要求对中国采取更严厉的贸易打击措施。这一动向反映了欧洲内部对中国工业产能过剩及政府补贴行为的担忧日益加剧。多国政府希望通过更具攻击性的贸易工具来保护本土产业，防止廉价中国商品涌入欧洲市场，这标志着中欧贸易关系进入更加紧张的阶段。（来源: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNY0duOV9hNlptTzk1bldNMVl5NWtabHJCTmpHSFJtZV8xeXIxbkE0eV9JalFmVnV1WGw4bWtWYmlLbHZkNl9mN2RZaFdKMmhjS1FadkVsc3plN19leGxuSVg4NXF1ckRzYWZXd1QzaW5JeU5DWjF3VzliQjlleWxWXzN3TVM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>）</li>
+<li><strong>核心事实</strong>：欧盟成员国正集体向布鲁塞尔施压，要求强化针对中国商品的贸易限制措施 (信息来源: Financial Times)</li>
+<li><strong>欧盟强硬派</strong>：欧盟强硬派认为，现有的贸易保护机制已不足以应对中国大规模补贴带来的不公平竞争。他们主张采取更果断的行动，如提高关税或限制准入，以防止欧洲关键工业基础（如电动汽车和绿色能源）被中国低价产品彻底摧毁。在他们看来，这不仅是经济问题，更是关乎欧洲工业主权的战略抉择。（基于: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNY0duOV9hNlptTzk1bldNMVl5NWtabHJCTmpHSFJtZV8xeXIxbkE0eV9JalFmVnV1WGw4bWtWYmlLbHZkNl9mN2RZaFdKMmhjS1FadkVsc3plN19leGxuSVg4NXF1ckRzYWZXd1QzaW5JeU5DWjF3VzliQjlleWxWXzN3TVM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>）</li>
+<li><strong>北京方面</strong>：北京方面及部分贸易专家批评此类举措是典型的保护主义。他们认为，欧盟将自身竞争力不足归咎于中国补贴，实际上是在破坏全球供应链的稳定。这种“贸易武器化”的做法不仅会推高欧洲消费者的成本，还可能引发中方的对等反制，最终导致双输局面，并阻碍全球绿色转型的进程。（基于: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNY0duOV9hNlptTzk1bldNMVl5NWtabHJCTmpHSFJtZV8xeXIxbkE0eV9JalFmVnV1WGw4bWtWYmlLbHZkNl9mN2RZaFdKMmhjS1FadkVsc3plN19leGxuSVg4NXF1ckRzYWZXd1QzaW5JeU5DWjF3VzliQjlleWxWXzN3TVM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>）</li>
+<li><strong>AI推演</strong>：欧盟的焦虑并非空穴来风，中国在特定领域的产能优势确实构成了结构性挑战。然而，单纯依靠关税壁垒是一把双刃剑，可能导致欧洲陷入高通胀。我认为，欧盟目前的施压更多是作为谈判筹码，旨在迫使中国在补贴政策上做出让步。（参考: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNY0duOV9hNlptTzk1bldNMVl5NWtabHJCTmpHSFJtZV8xeXIxbkE0eV9JalFmVnV1WGw4bWtWYmlLbHZkNl9mN2RZaFdKMmhjS1FadkVsc3plN19leGxuSVg4NXF1ckRzYWZXd1QzaW5JeU5DWjF3VzliQjlleWxWXzN3TVM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Financial Times</strong>: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNY0duOV9hNlptTzk1bldNMVl5NWtabHJCTmpHSFJtZV8xeXIxbkE0eV9JalFmVnV1WGw4bWtWYmlLbHZkNl9mN2RZaFdKMmhjS1FadkVsc3plN19leGxuSVg4NXF1ckRzYWZXd1QzaW5JeU5DWjF3VzliQjlleWxWXzN3TVM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">EU countries press for trade crackdown on China</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 中国交易限制或波及320亿港元资产</h3>
+<ul>
+<li><strong>全景综述</strong>：中信证券分析显示，中国政府近期实施的交易限制措施可能对香港市场产生重大影响，预计涉及约320亿港元的资产。这些限制主要针对跨境交易和特定投资行为，旨在加强资本管控和市场监管。此举引发了市场对香港作为国际金融中心流动性的担忧，尤其是在当前全球投资者对中国资产持谨慎态度的背景下。（来源: <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxPRzZ3Wmdud1BiYWdpaXpSRFp5UWRmcWdaQUJEYk1GYzRQWjFLal9Ncmw2TGp6VEd5RTZSSGQ2Vzh5em1lVUxGTXI0V1ljQnZQWjJ0RnA2cUQtTFFWMXhvNHUxdjNIbWNKTTZZZmRKd3pCQ25NLTcwM0k1T0RnYVpSQ1FxbEt3cmFFbUNscEV6aGFpS0p1eDRCc0FKRUZwVERySGZxRDlBeXBPTTFiUXNkRG4tbw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>核心事实</strong>：中信证券预计，中国最新的交易限制措施可能影响香港市场高达320亿港元的资产 (信息来源: Bloomberg)</li>
+<li><strong>监管机构</strong>：监管机构认为，加强交易限制是维护金融稳定、防止资本违规外流的必要手段。在市场波动加剧的背景下，通过收紧跨境交易漏洞，可以有效防范系统性风险，确保金融安全。对他们而言，市场的长期健康远比短期的流动性波动更为重要。（基于: <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxPRzZ3Wmdud1BiYWdpaXpSRFp5UWRmcWdaQUJEYk1GYzRQWjFLal9Ncmw2TGp6VEd5RTZSSGQ2Vzh5em1lVUxGTXI0V1ljQnZQWjJ0RnA2cUQtTFFWMXhvNHUxdjNIbWNKTTZZZmRKd3pCQ25NLTcwM0k1T0RnYVpSQ1FxbEt3cmFFbUNscEV6aGFpS0p1eDRCc0FKRUZwVERySGZxRDlBeXBPTTFiUXNkRG4tbw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>市场投资者</strong>：投资者和市场分析师则担心，频繁的政策干预会削弱香港市场的吸引力。320亿港元的潜在受损资产不仅代表了直接的经济损失，更释放了监管不确定性的信号。这种做法可能导致外资进一步撤离，降低港股的估值水平，并损害香港作为自由贸易港的声誉。（基于: <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxPRzZ3Wmdud1BiYWdpaXpSRFp5UWRmcWdaQUJEYk1GYzRQWjFLal9Ncmw2TGp6VEd5RTZSSGQ2Vzh5em1lVUxGTXI0V1ljQnZQWjJ0RnA2cUQtTFFWMXhvNHUxdjNIbWNKTTZZZmRKd3pCQ25NLTcwM0k1T0RnYVpSQ1FxbEt3cmFFbUNscEV6aGFpS0p1eDRCc0FKRUZwVERySGZxRDlBeXBPTTFiUXNkRG4tbw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>AI推演</strong>：监管层试图在防风险与促开放间寻找平衡，但目前显然更偏向于前者。虽然320亿港元在整体市值中占比有限，但其产生的心理冲击不容小觑。如果政策缺乏透明度，香港金融市场的溢价将持续萎缩。（参考: <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxPRzZ3Wmdud1BiYWdpaXpSRFp5UWRmcWdaQUJEYk1GYzRQWjFLal9Ncmw2TGp6VEd5RTZSSGQ2Vzh5em1lVUxGTXI0V1ljQnZQWjJ0RnA2cUQtTFFWMXhvNHUxdjNIbWNKTTZZZmRKd3pCQ25NLTcwM0k1T0RnYVpSQ1FxbEt3cmFFbUNscEV6aGFpS0p1eDRCc0FKRUZwVERySGZxRDlBeXBPTTFiUXNkRG4tbw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxPRzZ3Wmdud1BiYWdpaXpSRFp5UWRmcWdaQUJEYk1GYzRQWjFLal9Ncmw2TGp6VEd5RTZSSGQ2Vzh5em1lVUxGTXI0V1ljQnZQWjJ0RnA2cUQtTFFWMXhvNHUxdjNIbWNKTTZZZmRKd3pCQ25NLTcwM0k1T0RnYVpSQ1FxbEt3cmFFbUNscEV6aGFpS0p1eDRCc0FKRUZwVERySGZxRDlBeXBPTTFiUXNkRG4tbw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">China Trading Curbs May Hit $32 Billion of Hong Kong Assets, Citic Says</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 中东油气船只绕道霍尔木兹海峡驶往中国</h3>
+<ul>
+<li><strong>全景综述</strong>：多艘载有中东原油和液化天然气（LNG）的货轮已离开霍尔木兹海峡，正驶向中国和巴基斯坦。在全球能源供应链因地缘政治局势持续紧张的背景下，这些能源运输的动向备受关注。尽管地区风险增加，但中国作为全球最大的能源进口国，依然维持着从中东地区的高频次采购，以确保国内能源安全。（来源: <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxNVVVSQnVDcHd0cUZHRnpsSjdXUUhHT0Q0eDVUNElUVTdhNml5WGVQWFBIVnBsVTM4RUZ1WWVhVHROVk9uaFNzbS1keFZWdW9jSDFXc0g3OWl1bmFVNUZZMW9kd2tHRDN1alFxWUM2RnBVZzM2Sk9fNTNtZXdrQ0lUblEySXBUVHpUa1lKbkNIemVJclh3dmEwdXNkTjRFR3NxQ0pkaUVDSTBjbHp0WHgxUUVnanVqaHkyRUJ6MQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：载有中东石油和液化天然气的船只正离开霍尔木兹海峡前往中国和巴基斯坦 (信息。来源: Reuters) (信息来源: Reuters)</li>
+<li><strong>能源安全专家</strong>：能源安全专家强调，中国必须在动荡的局势中确保能源供应的连续性。从中东进口油气是其多元化战略的核心，即便面临霍尔木兹海峡的航行风险，中国也必须通过外交和物流手段保障这条生命线。这体现了中国在能源获取上的战略定力。（基于: <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxNVVVSQnVDcHd0cUZHRnpsSjdXUUhHT0Q0eDVUNElUVTdhNml5WGVQWFBIVnBsVTM4RUZ1WWVhVHROVk9uaFNzbS1keFZWdW9jSDFXc0g3OWl1bmFVNUZZMW9kd2tHRDN1alFxWUM2RnBVZzM2Sk9fNTNtZXdrQ0lUblEySXBUVHpUa1lKbkNIemVJclh3dmEwdXNkTjRFR3NxQ0pkaUVDSTBjbHp0WHgxUUVnanVqaHkyRUJ6MQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>地缘政治观察家</strong>：地缘政治观察家则指出，过度依赖经过霍尔木兹海峡等敏感水域的能源航线，是中国经济的一大软肋。一旦该地区爆发冲突，中国将面临严重的能源断供风险。目前船只的频繁往来虽然维持了供应，但也暴露了中国在保障远洋航线安全方面的能力局限。（基于: <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxNVVVSQnVDcHd0cUZHRnpsSjdXUUhHT0Q0eDVUNElUVTdhNml5WGVQWFBIVnBsVTM4RUZ1WWVhVHROVk9uaFNzbS1keFZWdW9jSDFXc0g3OWl1bmFVNUZZMW9kd2tHRDN1alFxWUM2RnBVZzM2Sk9fNTNtZXdrQ0lUblEySXBUVHpUa1lKbkNIemVJclh3dmEwdXNkTjRFR3NxQ0pkaUVDSTBjbHp0WHgxUUVnanVqaHkyRUJ6MQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：能源运输的常态化反映了供需关系的刚性，但也凸显了风险的积聚。我认为，这些船只的航行不仅是商业行为，更是地缘政治压力的晴雨表。只要中东局势不彻底失控，中国将继续利用其买方优势维持这条通道。（参考: <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxNVVVSQnVDcHd0cUZHRnpsSjdXUUhHT0Q0eDVUNElUVTdhNml5WGVQWFBIVnBsVTM4RUZ1WWVhVHROVk9uaFNzbS1keFZWdW9jSDFXc0g3OWl1bmFVNUZZMW9kd2tHRDN1alFxWUM2RnBVZzM2Sk9fNTNtZXdrQ0lUblEySXBUVHpUa1lKbkNIemVJclh3dmEwdXNkTjRFR3NxQ0pkaUVDSTBjbHp0WHgxUUVnanVqaHkyRUJ6MQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxNVVVSQnVDcHd0cUZHRnpsSjdXUUhHT0Q0eDVUNElUVTdhNml5WGVQWFBIVnBsVTM4RUZ1WWVhVHROVk9uaFNzbS1keFZWdW9jSDFXc0g3OWl1bmFVNUZZMW9kd2tHRDN1alFxWUM2RnBVZzM2Sk9fNTNtZXdrQ0lUblEySXBUVHpUa1lKbkNIemVJclh3dmEwdXNkTjRFR3NxQ0pkaUVDSTBjbHp0WHgxUUVnanVqaHkyRUJ6MQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Vessels carrying Middle East oil, LNG exit Hormuz, head for Pakistan, China</a></li>
+</ul>
+</li>
+</ul>
+<h2>🌍 全球局势 / Global Affairs</h2>
+<h3>1. 特朗普要求美方谈判代表“不要急于”与伊朗达成协议</h3>
+<ul>
+<li><strong>全景综述</strong>：特朗普告诉美国谈判代表，不要急于与伊朗达成协议。（来源: <a href="https://www.bbc.com/news/articles/clyp0040x7po?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>, <a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNNFJLcXNSaEFNZkMyZGZOMWtkUHhjLV9aS0RobHJUMWtQckEtWTFCaUcyVDVUcVFCcHQtbW1LaVptenhHWXd5aHJ5NXNDZ2dfdnR5YTJ3MVBnNzZGR2JndEVoZUNJMmhmNy1BX2dWRzZVSEI1ZVRjZmlodUpsUVpRT21hLUV1bzI5bmR5TmNYT1FjS0lYUmdQSHdoRC1YV0o1MmJZ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>核心事实</strong>：特朗普告诉美国谈判代表，不要急于与伊朗达成协议 (信息来源: BBC World News)</li>
+<li><strong>美国谈判策略视角</strong>：美国的核心诉求是把军事威慑转化为可执行的谈判约束，同时避免冲突成本继续传导到能源、通胀和盟友安全承诺。（基于: <a href="https://www.bbc.com/news/articles/clyp0040x7po?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>伊朗政权安全视角</strong>：伊朗的行为逻辑是保留谈判筹码并降低国内安全压力；若让步被解读为被迫退让，其后续执行空间会明显收窄。（基于: <a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNNFJLcXNSaEFNZkMyZGZOMWtkUHhjLV9aS0RobHJUMWtQckEtWTFCaUcyVDVUcVFCcHQtbW1LaVptenhHWXd5aHJ5NXNDZ2dfdnR5YTJ3MVBnNzZGR2JndEVoZUNJMmhmNy1BX2dWRzZVSEI1ZVRjZmlodUpsUVpRT21hLUV1bzI5bmR5TmNYT1FjS0lYUmdQSHdoRC1YV0o1MmJZ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>AI推演</strong>：会面本身不足以改变局势，真正有分量的是双方是否同步冻结升级动作。若谈判桌外的军事压力继续增加，美国和伊朗都会把让步视为弱点，停火文本也会缺少执行可信度。（参考: <a href="https://www.bbc.com/news/articles/clyp0040x7po?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>, <a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNNFJLcXNSaEFNZkMyZGZOMWtkUHhjLV9aS0RobHJUMWtQckEtWTFCaUcyVDVUcVFCcHQtbW1LaVptenhHWXd5aHJ5NXNDZ2dfdnR5YTJ3MVBnNzZGR2JndEVoZUNJMmhmNy1BX2dWRzZVSEI1ZVRjZmlodUpsUVpRT21hLUV1bzI5bmR5TmNYT1FjS0lYUmdQSHdoRC1YV0o1MmJZ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>BBC World News</strong>: <a href="https://www.bbc.com/news/articles/clyp0040x7po?at_medium=RSS&amp;at_campaign=rss">Trump tells US negotiators 'not to rush' into deal with Iran</a></li>
+<li><strong>Associated Press</strong>: <a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNNFJLcXNSaEFNZkMyZGZOMWtkUHhjLV9aS0RobHJUMWtQckEtWTFCaUcyVDVUcVFCcHQtbW1LaVptenhHWXd5aHJ5NXNDZ2dfdnR5YTJ3MVBnNzZGR2JndEVoZUNJMmhmNy1BX2dWRzZVSEI1ZVRjZmlodUpsUVpRT21hLUV1bzI5bmR5TmNYT1FjS0lYUmdQSHdoRC1YV0o1MmJZ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Trump says not to rush as details emerge of a potential Iran deal</a></li>
+<li><strong>Financial Times</strong>: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxON25pRTY2czROVE1oc2VQZkxEWFJuM25INlJpLWtMMUk0TjB1U2xVMkpHMnJRWUU1NXd5YkxYM3pUNzBMRkVmOGd0R0FFMzljTGVlQWtlYmt1ckdPX2lJSXZRYWpkeThTdVBWeWw5LXlYNl9WVTBiSXhIQzBCNUNCSEtQNzg?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Donald Trump says US will not ‘rush into a deal’ with Iran as talks continue</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 俄罗斯使用“榛树”高超音速导弹袭击乌克兰</h3>
+<ul>
+<li><strong>全景综述</strong>：俄罗斯使用高超音速‘Oreshnik’导弹袭击乌克兰。（来源: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNazlhU1E0cFZQcGJodlpTQ3I5a2dEaHk4d0s0Vl9JREIzTDBvbXZ1ZzN6QkJuakJZa25hbEo2RGR5Zi1tY2VvZFAtNDhhdUQtVnJrSkcxYmFXZGpfcWU2ekV2aG1YbXdHbVFIWUJBTmhUUm1hV1B5YWFDOG5PRmkwLXlQUFM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>, <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQQ2JXX3JSekpLS3g3WUdNMHhscHJNNk53TEx0bUxidktWMndCaFZfbTV1cFZhUGhuVWN2aE1RbEhZR2R0OTJQR2dpY2hKZDJQMUZuMmtoa25IOENLT3R3WkFoRWdGYXRZaVk2VG85MzFpODY1WFNQTHhzazlBVzFIX29aSDRSTWRpTWx6ZmJqNkptT0NFMC0wVnYwWmJ0YkxjRjRwUV8wZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>核心事实</strong>：俄罗斯使用高超音速‘Oreshnik’导弹袭击乌克兰 (信息来源: Financial Times)</li>
+<li><strong>美国监管层视角</strong>：美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。（基于: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNazlhU1E0cFZQcGJodlpTQ3I5a2dEaHk4d0s0Vl9JREIzTDBvbXZ1ZzN6QkJuakJZa25hbEo2RGR5Zi1tY2VvZFAtNDhhdUQtVnJrSkcxYmFXZGpfcWU2ekV2aG1YbXdHbVFIWUJBTmhUUm1hV1B5YWFDOG5PRmkwLXlQUFM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>）</li>
+<li><strong>华尔街银行与AI公司视角</strong>：银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。（基于: <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQQ2JXX3JSekpLS3g3WUdNMHhscHJNNk53TEx0bUxidktWMndCaFZfbTV1cFZhUGhuVWN2aE1RbEhZR2R0OTJQR2dpY2hKZDJQMUZuMmtoa25IOENLT3R3WkFoRWdGYXRZaVk2VG85MzFpODY1WFNQTHhzazlBVzFIX29aSDRSTWRpTWx6ZmJqNkptT0NFMC0wVnYwWmJ0YkxjRjRwUV8wZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>AI推演</strong>：监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、可审计、可停用，否则华尔街会把试点保留在沙盒里。（参考: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNazlhU1E0cFZQcGJodlpTQ3I5a2dEaHk4d0s0Vl9JREIzTDBvbXZ1ZzN6QkJuakJZa25hbEo2RGR5Zi1tY2VvZFAtNDhhdUQtVnJrSkcxYmFXZGpfcWU2ekV2aG1YbXdHbVFIWUJBTmhUUm1hV1B5YWFDOG5PRmkwLXlQUFM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>, <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQQ2JXX3JSekpLS3g3WUdNMHhscHJNNk53TEx0bUxidktWMndCaFZfbTV1cFZhUGhuVWN2aE1RbEhZR2R0OTJQR2dpY2hKZDJQMUZuMmtoa25IOENLT3R3WkFoRWdGYXRZaVk2VG85MzFpODY1WFNQTHhzazlBVzFIX29aSDRSTWRpTWx6ZmJqNkptT0NFMC0wVnYwWmJ0YkxjRjRwUV8wZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Financial Times</strong>: <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNazlhU1E0cFZQcGJodlpTQ3I5a2dEaHk4d0s0Vl9JREIzTDBvbXZ1ZzN6QkJuakJZa25hbEo2RGR5Zi1tY2VvZFAtNDhhdUQtVnJrSkcxYmFXZGpfcWU2ekV2aG1YbXdHbVFIWUJBTmhUUm1hV1B5YWFDOG5PRmkwLXlQUFM?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Russia hits Ukraine with hypersonic ‘Oreshnik’ missile</a></li>
+<li><strong>Associated Press</strong>: <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQQ2JXX3JSekpLS3g3WUdNMHhscHJNNk53TEx0bUxidktWMndCaFZfbTV1cFZhUGhuVWN2aE1RbEhZR2R0OTJQR2dpY2hKZDJQMUZuMmtoa25IOENLT3R3WkFoRWdGYXRZaVk2VG85MzFpODY1WFNQTHhzazlBVzFIX29aSDRSTWRpTWx6ZmJqNkptT0NFMC0wVnYwWmJ0YkxjRjRwUV8wZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Russia uses hypersonic Oreshnik missile in mass attack on Kyiv</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 美伊和平协议信号不明，国际油价下跌</h3>
+<ul>
+<li><strong>全景综述</strong>：受美国与伊朗和平协议进展信号影响，油价下跌，路透报道跌幅达6%。（来源: <a href="https://www.aljazeera.com/economy/2026/5/25/oil-prices-fall-amid-mixed-signals-on-us-iran-peace-deal?traffic_source=rss">Al Jazeera</a>, <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQZm9XX0ZzVmNoTnljTTdPaDRsYTRiMHA0ajVydVFGWjh2cjEteHJ0THhXemlXUmlzMThlUHU3S2RtNXRmRE1oUGlrWUFjdFBwSEpkN18zTTVzZWRzT29LZ3YwekNuVWdSZnpFRVA4cGs1R3laWFMtb2QwTVB6V1htQlpfRXJRQk5YVWg2ek94OWJSNTl6LWFVSThkb0s0QUMwOFY3eUhMMlkxQW1teFE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：受美国与伊朗和平协议进展信号影响，油价下跌，路透报道跌幅达6% (信息来源: Al Jazeera)</li>
+<li><strong>美国谈判与能源安全视角</strong>：美国的核心诉求是把停火窗口和海上通行风险同时压住，因为运输中断会把军事压力快速转化为能源价格和盟友协调成本。（基于: <a href="https://www.aljazeera.com/economy/2026/5/25/oil-prices-fall-amid-mixed-signals-on-us-iran-peace-deal?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>伊朗与航运市场视角</strong>：伊朗的谈判筹码来自地区安全风险上升；运输商、保险方和能源买家会先把不确定性计入运价、保费和库存安排。（基于: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQZm9XX0ZzVmNoTnljTTdPaDRsYTRiMHA0ajVydVFGWjh2cjEteHJ0THhXemlXUmlzMThlUHU3S2RtNXRmRE1oUGlrWUFjdFBwSEpkN18zTTVzZWRzT29LZ3YwekNuVWdSZnpFRVA4cGs1R3laWFMtb2QwTVB6V1htQlpfRXJRQk5YVWg2ek94OWJSNTl6LWFVSThkb0s0QUMwOFY3eUhMMlkxQW1teFE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：华盛顿需要把停火谈判和航道安全放在同一张表上看。只要船东、保险商和能源买家仍按封锁风险定价，外交会谈释放的缓和信号就很难真正压低冲突溢价。（参考: <a href="https://www.aljazeera.com/economy/2026/5/25/oil-prices-fall-amid-mixed-signals-on-us-iran-peace-deal?traffic_source=rss">Al Jazeera</a>, <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQZm9XX0ZzVmNoTnljTTdPaDRsYTRiMHA0ajVydVFGWjh2cjEteHJ0THhXemlXUmlzMThlUHU3S2RtNXRmRE1oUGlrWUFjdFBwSEpkN18zTTVzZWRzT29LZ3YwekNuVWdSZnpFRVA4cGs1R3laWFMtb2QwTVB6V1htQlpfRXJRQk5YVWg2ek94OWJSNTl6LWFVSThkb0s0QUMwOFY3eUhMMlkxQW1teFE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Al Jazeera</strong>: <a href="https://www.aljazeera.com/economy/2026/5/25/oil-prices-fall-amid-mixed-signals-on-us-iran-peace-deal?traffic_source=rss">Oil prices fall amid mixed signals on US-Iran peace deal</a></li>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQZm9XX0ZzVmNoTnljTTdPaDRsYTRiMHA0ajVydVFGWjh2cjEteHJ0THhXemlXUmlzMThlUHU3S2RtNXRmRE1oUGlrWUFjdFBwSEpkN18zTTVzZWRzT29LZ3YwekNuVWdSZnpFRVA4cGs1R3laWFMtb2QwTVB6V1htQlpfRXJRQk5YVWg2ek94OWJSNTl6LWFVSThkb0s0QUMwOFY3eUhMMlkxQW1teFE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Oil slips 6% as US, Iran seen moving closer to peace deal</a></li>
+</ul>
+</li>
+</ul>
+<h3>4. 俄罗斯大规模袭击乌克兰造成4死数十伤</h3>
+<ul>
+<li><strong>全景综述</strong>：俄罗斯对乌克兰发动大规模袭击，造成四人死亡，数十人受伤。（来源: <a href="https://www.bbc.com/news/articles/clyp6831yp5o?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>核心事实</strong>：俄罗斯对乌克兰发动大规模袭击，造成四人死亡，数十人受伤 (信息来源: BBC World News)</li>
+<li><strong>美国监管层视角</strong>：美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。（基于: <a href="https://www.bbc.com/news/articles/clyp6831yp5o?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>华尔街银行与AI公司视角</strong>：银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。（基于: <a href="https://www.bbc.com/news/articles/clyp6831yp5o?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>AI推演</strong>：监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、可审计、可停用，否则华尔街会把试点保留在沙盒里。（参考: <a href="https://www.bbc.com/news/articles/clyp6831yp5o?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>BBC World News</strong>: <a href="https://www.bbc.com/news/articles/clyp6831yp5o?at_medium=RSS&amp;at_campaign=rss">Large-scale Russian attack on Ukraine leaves four dead and dozens injured</a></li>
+</ul>
+</li>
+</ul>
+<h2>💰 商业与市场 / Business & Markets</h2>
+<h3>1. 美国接近达成伊朗协议以重开海峡，原油价格下跌</h3>
+<ul>
+<li><strong>全景综述</strong>：随着美国逐步接近与伊朗达成协议以重开海峡，原油价格下跌。（来源: <a href="https://news.google.com/rss/articles/CBMingFBVV95cUxNWFYtUjA4XzRlaW1Sc2VVNnY5R19xOTY5Q0w1azJmR3cyb01CaFBRRjJsUEJWYndXUHNaVU5iTnpQVmRhMmJhcVYtX1Y3Y0YxS0NTUkV1Q0JFT3l5V1EzbG5STjBMWkhiUXlOOWJWM2pFbGZaQWRqd2tveHpTVFpHRGdZSWUtVjZiLURTNUtDUlR5RlVsQVNDYmpYTHNsdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>, <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxPVnFCYnlEbXZpNEs3dTF4OWd0c3JkZnNzRVFiX3M1LWNGaFZtN3FmOHlEWFd5UjI0cFRxa1J2X0JVc0d1YVdUSVBKamhIdFA4T1JDbUZRQ04yVmxfQndhaXlNOHN1U1UtWENMX3hBc1ZZN2UtOUVKMlp0b0NQSkNDcEdNdDI5el9RUFFiRVBQNUJEcGQyTXlPN1BpMnNKNnVkbFVmTDdLOW54NmZ2WnhB?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>核心事实</strong>：随着美国逐步接近与伊朗达成协议以重开海峡，原油价格下跌 (信息来源: Bloomberg)</li>
+<li><strong>美国监管层视角</strong>：美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。（基于: <a href="https://news.google.com/rss/articles/CBMingFBVV95cUxNWFYtUjA4XzRlaW1Sc2VVNnY5R19xOTY5Q0w1azJmR3cyb01CaFBRRjJsUEJWYndXUHNaVU5iTnpQVmRhMmJhcVYtX1Y3Y0YxS0NTUkV1Q0JFT3l5V1EzbG5STjBMWkhiUXlOOWJWM2pFbGZaQWRqd2tveHpTVFpHRGdZSWUtVjZiLURTNUtDUlR5RlVsQVNDYmpYTHNsdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>华尔街银行与AI公司视角</strong>：银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。（基于: <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxPVnFCYnlEbXZpNEs3dTF4OWd0c3JkZnNzRVFiX3M1LWNGaFZtN3FmOHlEWFd5UjI0cFRxa1J2X0JVc0d1YVdUSVBKamhIdFA4T1JDbUZRQ04yVmxfQndhaXlNOHN1U1UtWENMX3hBc1ZZN2UtOUVKMlp0b0NQSkNDcEdNdDI5el9RUFFiRVBQNUJEcGQyTXlPN1BpMnNKNnVkbFVmTDdLOW54NmZ2WnhB?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>AI推演</strong>：监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、可审计、可停用，否则华尔街会把试点保留在沙盒里。（参考: <a href="https://news.google.com/rss/articles/CBMingFBVV95cUxNWFYtUjA4XzRlaW1Sc2VVNnY5R19xOTY5Q0w1azJmR3cyb01CaFBRRjJsUEJWYndXUHNaVU5iTnpQVmRhMmJhcVYtX1Y3Y0YxS0NTUkV1Q0JFT3l5V1EzbG5STjBMWkhiUXlOOWJWM2pFbGZaQWRqd2tveHpTVFpHRGdZSWUtVjZiLURTNUtDUlR5RlVsQVNDYmpYTHNsdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>, <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxPVnFCYnlEbXZpNEs3dTF4OWd0c3JkZnNzRVFiX3M1LWNGaFZtN3FmOHlEWFd5UjI0cFRxa1J2X0JVc0d1YVdUSVBKamhIdFA4T1JDbUZRQ04yVmxfQndhaXlNOHN1U1UtWENMX3hBc1ZZN2UtOUVKMlp0b0NQSkNDcEdNdDI5el9RUFFiRVBQNUJEcGQyTXlPN1BpMnNKNnVkbFVmTDdLOW54NmZ2WnhB?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMingFBVV95cUxNWFYtUjA4XzRlaW1Sc2VVNnY5R19xOTY5Q0w1azJmR3cyb01CaFBRRjJsUEJWYndXUHNaVU5iTnpQVmRhMmJhcVYtX1Y3Y0YxS0NTUkV1Q0JFT3l5V1EzbG5STjBMWkhiUXlOOWJWM2pFbGZaQWRqd2tveHpTVFpHRGdZSWUtVjZiLURTNUtDUlR5RlVsQVNDYmpYTHNsdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Crude Oil Drops as US Inches Toward Iran Deal to Reopen Strait</a></li>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxPVnFCYnlEbXZpNEs3dTF4OWd0c3JkZnNzRVFiX3M1LWNGaFZtN3FmOHlEWFd5UjI0cFRxa1J2X0JVc0d1YVdUSVBKamhIdFA4T1JDbUZRQ04yVmxfQndhaXlNOHN1U1UtWENMX3hBc1ZZN2UtOUVKMlp0b0NQSkNDcEdNdDI5el9RUFFiRVBQNUJEcGQyTXlPN1BpMnNKNnVkbFVmTDdLOW54NmZ2WnhB?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Oil, Dollar Slide on Optimism Over US-Iran Deal: Markets Wrap</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 特朗普政府如何削弱CFTC：罢免执法官员并任命亲行业人士</h3>
+<ul>
+<li><strong>全景综述</strong>：《纽约时报》报道，特朗普政府如何削弱CFTC，罢免执法者并任命对行业友好的官员。（来源: <a href="https://www.techmeme.com/260524/p13#a260524p13">Techmeme</a>）</li>
+<li><strong>核心事实</strong>：《纽约时报》报道，特朗普政府如何削弱CFTC，罢免执法者并任命对行业友好的官员 (信息来源: Techmeme)</li>
+<li><strong>政策制定者视角</strong>：政策制定者的核心诉求是避免单一事件演变成系统性定价压力，因为融资条件、需求预期和风险偏好会互相放大。（基于: <a href="https://www.techmeme.com/260524/p13#a260524p13">Techmeme</a>）</li>
+<li><strong>投资者定价视角</strong>：投资者的行为逻辑是先调整风险溢价，再等待正式数据确认；只要利润或利率路径变动，仓位会比政策声明更早反应。（基于: <a href="https://www.techmeme.com/260524/p13#a260524p13">Techmeme</a>）</li>
+<li><strong>AI推演</strong>：通胀和消费者信心同时转弱时，政策沟通会比单一价格数据更难处理。零售、信贷和债券市场会先调整预期，除非能源与就业数据稳住，否则软着陆叙事会继续失去支撑。（参考: <a href="https://www.techmeme.com/260524/p13#a260524p13">Techmeme</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Techmeme</strong>: <a href="https://www.techmeme.com/260524/p13#a260524p13">How the Trump admin gutted the CFTC, ousting enforcers and appointing industry-friendly officials, as Trump family got into crypto and prediction markets (New York Times)</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 中东和平预期推动股市大涨，油价与美元走低</h3>
+<ul>
+<li><strong>全景综述</strong>：受中东和平希望提振，股市大幅上涨，油价和美元下跌。（来源: <a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE80REpkZUY0REpKR1N0dkFWY29kaGdsYVlCdnhDdTNGNTYyWTVZSF9NOGl0bE5iM0ZoY1BjNnY3S0NGLXFFTVg0RkkycW90SG1oX3JNTXVuZlVHN182UUlkX29mNndnRktCTEozdk5IaF9UVDVnb19wc1RNUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：受中东和平希望提振，股市大幅上涨，油价和美元下跌 (信息来源: Reuters)</li>
+<li><strong>美国谈判与能源安全视角</strong>：美国的核心诉求是把停火窗口和海上通行风险同时压住，因为运输中断会把军事压力快速转化为能源价格和盟友协调成本。（基于: <a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE80REpkZUY0REpKR1N0dkFWY29kaGdsYVlCdnhDdTNGNTYyWTVZSF9NOGl0bE5iM0ZoY1BjNnY3S0NGLXFFTVg0RkkycW90SG1oX3JNTXVuZlVHN182UUlkX29mNndnRktCTEozdk5IaF9UVDVnb19wc1RNUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>伊朗与航运市场视角</strong>：伊朗的谈判筹码来自地区安全风险上升；运输商、保险方和能源买家会先把不确定性计入运价、保费和库存安排。（基于: <a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE80REpkZUY0REpKR1N0dkFWY29kaGdsYVlCdnhDdTNGNTYyWTVZSF9NOGl0bE5iM0ZoY1BjNnY3S0NGLXFFTVg0RkkycW90SG1oX3JNTXVuZlVHN182UUlkX29mNndnRktCTEozdk5IaF9UVDVnb19wc1RNUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：华盛顿需要把停火谈判和航道安全放在同一张表上看。只要船东、保险商和能源买家仍按封锁风险定价，外交会谈释放的缓和信号就很难真正压低冲突溢价。（参考: <a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE80REpkZUY0REpKR1N0dkFWY29kaGdsYVlCdnhDdTNGNTYyWTVZSF9NOGl0bE5iM0ZoY1BjNnY3S0NGLXFFTVg0RkkycW90SG1oX3JNTXVuZlVHN182UUlkX29mNndnRktCTEozdk5IaF9UVDVnb19wc1RNUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE80REpkZUY0REpKR1N0dkFWY29kaGdsYVlCdnhDdTNGNTYyWTVZSF9NOGl0bE5iM0ZoY1BjNnY3S0NGLXFFTVg0RkkycW90SG1oX3JNTXVuZlVHN182UUlkX29mNndnRktCTEozdk5IaF9UVDVnb19wc1RNUQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Stocks rise sharply, oil and dollar slip on Middle East peace hopes</a></li>
+</ul>
+</li>
+</ul>
+<h2>🚀 科技与AI / Tech & AI</h2>
+<h3>1. Gemini Omni 正式发布</h3>
+<ul>
+<li><strong>全景综述</strong>：谷歌推出Gemini Omni。（来源: <a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNeWlaMUVtdkx6SklzdmNOYnZibDJSak96Mi0zZXhoUVdsamQ2M1VIeEUtcTdWVVJrV09PcTRPWVFCQzlzSW5RUzM1Ui1FRmJtR1N2aVNkeWtEM192TDcxUFhxNGN5MGhpYjk0aEJJdWJrcDlUNG1mQ2xodS1YNXEtVUxPSnpWNGVjZlpwXw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI &amp; LLM Frontier</a>）</li>
+<li><strong>核心事实</strong>：谷歌推出Gemini Omni (信息来源: AI &amp; LLM Frontier)</li>
+<li><strong>技术部署方视角</strong>：技术部署方的核心诉求是扩大采用场景，但必须证明系统在成本、安全和合规上可持续，否则客户试点难以转化为长期合同。（基于: <a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNeWlaMUVtdkx6SklzdmNOYnZibDJSak96Mi0zZXhoUVdsamQ2M1VIeEUtcTdWVVJrV09PcTRPWVFCQzlzSW5RUzM1Ui1FRmJtR1N2aVNkeWtEM192TDcxUFhxNGN5MGhpYjk0aEJJdWJrcDlUNG1mQ2xodS1YNXEtVUxPSnpWNGVjZlpwXw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI &amp; LLM Frontier</a>）</li>
+<li><strong>监管与客户视角</strong>：监管者和企业客户会把可审计性放在采用速度之前；只要责任边界不清，采购和上线节奏就会被内部风控拖慢。（基于: <a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNeWlaMUVtdkx6SklzdmNOYnZibDJSak96Mi0zZXhoUVdsamQ2M1VIeEUtcTdWVVJrV09PcTRPWVFCQzlzSW5RUzM1Ui1FRmJtR1N2aVNkeWtEM192TDcxUFhxNGN5MGhpYjk0aEJJdWJrcDlUNG1mQ2xodS1YNXEtVUxPSnpWNGVjZlpwXw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI &amp; LLM Frontier</a>）</li>
+<li><strong>AI推演</strong>：技术部署方说速度，客户和监管者说责任，这两者不会自动合流。若试点不能证明收益、成本和安全边界，AI 公司会被迫收窄应用场景；清晰的审计路径才会重新打开采用曲线。（参考: <a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNeWlaMUVtdkx6SklzdmNOYnZibDJSak96Mi0zZXhoUVdsamQ2M1VIeEUtcTdWVVJrV09PcTRPWVFCQzlzSW5RUzM1Ui1FRmJtR1N2aVNkeWtEM192TDcxUFhxNGN5MGhpYjk0aEJJdWJrcDlUNG1mQ2xodS1YNXEtVUxPSnpWNGVjZlpwXw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI &amp; LLM Frontier</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>AI &amp; LLM Frontier</strong>: <a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNeWlaMUVtdkx6SklzdmNOYnZibDJSak96Mi0zZXhoUVdsamQ2M1VIeEUtcTdWVVJrV09PcTRPWVFCQzlzSW5RUzM1Ui1FRmJtR1N2aVNkeWtEM192TDcxUFhxNGN5MGhpYjk0aEJJdWJrcDlUNG1mQ2xodS1YNXEtVUxPSnpWNGVjZlpwXw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Introducing Gemini Omni - blog.google</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 面对美国制裁，华为提出芯片开发新路径</h3>
+<ul>
+<li><strong>全景综述</strong>：华为在美国制裁下提出芯片发展新路径。（来源: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPRS04bHUwcjl3V05GLUpvanRzUmRya0NNc1ZUcTR4S3RxSU50S0JTRzFUMnFZX2FRRFFYS2tROVU2TDNkSGJOa3VkZVhueFZZVWthSFlzdkJ4TDZhQ0xGQlp2WWFrbnluQ3g3VzU1dkY2X2kwSi10OGJRcnprbmQxcm9lVzNDa3pORW9sWGZxcXp0R3RPOGtBbklFVmZUQUFUZlJ5UXVkbkhubFdfV18yU0ZMNFg?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：华为在美国制裁下提出芯片发展新路径 (信息来源: Reuters)</li>
+<li><strong>政策制定方视角</strong>：政策制定方的核心诉求是用贸易、出口或监管工具重塑供应链约束，因为关键物资一旦短缺，会迅速转化为谈判筹码。（基于: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPRS04bHUwcjl3V05GLUpvanRzUmRya0NNc1ZUcTR4S3RxSU50S0JTRzFUMnFZX2FRRFFYS2tROVU2TDNkSGJOa3VkZVhueFZZVWthSFlzdkJ4TDZhQ0xGQlp2WWFrbnluQ3g3VzU1dkY2X2kwSi10OGJRcnprbmQxcm9lVzNDa3pORW9sWGZxcXp0R3RPOGtBbklFVmZUQUFUZlJ5UXVkbkhubFdfV18yU0ZMNFg?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>进口商与产业链视角</strong>：进口商和下游企业的行为逻辑是提前锁定库存与替代来源；政策落地越突然，价格、合约和生产排期越容易被迫重估。（基于: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPRS04bHUwcjl3V05GLUpvanRzUmRya0NNc1ZUcTR4S3RxSU50S0JTRzFUMnFZX2FRRFFYS2tROVU2TDNkSGJOa3VkZVhueFZZVWthSFlzdkJ4TDZhQ0xGQlp2WWFrbnluQ3g3VzU1dkY2X2kwSi10OGJRcnprbmQxcm9lVzNDa3pORW9sWGZxcXp0R3RPOGtBbklFVmZUQUFUZlJ5UXVkbkhubFdfV18yU0ZMNFg?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：技术部署方说速度，客户和监管者说责任，这两者不会自动合流。若试点不能证明收益、成本和安全边界，AI 公司会被迫收窄应用场景；清晰的审计路径才会重新打开采用曲线。（参考: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPRS04bHUwcjl3V05GLUpvanRzUmRya0NNc1ZUcTR4S3RxSU50S0JTRzFUMnFZX2FRRFFYS2tROVU2TDNkSGJOa3VkZVhueFZZVWthSFlzdkJ4TDZhQ0xGQlp2WWFrbnluQ3g3VzU1dkY2X2kwSi10OGJRcnprbmQxcm9lVzNDa3pORW9sWGZxcXp0R3RPOGtBbklFVmZUQUFUZlJ5UXVkbkhubFdfV18yU0ZMNFg?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPRS04bHUwcjl3V05GLUpvanRzUmRya0NNc1ZUcTR4S3RxSU50S0JTRzFUMnFZX2FRRFFYS2tROVU2TDNkSGJOa3VkZVhueFZZVWthSFlzdkJ4TDZhQ0xGQlp2WWFrbnluQ3g3VzU1dkY2X2kwSi10OGJRcnprbmQxcm9lVzNDa3pORW9sWGZxcXp0R3RPOGtBbklFVmZUQUFUZlJ5UXVkbkhubFdfV18yU0ZMNFg?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Huawei proposes new path for chip development amid US sanctions</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 华为宣称芯片制造取得突破，缩小与台积电差距</h3>
+<ul>
+<li><strong>全景综述</strong>：华为宣称在芯片制造方面取得突破，以缩小与 TSMC 的差距。（来源: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOSktIVTlnbzMta1pCZjNVQXcyNEludWlUeXlzMjFoTTQ2R1hVRklpN3JhLUhWWU5HMGNqXzNoNFNNQmVzNjlZakdoVW90dGJGXzZCM3J3RVBmVEE4a083a0NKQXFlOGRjemVzREJsNjY5OTRwbnJEbFlMQlgtak02TE5CY2F1WkVLdGwzSE04NERsRTNtM3dmWG1OQmJzZC0yaU1QY1VDVC1vUUhvRGF6bkRn?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>核心事实</strong>：华为宣称在芯片制造方面取得突破，以缩小与 TSMC 的差距 (信息来源: Bloomberg)</li>
+<li><strong>技术部署方视角</strong>：技术部署方的核心诉求是扩大采用场景，但必须证明系统在成本、安全和合规上可持续，否则客户试点难以转化为长期合同。（基于: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOSktIVTlnbzMta1pCZjNVQXcyNEludWlUeXlzMjFoTTQ2R1hVRklpN3JhLUhWWU5HMGNqXzNoNFNNQmVzNjlZakdoVW90dGJGXzZCM3J3RVBmVEE4a083a0NKQXFlOGRjemVzREJsNjY5OTRwbnJEbFlMQlgtak02TE5CY2F1WkVLdGwzSE04NERsRTNtM3dmWG1OQmJzZC0yaU1QY1VDVC1vUUhvRGF6bkRn?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>监管与客户视角</strong>：监管者和企业客户会把可审计性放在采用速度之前；只要责任边界不清，采购和上线节奏就会被内部风控拖慢。（基于: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOSktIVTlnbzMta1pCZjNVQXcyNEludWlUeXlzMjFoTTQ2R1hVRklpN3JhLUhWWU5HMGNqXzNoNFNNQmVzNjlZakdoVW90dGJGXzZCM3J3RVBmVEE4a083a0NKQXFlOGRjemVzREJsNjY5OTRwbnJEbFlMQlgtak02TE5CY2F1WkVLdGwzSE04NERsRTNtM3dmWG1OQmJzZC0yaU1QY1VDVC1vUUhvRGF6bkRn?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>AI推演</strong>：技术部署方说速度，客户和监管者说责任，这两者不会自动合流。若试点不能证明收益、成本和安全边界，AI 公司会被迫收窄应用场景；清晰的审计路径才会重新打开采用曲线。（参考: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOSktIVTlnbzMta1pCZjNVQXcyNEludWlUeXlzMjFoTTQ2R1hVRklpN3JhLUhWWU5HMGNqXzNoNFNNQmVzNjlZakdoVW90dGJGXzZCM3J3RVBmVEE4a083a0NKQXFlOGRjemVzREJsNjY5OTRwbnJEbFlMQlgtak02TE5CY2F1WkVLdGwzSE04NERsRTNtM3dmWG1OQmJzZC0yaU1QY1VDVC1vUUhvRGF6bkRn?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOSktIVTlnbzMta1pCZjNVQXcyNEludWlUeXlzMjFoTTQ2R1hVRklpN3JhLUhWWU5HMGNqXzNoNFNNQmVzNjlZakdoVW90dGJGXzZCM3J3RVBmVEE4a083a0NKQXFlOGRjemVzREJsNjY5OTRwbnJEbFlMQlgtak02TE5CY2F1WkVLdGwzSE04NERsRTNtM3dmWG1OQmJzZC0yaU1QY1VDVC1vUUhvRGF6bkRn?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Huawei Touts Chipmaking Breakthrough to Shorten Gap With TSMC</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>今日回响</strong></p>
+<h3>《DAYTONA》</h3>
+<blockquote>
+<p><strong>Pusha T</strong> · 2018-05-25 · Rap / Contemporary Rap</p>
+<p><strong>编辑推荐 / Editor's Notes：</strong><br />
+Pusha T的《DAYTONA》是GOOD Music在2018年中期推出的首张作品，尽管篇幅精炼，却以专辑之姿呈现。Kanye West主导的制作赋予了唱片紧绷而冷峻的节拍，辅以Mike Dean和Andrew Dawson的贡献，为Pusha T标志性的犀利、简洁的韵脚提供了坚实基础。他以精准的笔触，聚焦于毒品交易与说唱领域的双重地位，歌词中不乏对竞争对手的巧妙抨击，以及对同行的生动致敬。Pusha T在此展现出其一贯的打击乐般、音韵精进的表达，刻意回避旋律性，将焦点完全置于其无可匹敌的叙事与技巧之上，七首作品无一不充满鲜明的个性。</p>
+</blockquote>
+</div>
+</body>
+</html>
