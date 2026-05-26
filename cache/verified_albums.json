@@ -537,5 +537,19 @@
         "MusicBrainz"
       ]
     }
+  ],
+  "05-26": [
+    {
+      "album": "Sgt. Pepper's Lonely Hearts Club Band",
+      "artist": "The Beatles",
+      "cached_at": "2026-05-26T12:54:40",
+      "genre_hint": "Pop/Rock",
+      "release_date": "1967-05-26",
+      "verification_score": 6,
+      "verification_sources": [
+        "MusicBrainz",
+        "AllMusic"
+      ]
+    }
   ]
 }
