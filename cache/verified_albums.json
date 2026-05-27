@@ -551,5 +551,20 @@
         "AllMusic"
       ]
     }
+  ],
+  "05-27": [
+    {
+      "album": "The Freewheelin’ Bob Dylan",
+      "artist": "Bob Dylan",
+      "cached_at": "2026-05-27T13:02:37",
+      "genre_hint": "Pop/Rock / Folk",
+      "release_date": "1963-05-27",
+      "verification_score": 8,
+      "verification_sources": [
+        "AllMusic",
+        "Wikidata",
+        "MusicBrainz"
+      ]
+    }
   ]
 }
