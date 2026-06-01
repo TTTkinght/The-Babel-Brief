@@ -566,5 +566,19 @@
         "MusicBrainz"
       ]
     }
+  ],
+  "06-01": [
+    {
+      "album": "ye",
+      "artist": "Kanye West",
+      "cached_at": "2026-06-01T13:33:22",
+      "genre_hint": "Rap",
+      "release_date": "2018-06-01",
+      "verification_score": 6,
+      "verification_sources": [
+        "AllMusic",
+        "MusicBrainz"
+      ]
+    }
   ]
 }
