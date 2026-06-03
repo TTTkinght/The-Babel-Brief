@@ -580,5 +580,19 @@
         "MusicBrainz"
       ]
     }
+  ],
+  "06-03": [
+    {
+      "album": "Wu-Tang Forever",
+      "artist": "Wu-Tang Clan",
+      "cached_at": "2026-06-03T13:27:52",
+      "genre_hint": "Rap",
+      "release_date": "1997-06-03",
+      "verification_score": 5,
+      "verification_sources": [
+        "Wikidata",
+        "AllMusic"
+      ]
+    }
   ]
 }
