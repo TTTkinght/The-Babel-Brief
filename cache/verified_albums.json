@@ -608,5 +608,19 @@
         "Wikidata"
       ]
     }
+  ],
+  "06-05": [
+    {
+      "album": "The Phantom Agony",
+      "artist": "Epica",
+      "cached_at": "2026-06-05T00:37:07",
+      "genre_hint": "",
+      "release_date": "2003-06-05",
+      "verification_score": 5,
+      "verification_sources": [
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
