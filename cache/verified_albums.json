@@ -594,5 +594,19 @@
         "AllMusic"
       ]
     }
+  ],
+  "06-04": [
+    {
+      "album": "Born in the U.S.A.",
+      "artist": "Bruce Springsteen",
+      "cached_at": "2026-06-04T13:29:12",
+      "genre_hint": "Pop/Rock",
+      "release_date": "1984-06-04",
+      "verification_score": 5,
+      "verification_sources": [
+        "AllMusic",
+        "Wikidata"
+      ]
+    }
   ]
 }
