@@ -622,5 +622,19 @@
         "Wikidata"
       ]
     }
+  ],
+  "06-07": [
+    {
+      "album": "Hot Fuss",
+      "artist": "The Killers",
+      "cached_at": "2026-06-07T13:13:48",
+      "genre_hint": "",
+      "release_date": "2004-06-07",
+      "verification_score": 5,
+      "verification_sources": [
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
