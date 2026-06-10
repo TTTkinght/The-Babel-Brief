@@ -636,5 +636,19 @@
         "Wikidata"
       ]
     }
+  ],
+  "06-10": [
+    {
+      "album": "Little Creatures",
+      "artist": "Talking Heads",
+      "cached_at": "2026-06-10T13:02:37",
+      "genre_hint": "",
+      "release_date": "1985-06-10",
+      "verification_score": 5,
+      "verification_sources": [
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
