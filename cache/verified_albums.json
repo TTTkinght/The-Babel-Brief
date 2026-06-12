@@ -650,5 +650,19 @@
         "Wikidata"
       ]
     }
+  ],
+  "06-12": [
+    {
+      "album": "Le Québec est mort, Vive le Québec !",
+      "artist": "Loco Locass",
+      "cached_at": "2026-06-12T13:20:53",
+      "genre_hint": "",
+      "release_date": "2012-06-12",
+      "verification_score": 5,
+      "verification_sources": [
+        "MusicBrainz",
+        "Wikidata"
+      ]
+    }
   ]
 }
