@@ -2059,14 +2059,14 @@ def get_api_key() -> str:
 
 
 def get_model_candidates() -> List[str]:
+    # 只保留免费档模型，杜绝回退到收费模型（如 gemini-3-flash-preview /
+    # gemini-2.5-pro）而产生账单。无结算 key 上即便撞限额也只是 429，不计费。
     defaults = [
-        "gemini-3-flash-preview",
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
         "gemini-flash-lite-latest",
         "gemini-2.0-flash",
         "gemini-flash-latest",
-        "gemini-2.5-pro",
     ]
     explicit = (
         os.getenv("LLM_MODEL")
@@ -2076,8 +2076,15 @@ def get_model_candidates() -> List[str]:
     ).strip()
     ordered: List[str] = []
     for model in (ACTIVE_GEMINI_MODEL, explicit, *defaults):
-        if model and model not in ordered:
-            ordered.append(model)
+        if not model or model in ordered:
+            continue
+        # 安全网：剔除收费/预览模型（pro、preview），确保只走免费档。
+        lowered = model.lower()
+        if "pro" in lowered or "preview" in lowered:
+            continue
+        ordered.append(model)
+    if not ordered:
+        ordered.append("gemini-2.5-flash")
     return ordered
 
 
