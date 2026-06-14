@@ -53,7 +53,7 @@ DEFAULT_PROMPT_CLUSTER_LIMIT = 20
 DEFAULT_PROMPT_ITEMS_PER_CLUSTER = 3
 DEFAULT_PROMPT_SUMMARY_LIMIT = 220
 LLM_IMPORTANCE_THRESHOLD = 4
-DEFAULT_LLM_SCORE_BATCH_SIZE = 18
+DEFAULT_LLM_SCORE_BATCH_SIZE = 32
 DEFAULT_SOURCE_CATALOG_LIMIT = 24
 TODAY_ECHO_SOURCE_WEIGHTS = {"MusicBrainz": 3, "AllMusic": 3, "Wikidata": 2}
 TODAY_ECHO_MIN_CONSENSUS_SCORE = 5
@@ -2155,6 +2155,36 @@ def call_openai_compatible(prompt: str, model: str, api_key: str, base_url: str,
     raise RuntimeError("OpenAI 兼容接口连续重试失败。") from last_error
 
 
+_LAST_GEMINI_REQUEST_TS = 0.0
+
+
+def _throttle_gemini_request() -> None:
+    """免费档限流保护：保证相邻 Gemini 请求至少间隔 N 秒，避免一分钟内挤入
+    过多请求触发 RPM 配额（429）。默认 6 秒（约 10 次/分钟）。"""
+    global _LAST_GEMINI_REQUEST_TS
+    min_interval = max(0.0, float(os.getenv("GEMINI_MIN_REQUEST_INTERVAL_SECONDS", "6")))
+    if min_interval <= 0:
+        return
+    wait = min_interval - (time.monotonic() - _LAST_GEMINI_REQUEST_TS)
+    if wait > 0:
+        time.sleep(wait)
+    _LAST_GEMINI_REQUEST_TS = time.monotonic()
+
+
+def _parse_gemini_retry_delay(exc: Exception) -> float:
+    """从 Gemini 429 响应的 RetryInfo 解析官方建议等待秒数（解析失败返回 0）。"""
+    try:
+        response = getattr(exc, "response", None)
+        if response is None:
+            return 0.0
+        for detail in response.json().get("error", {}).get("details", []):
+            if "RetryInfo" in str(detail.get("@type", "")) and detail.get("retryDelay"):
+                return float(str(detail["retryDelay"]).strip().rstrip("s"))
+    except Exception:
+        return 0.0
+    return 0.0
+
+
 def call_gemini_native(prompt: str, models: Sequence[str], api_key: str, timeout_s: int) -> str:
     global ACTIVE_GEMINI_MODEL
     last_error = None
@@ -2180,6 +2210,7 @@ def call_gemini_native(prompt: str, models: Sequence[str], api_key: str, timeout
         for attempt in range(retry_count):
             try:
                 print(f"[INFO] 正在请求 Gemini 模型 {model} ({attempt + 1}/{retry_count})...")
+                _throttle_gemini_request()
                 response = http_post(
                     url,
                     json=payload,
@@ -2209,9 +2240,20 @@ def call_gemini_native(prompt: str, models: Sequence[str], api_key: str, timeout
                     response_text = ""
                     if hasattr(exc, "response") and exc.response is not None:
                         response_text = clean_text(exc.response.text).lower()
+                    is_rate_limited = (
+                        "429" in error_text
+                        or "too many requests" in error_text
+                        or "resource_exhausted" in response_text
+                        or "quota" in response_text
+                    )
                     is_high_demand = "503" in error_text or "unavailable" in error_text or "high demand" in response_text
                     is_read_timeout = "read timed out" in error_text or "readtimeout" in error_text
-                    if is_high_demand:
+                    if is_rate_limited:
+                        # 优先采用 Gemini 返回的官方建议等待时长；否则用较长退避，
+                        # 让每分钟配额窗口有时间重置（免费档 RPM 限制）。
+                        suggested = _parse_gemini_retry_delay(exc)
+                        delay = min(60, max(suggested + 1, 25 + attempt * 15))
+                    elif is_high_demand:
                         delay = min(45, 12 + attempt * 12)
                     elif is_read_timeout:
                         delay = min(30, 10 + attempt * 8)
