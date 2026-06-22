@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>【The Babel Brief】中国对美企实施出口管制；俄军在乌克兰顿巴斯地区集结兵力</title>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+:root {
+    color-scheme: light;
+    --black: #F5F5F5;
+    --surface: #FFFFFF;
+    --surface-raised: #F0F0F0;
+    --border: #E8E8E8;
+    --border-visible: #CCCCCC;
+    --text-disabled: #999999;
+    --text-secondary: #666666;
+    --text-primary: #1A1A1A;
+    --text-display: #000000;
+    --accent: #FF661F;
+    --interactive: var(--text-display);
+    --display-xl: 4.5rem;
+    --display-lg: 3rem;
+    --display-md: 2.25rem;
+    --heading: 1.5rem;
+    --subheading: 1.125rem;
+    --body: 1rem;
+    --body-sm: 0.875rem;
+    --caption: 0.75rem;
+    --label: 0.6875rem;
+    --button: 0.8125rem;
+    --space-2xs: 2px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    --space-4xl: 96px;
+    --motion-fast: 160ms;
+    --motion-base: 240ms;
+    --motion-slow: 360ms;
+    --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --black: #000000;
+    --surface: #111111;
+    --surface-raised: #1A1A1A;
+    --border: #222222;
+    --border-visible: #333333;
+    --text-disabled: #666666;
+    --text-secondary: #999999;
+    --text-primary: #E8E8E8;
+    --text-display: #FFFFFF;
+    --interactive: var(--text-display);
+}
+* {
+    box-sizing: border-box;
+    letter-spacing: 0;
+}
+body {
+    margin: 0;
+    padding: var(--space-4xl) var(--space-xl);
+    background: var(--black);
+    color: var(--text-primary);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.5;
+    transition: background-color var(--motion-base) var(--ease-out), color var(--motion-base) var(--ease-out);
+}
+.brief-backbar {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto calc(var(--space-xl) + var(--space-sm));
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border-visible);
+}
+.brief-backbar .brief-back-link {
+    grid-column: 4 / 9;
+    width: fit-content;
+    color: var(--accent);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 0;
+    transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+}
+.theme-toggle {
+    grid-column: 10 / 13;
+    justify-self: end;
+    align-self: start;
+    min-height: 44px;
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--button);
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out);
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+    border-color: var(--text-display);
+}
+.brief-backbar .brief-brand {
+    grid-column: 1 / 3;
+    width: fit-content;
+    padding-left: 14px;
+    color: var(--accent);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-bottom: 0;
+}
+.brief-backbar .brief-brand:hover,
+.brief-backbar .brief-brand:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+.email-container {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    row-gap: 0;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+.brief-detail-header {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto var(--space-3xl);
+}
+.brief-detail-instruments {
+    grid-column: 1 / 3;
+    display: grid;
+    gap: var(--space-sm);
+    align-content: start;
+}
+.instrument-label {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.instrument-number {
+    margin: 0;
+    color: var(--text-display);
+    font-family: "Doto", "Space Mono", monospace;
+    font-size: var(--display-lg);
+    line-height: 0.95;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.instrument-meta,
+.instrument-clock {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+    line-height: 1.4;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+}
+.instrument-clock {
+    width: fit-content;
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-visible);
+    color: var(--text-display);
+    transition: opacity var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
+}
+.instrument-clock.is-ticking {
+    opacity: 0.55;
+}
+.brief-detail-title {
+    grid-column: 4 / 12;
+    align-self: center;
+    margin: 0;
+    width: min(788.268px, 100%);
+    max-width: 100%;
+    opacity: 1;
+    color: var(--text-display);
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 700;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.email-container > * {
+    grid-column: 4 / 12;
+    max-width: 65ch;
+}
+.hero,
+.email-container > hr {
+    grid-column: 1 / -1;
+    max-width: none;
+}
+.email-container > h2 {
+    grid-column: 4 / 12;
+    max-width: 65ch;
+}
+.hero {
+    margin: 0 0 var(--space-3xl);
+}
+.hero img {
+    width: 100%;
+    display: block;
+    border-radius: 0;
+}
+h1 {
+    max-width: 12em;
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    border: 0;
+    color: var(--text-display);
+    font-size: var(--heading);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+h2 {
+    margin: var(--space-3xl) 0 var(--space-lg);
+    padding: var(--space-md) 0 0;
+    border-top: 1px solid var(--border-visible);
+    border-left: 0;
+    color: var(--text-secondary);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+h2:first-of-type {
+    margin-top: var(--space-2xl);
+}
+h3 {
+    margin: var(--space-xl) 0 var(--space-md);
+    color: var(--accent);
+    font-family: "Space Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: var(--body);
+    line-height: 1.3;
+    font-weight: 700;
+}
+p,
+li {
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.6;
+}
+p {
+    margin: 0 0 var(--space-md);
+}
+ul {
+    margin: 0 0 var(--space-lg);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+li {
+    margin: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+ul ul {
+    margin-top: var(--space-sm);
+    margin-bottom: 0;
+    padding-left: var(--space-lg);
+    border-top: 1px solid var(--border);
+}
+.history-note {
+    margin: 0 0 var(--space-xl);
+    color: var(--text-primary);
+    font-size: var(--body);
+    line-height: 1.5;
+}
+.history-label {
+    color: var(--text-display);
+    font-weight: 700;
+}
+blockquote {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md);
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-primary);
+}
+a {
+    color: var(--interactive);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+}
+a:hover {
+    color: var(--text-display);
+    border-bottom-color: var(--text-display);
+}
+strong {
+    color: var(--text-display);
+    font-weight: 700;
+}
+.email-container > ul:first-of-type > li > strong {
+    color: var(--accent);
+}
+.email-container > ul:first-of-type {
+    border-top: 0;
+}
+.email-container > ul:first-of-type > li {
+    border-bottom: 0;
+}
+code {
+    padding: 1px 4px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-visible);
+    border-radius: 4px;
+    color: var(--text-display);
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: var(--caption);
+}
+hr {
+    border: 0;
+    border-top: 1px solid var(--border-visible);
+    margin: var(--space-3xl) 0;
+}
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--accent);
+    z-index: 50;
+    pointer-events: none;
+    will-change: transform;
+}
+.back-to-top {
+    position: fixed;
+    right: var(--space-xl);
+    bottom: var(--space-xl);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    font-family: "Space Mono", "JetBrains Mono", "SF Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 180ms linear, transform 180ms linear, color 120ms linear, border-color 120ms linear;
+    z-index: 60;
+}
+.back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+.back-to-top-glyph {
+    font-size: 14px;
+    line-height: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+        transition: opacity 1ms linear;
+        transform: none;
+    }
+}
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes nd-power-on {
+        from { opacity: 0; transform: translate3d(0, 6px, 0); }
+        to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .brief-backbar,
+    .brief-detail-header,
+    .email-container {
+        animation: nd-power-on var(--motion-base) var(--ease-out) both;
+    }
+    .brief-detail-header {
+        animation-delay: 60ms;
+    }
+    .email-container {
+        animation-delay: 120ms;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+@media (max-width: 640px) {
+    body {
+        padding: var(--space-3xl) var(--space-md);
+    }
+    .brief-backbar {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+        margin-bottom: var(--space-2xl);
+    }
+    .brief-backbar span,
+    .brief-backbar a,
+    .theme-toggle {
+        grid-column: 1;
+    }
+    .theme-toggle {
+        justify-self: start;
+    }
+    .email-container {
+        display: block;
+    }
+    .brief-detail-header {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+        margin-bottom: var(--space-3xl);
+    }
+    .brief-detail-instruments,
+    .brief-detail-title {
+        grid-column: 1;
+    }
+    .email-container > * {
+        max-width: none;
+    }
+    h1 {
+        font-size: var(--heading);
+    }
+    .brief-detail-title {
+        font-size: var(--heading);
+    }
+    h2 {
+        margin-top: var(--space-2xl);
+    }
+    h3 {
+        font-size: var(--body);
+    }
+}
+</style>
+
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body>
+
+<div class="reading-progress" aria-hidden="true"></div>
+<div class="brief-backbar">
+    <a class="brief-brand" href="../">The Babel Brief</a>
+    <a class="brief-back-link" href="../">&lt; back</a>
+    <button class="theme-toggle" type="button" data-theme-toggle>[ DARK ]</button>
+</div>
+<button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+    <span class="back-to-top-glyph" aria-hidden="true">&uarr;</span>
+    <span class="back-to-top-text">TOP</span>
+</button>
+<script>
+(() => {
+    const btn = document.querySelector("[data-back-to-top]");
+    if (!btn) return;
+    const onScroll = () => btn.classList.toggle("is-visible", window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    btn.addEventListener("click", () => {
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    });
+    onScroll();
+})();
+</script>
+<script type="module">
+(async () => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try {
+        const { animate, scroll } = await import("https://cdn.jsdelivr.net/npm/motion@latest/+esm");
+        scroll(animate(".reading-progress", { scaleX: [0, 1] }, { ease: "linear" }));
+    } catch (e) { /* offline / blocked CDN — silently degrade */ }
+})();
+</script>
+
+
+<header class="brief-detail-header">
+    <div class="brief-detail-instruments">
+        <p class="instrument-label">Issue</p>
+        <p class="instrument-number">22</p>
+        <p class="instrument-meta">06 / 2026</p>
+        <p class="instrument-label">CN Time</p>
+        <time class="instrument-clock" data-cn-clock>13:46</time>
+    </div>
+    <h1 class="brief-detail-title">中国将MP Materials、Teal Drones等10家美企列入出口管制，并禁止政府采购</h1>
+</header>
+
+
+<script>
+(() => {
+    const clocks = document.querySelectorAll("[data-cn-clock]");
+    const clockEl = document.getElementById("home-analog-clock");
+    if (clocks.length || clockEl) {
+        const timeFormatter = new Intl.DateTimeFormat("zh-CN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: "Asia/Shanghai"
+        });
+        const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            timeZone: "Asia/Shanghai"
+        });
+        const tick = () => {
+            const now = new Date();
+            clocks.forEach((clock) => {
+                const nextText = timeFormatter.format(now);
+                if (clock.textContent === nextText) {
+                    return;
+                }
+                clock.textContent = nextText;
+                clock.classList.remove("is-ticking");
+                void clock.offsetWidth;
+                clock.classList.add("is-ticking");
+                setTimeout(() => clock.classList.remove("is-ticking"), 120);
+            });
+            document.querySelectorAll("[data-cn-date]").forEach((date) => {
+                date.textContent = dateFormatter.format(now).replace(/\//g, " / ");
+            });
+            if (clockEl && !clockEl.dataset.ready) {
+                for (let i = 0; i < 60; i++) {
+                    const t = document.createElement("div");
+                    t.className = "clock-tick " + (i % 5 === 0 ? "hour-tick" : "min-tick");
+                    t.style.transform = `translateX(-50%) rotate(${i * 6}deg)`;
+                    clockEl.prepend(t);
+                }
+                clockEl.dataset.ready = "1";
+            }
+
+            const handH = document.getElementById("hand-h");
+            const handM = document.getElementById("hand-m");
+            const handS = document.getElementById("hand-s");
+            if (handH && handM && handS) {
+                const s = now.getSeconds();
+                const m = now.getMinutes();
+                const h = now.getHours() % 12;
+                handH.style.rotate = `${h * 30 + m * 0.5}deg`;
+                handM.style.rotate = `${m * 6 + s * 0.1}deg`;
+                handS.style.rotate = `${s * 6}deg`;
+            }
+        };
+
+        tick();
+        setInterval(tick, 1000);
+    }
+
+    const themeKey = "babel-brief-theme";
+    const buttons = document.querySelectorAll("[data-theme-toggle]");
+    const storedTheme = localStorage.getItem(themeKey);
+    const hashTheme = new URLSearchParams(window.location.hash.slice(1)).get("figmatheme");
+    const forcedTheme = ["dark", "light"].includes(hashTheme) ? hashTheme : "";
+    const initialTheme = forcedTheme || storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem(themeKey, theme);
+        buttons.forEach((button) => {
+            button.textContent = theme === "dark" ? "[ LIGHT ]" : "[ DARK ]";
+            button.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+        });
+    };
+
+    setTheme(initialTheme);
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+        });
+    });
+})();
+</script>
+
+<div class="email-container">
+
+<p class="history-note"><span class="history-label">历史上的今天（1986）</span>：在墨西哥城举行的世界杯四分之一决赛中，阿根廷传奇球星迭戈·马拉多纳攻入两粒载入史册的进球。其中一球因其用手触球而被称为“上帝之手”，引发巨大争议；另一球则是连过数人的“世纪进球”。阿根廷最终以2-1战胜英格兰，并最终夺得该届世界杯冠军。这两粒进球至今仍是足球史上最具标志性和争议性的瞬间之一。 —— <a href="https://en.wikipedia.org/wiki/The_hand_of_God">来源: Wikipedia</a></p>
+
+<hr />
+<h2>🦉 Quick Hits</h2>
+<ul>
+<li><strong>中国将MP Materials、Teal Drones等10家美企列入出口管制，并禁止政府采购Anduril等46家美企产品</strong>：中国对数十家美国公司实施限制。（<a href="https://www.techmeme.com/260621/p16#a260621p16">来源: Nikkei Asia</a>, <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxQLVd1SnlUVHExVFpPM1NhVF8yanVJZTRoa0ttOHc1QkQ4U29KUEpBR2d5cl9lbUFxaTRhdnhWWF85ZlBOdzJSR3VXbURWUUR5TFVpR0NURm5mY1MxbFhlSnI5TEhyMEZBTUtZWXpVT0hYOFV6MzI1bnZ2bVV0SnZkaXNxVW1BbnlQQlNqeGJzNFp0TDZzWnFj?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: WSJ</a>）</li>
+<li> <strong>美伊首轮会谈结束，取得“令人鼓舞的进展”</strong>：美伊首轮会谈结束，双方就路线图达成一致。（<a href="https://www.aljazeera.com/video/newsfeed/2026/6/22/encouraging-progress-made-as-first-round-us-iran-talks-end?traffic_source=rss">来源: Al Jazeera</a>, <a href="https://www.bbc.com/news/articles/cwy0q41v1lzo?at_medium=RSS&amp;at_campaign=rss">来源: BBC World News</a>）</li>
+<li> <strong>伊朗称结束黎巴嫩战争取得“进展”</strong>：伊朗称结束黎巴嫩战争取得“进展”。（<a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE5IbGdmbG5zYTRLYkVMZTdaSHNBX0ZObTloS0RwSEFfYzBpZk94SHR4dWtROXkwVy1UR3FUNlJmOEkwUWFpT0hoZWMyS2dKcXJTLUFLbzNaZzZESmp3N0VfYTNLLXptSG4tX0Q1U0xqT1I?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Financial Times</a>, <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUWgtd2pJRXdwSF82TUxsVmowMDNWZnNONEpSeGVQQ0t3TXlVdGs3TU5xS0V2QUNHaHFrdmw3UmlDTU93RDRSb0xPNExzWTRvSU5tbTQ0MENKSlhfQVRGRmlUbFIzeG1yb2l1TzhSOXVzRzI2NWdIOVhDVzA5eWJwYmw2cmJVNWlpbmFMUjdiMENhaFhRbzlnOHlIMlh2YUlaM29QYTNNM0E?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Associated Press</a>）</li>
+<li> <strong>假期后香港中资股逼近熊市</strong>：香港于7月1日纪念回归中国统治29周年。（<a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPay1kbHlGWGZtRC1vMFViS0dJRlVwZ0NXNnNGZm5pbGxYemRhd2lSSVl6YlkwMHFaZ2dKc1U0ZU53cEdHdzZWTl9mSnRoTEFhVWUtS201YUxWWWxfVUlpOGdfWllLREQzNGdQRmg1R3ZvMEJ1SHdKU0F6UUNiU0NNbmlxanNVNGVXOTJ2enI5SkRfekJ5YUVNbTF0cjZUbVIwNzVrcVlRVlEyMkFGcEE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Bloomberg</a>, <a href="https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3357808/hong-kong-aims-offer-more-investment-options-mainland-chinese-paul-chan?utm_source=rss_feed">来源: South China Morning Post</a>）</li>
+<li> <strong>初步计票显示，特朗普支持的政治局外人赢得哥伦比亚大选</strong>：初步计票显示，特朗普支持的政治局外人赢得哥伦比亚大选。（<a href="https://www.bbc.com/news/articles/clye4ky2yzpo?at_medium=RSS&amp;at_campaign=rss">来源: BBC World News</a>, <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxNSVJHUHV0QWpad1RsZ3czaHFKb1hOU1V4aW5oeGZlbkFfeVNIdHdVdmpqQmRQMUh0cHlFUXFzcnNHdjU1aXNqUFU5NV9lVHZJdVI3QS1aSjJ3LXY3aDlqTnJmeFcyVzZfWVE3a0VOU2VLcU16RzlzQ2hWcTYtWTdHRTM2ODhZby1Od3V4UGM3OXRHbC1XNlRBNGozTUowcFM4N0VYS3IxS3JiVDJNTEpyeHdicw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Associated Press</a>）</li>
+<li><strong>哥伦比亚总统候选人De la Espriella庆祝初步领先</strong>：哥伦比亚局外人Abelardo de la Espriella 乘坐装甲车。（<a href="https://www.aljazeera.com/video/newsfeed/2026/6/22/colombia-presidential-candidate-de-la-espriella-celebrates-preliminary-lead?traffic_source=rss">来源: Al Jazeera</a>, <a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNQ2NaRTM2QVRsbUROX2wxRnVHU2R6OXQ4M1VKMmtxMXZQSlBEOTZBRmlxTEdQY3dkcU5obTZmUENrNXV3TDlSUDk1enl1UGlVcFdCeUhtemQ5LVIzamF3VG5LSW5fdF9GT2cwYUpjOE5sSzB3WnB1YWlkQldua0xia1M5QkVLd2txZ0tXSVhkS1JVS05UTlQycW5RWFRLVXZSa21yaFAycjRFeWY1dy1pSEZ1S0R1VHNZ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Reuters</a>）</li>
+<li><code>[独家重磅]</code> <strong>中国对美国稀土及其他公司实施出口管制</strong>：中国对美国稀土及其他公司实施出口管制。（<a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOaTFRNGkzaENWU2dUd0hseGlKUjVhT0NlVVAwRUVlcFRPQW5BdEZhWVdwSFQ0ZGJaaTlYcXFScEdkUGFRcWdyUFpyZHhVU1dCdzE0bUk3RHQwdU5TVnZGa25IUGN1X01qRXo4SU9Nd2hKT0pEYVJNM1VLdXdaaHdrSHh6R2MySFp1RTdwc3YxUC1mN2ZrbVBLYkg2LUg1N3BOZk84TGRDX2NQcWM3M1BOSlc0eFZZZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Reuters</a>）</li>
+<li><code>[独家重磅]</code> <strong>中国石油进口或永远无法从伊朗战争中完全恢复</strong>：中国石油进口可能永远无法从伊朗战争中完全恢复。（<a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOVXBDZlMzM3o2Szc4akZGbVAwaW96cUY3Z0haSHpVODBONGNKM0F2cHppa21SSGFJeXVzUnhmNWJ5dTZqeG1jNjlBSkR1eXRXSlJFanpfUHpndXJYMndDY3EzRmpwcDJTNnk2ZHlCZ0ZqT1h6Q2h0OHdqeHYtcTNTS0ZnVVlHVDluMlRHMjFUb3V3LXdXbS1zZGJ0a290UWZfcnYxQVVfdHZidmpRQ29NeWJ3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">来源: Bloomberg</a>）</li>
+</ul>
+<h2>🇨🇳 中国与世界 / China & The World</h2>
+<h3>1. 中国将MP Materials、Teal Drones等十家美企列入出口管制清单</h3>
+<ul>
+<li><strong>全景综述</strong>：中国将包括MP Materials和Teal Drones在内的十余家美国公司列入出口管制名单。（来源: <a href="https://www.techmeme.com/260621/p16#a260621p16">Nikkei Asia</a>, <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxQLVd1SnlUVHExVFpPM1NhVF8yanVJZTRoa0ttOHc1QkQ4U29KUEpBR2d5cl9lbUFxaTRhdnhWWF85ZlBOdzJSR3VXbURWUUR5TFVpR0NURm5mY1MxbFhlSnI5TEhyMEZBTUtZWXpVT0hYOFV6MzI1bnZ2bVV0SnZkaXNxVW1BbnlQQlNqeGJzNFp0TDZzWnFj?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">WSJ</a>）</li>
+<li><strong>核心事实</strong>：中国对包括MP Materials和Teal在内的数十家美国公司实施出口管制和采购禁令 (信息来源: Nikkei Asia)</li>
+<li><strong>北京政策视角</strong>：北京的核心诉求是把两岸议题维持在可塑形的政治框架内，因为对台接触同时服务于内部叙事、外交信号和对美博弈。（基于: <a href="https://www.techmeme.com/260621/p16#a260621p16">Nikkei Asia</a>）</li>
+<li><strong>台湾与美国政策视角</strong>：台湾和美国的行为逻辑是避免象征性接触被转化为既成政治压力；军机军舰、关税或访问安排都会被纳入风险校准。（基于: <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxQLVd1SnlUVHExVFpPM1NhVF8yanVJZTRoa0ttOHc1QkQ4U29KUEpBR2d5cl9lbUFxaTRhdnhWWF85ZlBOdzJSR3VXbURWUUR5TFVpR0NURm5mY1MxbFhlSnI5TEhyMEZBTUtZWXpVT0hYOFV6MzI1bnZ2bVV0SnZkaXNxVW1BbnlQQlNqeGJzNFp0TDZzWnFj?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">WSJ</a>）</li>
+<li><strong>AI推演</strong>：北京的政治接触只有在军事活动同步降温时才会被外界视为缓和。若军机、军舰或关税信号继续升高，台湾和美国更可能把会面理解为压力管理，而不是关系修复。（参考: <a href="https://www.techmeme.com/260621/p16#a260621p16">Nikkei Asia</a>, <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxQLVd1SnlUVHExVFpPM1NhVF8yanVJZTRoa0ttOHc1QkQ4U29KUEpBR2d5cl9lbUFxaTRhdnhWWF85ZlBOdzJSR3VXbURWUUR5TFVpR0NURm5mY1MxbFhlSnI5TEhyMEZBTUtZWXpVT0hYOFV6MzI1bnZ2bVV0SnZkaXNxVW1BbnlQQlNqeGJzNFp0TDZzWnFj?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">WSJ</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Nikkei Asia</strong>: <a href="https://www.techmeme.com/260621/p16#a260621p16">China adds ten US companies, including MP Materials and Teal Drones, to export controls and bars government purchases from 46 US companies, including Anduril</a></li>
+<li><strong>WSJ</strong>: <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxQLVd1SnlUVHExVFpPM1NhVF8yanVJZTRoa0ttOHc1QkQ4U29KUEpBR2d5cl9lbUFxaTRhdnhWWF85ZlBOdzJSR3VXbURWUUR5TFVpR0NURm5mY1MxbFhlSnI5TEhyMEZBTUtZWXpVT0hYOFV6MzI1bnZ2bVV0SnZkaXNxVW1BbnlQQlNqeGJzNFp0TDZzWnFj?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">China Slaps Restrictions on Dozens of U.S. Companies</a></li>
+<li><strong>Nikkei Asia</strong>: <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxNcWhZTW1SXzZueGViZEdCNTlPSXM4V3dSekFkTEJDSVFtdHhld1I0YUI1UTdjQTdLazZvb0xvblF4amIwckJtTG9GX1BfSk9RV3EtYnFBd1ZfV1kxV21INEJyMnlvNnAweWFnbVBuNlJDZHcxZ2E0T2E4WHJ5WHVyeWx4NXBHQzl5TmQ5b0d5UEo3YXpfN24wMkdyUkw0ajBFXzRxdmpWeVhVTmNlOUFjZHVUVQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">China hits dozens of US companies with export controls, procurement bans</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 中国针对美国稀土及其他企业实施出口管制</h3>
+<ul>
+<li><strong>全景综述</strong>：中国对美国稀土及其他公司实施出口管制。（来源: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOaTFRNGkzaENWU2dUd0hseGlKUjVhT0NlVVAwRUVlcFRPQW5BdEZhWVdwSFQ0ZGJaaTlYcXFScEdkUGFRcWdyUFpyZHhVU1dCdzE0bUk3RHQwdU5TVnZGa25IUGN1X01qRXo4SU9Nd2hKT0pEYVJNM1VLdXdaaHdrSHh6R2MySFp1RTdwc3YxUC1mN2ZrbVBLYkg2LUg1N3BOZk84TGRDX2NQcWM3M1BOSlc0eFZZZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：中国对美国稀土及其他公司实施出口管制 (信息来源: Reuters)</li>
+<li><strong>北京政策视角</strong>：北京的核心诉求是把两岸议题维持在可塑形的政治框架内，因为对台接触同时服务于内部叙事、外交信号和对美博弈。（基于: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOaTFRNGkzaENWU2dUd0hseGlKUjVhT0NlVVAwRUVlcFRPQW5BdEZhWVdwSFQ0ZGJaaTlYcXFScEdkUGFRcWdyUFpyZHhVU1dCdzE0bUk3RHQwdU5TVnZGa25IUGN1X01qRXo4SU9Nd2hKT0pEYVJNM1VLdXdaaHdrSHh6R2MySFp1RTdwc3YxUC1mN2ZrbVBLYkg2LUg1N3BOZk84TGRDX2NQcWM3M1BOSlc0eFZZZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>台湾与美国政策视角</strong>：台湾和美国的行为逻辑是避免象征性接触被转化为既成政治压力；军机军舰、关税或访问安排都会被纳入风险校准。（基于: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOaTFRNGkzaENWU2dUd0hseGlKUjVhT0NlVVAwRUVlcFRPQW5BdEZhWVdwSFQ0ZGJaaTlYcXFScEdkUGFRcWdyUFpyZHhVU1dCdzE0bUk3RHQwdU5TVnZGa25IUGN1X01qRXo4SU9Nd2hKT0pEYVJNM1VLdXdaaHdrSHh6R2MySFp1RTdwc3YxUC1mN2ZrbVBLYkg2LUg1N3BOZk84TGRDX2NQcWM3M1BOSlc0eFZZZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：北京的政治接触只有在军事活动同步降温时才会被外界视为缓和。若军机、军舰或关税信号继续升高，台湾和美国更可能把会面理解为压力管理，而不是关系修复。（参考: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOaTFRNGkzaENWU2dUd0hseGlKUjVhT0NlVVAwRUVlcFRPQW5BdEZhWVdwSFQ0ZGJaaTlYcXFScEdkUGFRcWdyUFpyZHhVU1dCdzE0bUk3RHQwdU5TVnZGa25IUGN1X01qRXo4SU9Nd2hKT0pEYVJNM1VLdXdaaHdrSHh6R2MySFp1RTdwc3YxUC1mN2ZrbVBLYkg2LUg1N3BOZk84TGRDX2NQcWM3M1BOSlc0eFZZZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOaTFRNGkzaENWU2dUd0hseGlKUjVhT0NlVVAwRUVlcFRPQW5BdEZhWVdwSFQ0ZGJaaTlYcXFScEdkUGFRcWdyUFpyZHhVU1dCdzE0bUk3RHQwdU5TVnZGa25IUGN1X01qRXo4SU9Nd2hKT0pEYVJNM1VLdXdaaHdrSHh6R2MySFp1RTdwc3YxUC1mN2ZrbVBLYkg2LUg1N3BOZk84TGRDX2NQcWM3M1BOSlc0eFZZZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">China targets US rare earth and other firms with export controls</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 中国将两家美国稀土生产商列入出口管制清单</h3>
+<ul>
+<li><strong>全景综述</strong>：中国将两家美国稀土生产商列入出口管制名单。（来源: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPMHJwdlZ4MUdGR0ZWRzFndEhRbzRWYUxjcVllaURQcGt4bkpHWHE0OXNwaGZOVkRkNFFyWGVOOGdqSkUtelBQU19qWlNITlRwNXZoTnAzR3VFSE0ydnhvdnl1d1hjVkdKYUNPWmZkTC1pVEpVNV9PSU9FMFlNc01OODUwSE1ScjBMZ2ZtdEVnelQ5Z2diYzk2bVpSOElidmFsLTh5VDVwR2FySWt2dngzV1hjLWhfZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>核心事实</strong>：中国将两家美国稀土生产商列入出口管制名单 (信息来源: Bloomberg)</li>
+<li><strong>北京政策视角</strong>：北京的核心诉求是把两岸议题维持在可塑形的政治框架内，因为对台接触同时服务于内部叙事、外交信号和对美博弈。（基于: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPMHJwdlZ4MUdGR0ZWRzFndEhRbzRWYUxjcVllaURQcGt4bkpHWHE0OXNwaGZOVkRkNFFyWGVOOGdqSkUtelBQU19qWlNITlRwNXZoTnAzR3VFSE0ydnhvdnl1d1hjVkdKYUNPWmZkTC1pVEpVNV9PSU9FMFlNc01OODUwSE1ScjBMZ2ZtdEVnelQ5Z2diYzk2bVpSOElidmFsLTh5VDVwR2FySWt2dngzV1hjLWhfZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>台湾与美国政策视角</strong>：台湾和美国的行为逻辑是避免象征性接触被转化为既成政治压力；军机军舰、关税或访问安排都会被纳入风险校准。（基于: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPMHJwdlZ4MUdGR0ZWRzFndEhRbzRWYUxjcVllaURQcGt4bkpHWHE0OXNwaGZOVkRkNFFyWGVOOGdqSkUtelBQU19qWlNITlRwNXZoTnAzR3VFSE0ydnhvdnl1d1hjVkdKYUNPWmZkTC1pVEpVNV9PSU9FMFlNc01OODUwSE1ScjBMZ2ZtdEVnelQ5Z2diYzk2bVpSOElidmFsLTh5VDVwR2FySWt2dngzV1hjLWhfZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>AI推演</strong>：北京的政治接触只有在军事活动同步降温时才会被外界视为缓和。若军机、军舰或关税信号继续升高，台湾和美国更可能把会面理解为压力管理，而不是关系修复。（参考: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPMHJwdlZ4MUdGR0ZWRzFndEhRbzRWYUxjcVllaURQcGt4bkpHWHE0OXNwaGZOVkRkNFFyWGVOOGdqSkUtelBQU19qWlNITlRwNXZoTnAzR3VFSE0ydnhvdnl1d1hjVkdKYUNPWmZkTC1pVEpVNV9PSU9FMFlNc01OODUwSE1ScjBMZ2ZtdEVnelQ5Z2diYzk2bVpSOElidmFsLTh5VDVwR2FySWt2dngzV1hjLWhfZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPMHJwdlZ4MUdGR0ZWRzFndEhRbzRWYUxjcVllaURQcGt4bkpHWHE0OXNwaGZOVkRkNFFyWGVOOGdqSkUtelBQU19qWlNITlRwNXZoTnAzR3VFSE0ydnhvdnl1d1hjVkdKYUNPWmZkTC1pVEpVNV9PSU9FMFlNc01OODUwSE1ScjBMZ2ZtdEVnelQ5Z2diYzk2bVpSOElidmFsLTh5VDVwR2FySWt2dngzV1hjLWhfZw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">China Places Two US Rare Earths Producers on Export Control List</a></li>
+</ul>
+</li>
+</ul>
+<h3>4. 台湾将举行五天战备演习</h3>
+<ul>
+<li><strong>全景综述</strong>：台湾将举行五天的战备演习。（来源: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxNUUVrMkNSZDNEUVEtSlFNbjktM3EwR1RXWF9TSmNrYkdyX1hEYWhfYkRmVEVJbkFkbHhCNzlMLVA4Rmw0clgzdW1fbGhfTEFTY1l0RnRhMk0ybTdJUDQxYjhtdW05eHMxTXlXdnZQNUJxd0I5Tnd6YjNIU2JTcUxSZkhuUjFlUnBoVzRJLVR6RGxLMzhUZzh2V0JfN3A5MnhVRFk4R2dtTVAxcDdRLVE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：台湾将举行五天的战备演习 (信息来源: Reuters)</li>
+<li><strong>美国监管层视角</strong>：美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。（基于: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxNUUVrMkNSZDNEUVEtSlFNbjktM3EwR1RXWF9TSmNrYkdyX1hEYWhfYkRmVEVJbkFkbHhCNzlMLVA4Rmw0clgzdW1fbGhfTEFTY1l0RnRhMk0ybTdJUDQxYjhtdW05eHMxTXlXdnZQNUJxd0I5Tnd6YjNIU2JTcUxSZkhuUjFlUnBoVzRJLVR6RGxLMzhUZzh2V0JfN3A5MnhVRFk4R2dtTVAxcDdRLVE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>华尔街银行与AI公司视角</strong>：银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。（基于: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxNUUVrMkNSZDNEUVEtSlFNbjktM3EwR1RXWF9TSmNrYkdyX1hEYWhfYkRmVEVJbkFkbHhCNzlMLVA4Rmw0clgzdW1fbGhfTEFTY1l0RnRhMk0ybTdJUDQxYjhtdW05eHMxTXlXdnZQNUJxd0I5Tnd6YjNIU2JTcUxSZkhuUjFlUnBoVzRJLVR6RGxLMzhUZzh2V0JfN3A5MnhVRFk4R2dtTVAxcDdRLVE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、可审计、可停用，否则华尔街会把试点保留在沙盒里。（参考: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxNUUVrMkNSZDNEUVEtSlFNbjktM3EwR1RXWF9TSmNrYkdyX1hEYWhfYkRmVEVJbkFkbHhCNzlMLVA4Rmw0clgzdW1fbGhfTEFTY1l0RnRhMk0ybTdJUDQxYjhtdW05eHMxTXlXdnZQNUJxd0I5Tnd6YjNIU2JTcUxSZkhuUjFlUnBoVzRJLVR6RGxLMzhUZzh2V0JfN3A5MnhVRFk4R2dtTVAxcDdRLVE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxNUUVrMkNSZDNEUVEtSlFNbjktM3EwR1RXWF9TSmNrYkdyX1hEYWhfYkRmVEVJbkFkbHhCNzlMLVA4Rmw0clgzdW1fbGhfTEFTY1l0RnRhMk0ybTdJUDQxYjhtdW05eHMxTXlXdnZQNUJxd0I5Tnd6YjNIU2JTcUxSZkhuUjFlUnBoVzRJLVR6RGxLMzhUZzh2V0JfN3A5MnhVRFk4R2dtTVAxcDdRLVE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Taiwan to stage five days of combat readiness drills</a></li>
+</ul>
+</li>
+</ul>
+<h2>🌍 全球局势 / Global Affairs</h2>
+<h3>1. 首轮美伊会谈结束，取得积极进展</h3>
+<ul>
+<li><strong>全景综述</strong>：首轮美伊会谈结束，双方就达成最终协议的路线图达成一致。（来源: <a href="https://www.aljazeera.com/video/newsfeed/2026/6/22/encouraging-progress-made-as-first-round-us-iran-talks-end?traffic_source=rss">Al Jazeera</a>, <a href="https://www.bbc.com/news/articles/cwy0q41v1lzo?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>核心事实</strong>：首轮美伊会谈结束，双方就达成最终协议的路线图达成一致 (信息来源: Al Jazeera)</li>
+<li><strong>美国谈判策略视角</strong>：美国的核心诉求是把军事威慑转化为可执行的谈判约束，同时避免冲突成本继续传导到能源、通胀和盟友安全承诺。（基于: <a href="https://www.aljazeera.com/video/newsfeed/2026/6/22/encouraging-progress-made-as-first-round-us-iran-talks-end?traffic_source=rss">Al Jazeera</a>）</li>
+<li><strong>伊朗政权安全视角</strong>：伊朗的行为逻辑是保留谈判筹码并降低国内安全压力；若让步被解读为被迫退让，其后续执行空间会明显收窄。（基于: <a href="https://www.bbc.com/news/articles/cwy0q41v1lzo?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>AI推演</strong>：会面本身不足以改变局势，真正有分量的是双方是否同步冻结升级动作。若谈判桌外的军事压力继续增加，美国和伊朗都会把让步视为弱点，停火文本也会缺少执行可信度。（参考: <a href="https://www.aljazeera.com/video/newsfeed/2026/6/22/encouraging-progress-made-as-first-round-us-iran-talks-end?traffic_source=rss">Al Jazeera</a>, <a href="https://www.bbc.com/news/articles/cwy0q41v1lzo?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Al Jazeera</strong>: <a href="https://www.aljazeera.com/video/newsfeed/2026/6/22/encouraging-progress-made-as-first-round-us-iran-talks-end?traffic_source=rss">‘Encouraging progress’ made as first round US-Iran talks end</a></li>
+<li><strong>BBC World News</strong>: <a href="https://www.bbc.com/news/articles/cwy0q41v1lzo?at_medium=RSS&amp;at_campaign=rss">First round of US-Iran talks ends with 'encouraging progress', mediators say</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 俄军集结威胁乌克兰顿巴斯关键城市</h3>
+<ul>
+<li><strong>全景综述</strong>：俄罗斯军队集结威胁到对夺取乌克兰顿巴斯地区至关重要的城市。（来源: <a href="https://www.bbc.com/news/articles/c9w2g0ewk95o?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>核心事实</strong>：俄罗斯军队集结威胁到对夺取乌克兰顿巴斯地区至关重要的城市 (信息来源: BBC World News)</li>
+<li><strong>美国监管层视角</strong>：美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。（基于: <a href="https://www.bbc.com/news/articles/c9w2g0ewk95o?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>华尔街银行与AI公司视角</strong>：银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。（基于: <a href="https://www.bbc.com/news/articles/c9w2g0ewk95o?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>AI推演</strong>：监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、可审计、可停用，否则华尔街会把试点保留在沙盒里。（参考: <a href="https://www.bbc.com/news/articles/c9w2g0ewk95o?at_medium=RSS&amp;at_campaign=rss">BBC World News</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>BBC World News</strong>: <a href="https://www.bbc.com/news/articles/c9w2g0ewk95o?at_medium=RSS&amp;at_campaign=rss">Russian troop build-up threatens city seen as key to seizing Ukraine's Donbas</a></li>
+</ul>
+</li>
+</ul>
+<h3>3. 伊朗称结束黎巴嫩战争取得进展</h3>
+<ul>
+<li><strong>全景综述</strong>：伊朗称在结束黎巴嫩战争方面取得“进展”。（来源: <a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE5IbGdmbG5zYTRLYkVMZTdaSHNBX0ZObTloS0RwSEFfYzBpZk94SHR4dWtROXkwVy1UR3FUNlJmOEkwUWFpT0hoZWMyS2dKcXJTLUFLbzNaZzZESmp3N0VfYTNLLXptSG4tX0Q1U0xqT1I?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>, <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUWgtd2pJRXdwSF82TUxsVmowMDNWZnNONEpSeGVQQ0t3TXlVdGs3TU5xS0V2QUNHaHFrdmw3UmlDTU93RDRSb0xPNExzWTRvSU5tbTQ0MENKSlhfQVRGRmlUbFIzeG1yb2l1TzhSOXVzRzI2NWdIOVhDVzA5eWJwYmw2cmJVNWlpbmFMUjdiMENhaFhRbzlnOHlIMlh2YUlaM29QYTNNM0E?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>核心事实</strong>：伊朗称在结束黎巴嫩战争方面取得“进展” (信息来源: Financial Times)</li>
+<li><strong>美国监管层视角</strong>：美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。（基于: <a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE5IbGdmbG5zYTRLYkVMZTdaSHNBX0ZObTloS0RwSEFfYzBpZk94SHR4dWtROXkwVy1UR3FUNlJmOEkwUWFpT0hoZWMyS2dKcXJTLUFLbzNaZzZESmp3N0VfYTNLLXptSG4tX0Q1U0xqT1I?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>）</li>
+<li><strong>华尔街银行与AI公司视角</strong>：银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。（基于: <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUWgtd2pJRXdwSF82TUxsVmowMDNWZnNONEpSeGVQQ0t3TXlVdGs3TU5xS0V2QUNHaHFrdmw3UmlDTU93RDRSb0xPNExzWTRvSU5tbTQ0MENKSlhfQVRGRmlUbFIzeG1yb2l1TzhSOXVzRzI2NWdIOVhDVzA5eWJwYmw2cmJVNWlpbmFMUjdiMENhaFhRbzlnOHlIMlh2YUlaM29QYTNNM0E?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>AI推演</strong>：监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、可审计、可停用，否则华尔街会把试点保留在沙盒里。（参考: <a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE5IbGdmbG5zYTRLYkVMZTdaSHNBX0ZObTloS0RwSEFfYzBpZk94SHR4dWtROXkwVy1UR3FUNlJmOEkwUWFpT0hoZWMyS2dKcXJTLUFLbzNaZzZESmp3N0VfYTNLLXptSG4tX0Q1U0xqT1I?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Financial Times</a>, <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUWgtd2pJRXdwSF82TUxsVmowMDNWZnNONEpSeGVQQ0t3TXlVdGs3TU5xS0V2QUNHaHFrdmw3UmlDTU93RDRSb0xPNExzWTRvSU5tbTQ0MENKSlhfQVRGRmlUbFIzeG1yb2l1TzhSOXVzRzI2NWdIOVhDVzA5eWJwYmw2cmJVNWlpbmFMUjdiMENhaFhRbzlnOHlIMlh2YUlaM29QYTNNM0E?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Associated Press</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Financial Times</strong>: <a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE5IbGdmbG5zYTRLYkVMZTdaSHNBX0ZObTloS0RwSEFfYzBpZk94SHR4dWtROXkwVy1UR3FUNlJmOEkwUWFpT0hoZWMyS2dKcXJTLUFLbzNaZzZESmp3N0VfYTNLLXptSG4tX0Q1U0xqT1I?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Iran hails ‘progress’ to end Lebanon war</a></li>
+<li><strong>Associated Press</strong>: <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUWgtd2pJRXdwSF82TUxsVmowMDNWZnNONEpSeGVQQ0t3TXlVdGs3TU5xS0V2QUNHaHFrdmw3UmlDTU93RDRSb0xPNExzWTRvSU5tbTQ0MENKSlhfQVRGRmlUbFIzeG1yb2l1TzhSOXVzRzI2NWdIOVhDVzA5eWJwYmw2cmJVNWlpbmFMUjdiMENhaFhRbzlnOHlIMlh2YUlaM29QYTNNM0E?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">The Latest: Iran says ‘major progress’ to end Lebanon war during talks</a></li>
+</ul>
+</li>
+</ul>
+<h3>4. 中国石油进口或因伊朗战争永远无法完全恢复</h3>
+<ul>
+<li><strong>全景综述</strong>：中国的石油进口可能永远无法从伊朗战争的影响中完全恢复。（来源: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOVXBDZlMzM3o2Szc4akZGbVAwaW96cUY3Z0haSHpVODBONGNKM0F2cHppa21SSGFJeXVzUnhmNWJ5dTZqeG1jNjlBSkR1eXRXSlJFanpfUHpndXJYMndDY3EzRmpwcDJTNnk2ZHlCZ0ZqT1h6Q2h0OHdqeHYtcTNTS0ZnVVlHVDluMlRHMjFUb3V3LXdXbS1zZGJ0a290UWZfcnYxQVVfdHZidmpRQ29NeWJ3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>核心事实</strong>：中国的石油进口可能永远无法从伊朗战争的影响中完全恢复 (信息来源: Bloomberg)</li>
+<li><strong>美国谈判与能源安全视角</strong>：美国的核心诉求是把停火窗口和海上通行风险同时压住，因为运输中断会把军事压力快速转化为能源价格和盟友协调成本。（基于: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOVXBDZlMzM3o2Szc4akZGbVAwaW96cUY3Z0haSHpVODBONGNKM0F2cHppa21SSGFJeXVzUnhmNWJ5dTZqeG1jNjlBSkR1eXRXSlJFanpfUHpndXJYMndDY3EzRmpwcDJTNnk2ZHlCZ0ZqT1h6Q2h0OHdqeHYtcTNTS0ZnVVlHVDluMlRHMjFUb3V3LXdXbS1zZGJ0a290UWZfcnYxQVVfdHZidmpRQ29NeWJ3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>伊朗与航运市场视角</strong>：伊朗的谈判筹码来自地区安全风险上升；运输商、保险方和能源买家会先把不确定性计入运价、保费和库存安排。（基于: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOVXBDZlMzM3o2Szc4akZGbVAwaW96cUY3Z0haSHpVODBONGNKM0F2cHppa21SSGFJeXVzUnhmNWJ5dTZqeG1jNjlBSkR1eXRXSlJFanpfUHpndXJYMndDY3EzRmpwcDJTNnk2ZHlCZ0ZqT1h6Q2h0OHdqeHYtcTNTS0ZnVVlHVDluMlRHMjFUb3V3LXdXbS1zZGJ0a290UWZfcnYxQVVfdHZidmpRQ29NeWJ3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>AI推演</strong>：华盛顿需要把停火谈判和航道安全放在同一张表上看。只要船东、保险商和能源买家仍按封锁风险定价，外交会谈释放的缓和信号就很难真正压低冲突溢价。（参考: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOVXBDZlMzM3o2Szc4akZGbVAwaW96cUY3Z0haSHpVODBONGNKM0F2cHppa21SSGFJeXVzUnhmNWJ5dTZqeG1jNjlBSkR1eXRXSlJFanpfUHpndXJYMndDY3EzRmpwcDJTNnk2ZHlCZ0ZqT1h6Q2h0OHdqeHYtcTNTS0ZnVVlHVDluMlRHMjFUb3V3LXdXbS1zZGJ0a290UWZfcnYxQVVfdHZidmpRQ29NeWJ3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOVXBDZlMzM3o2Szc4akZGbVAwaW96cUY3Z0haSHpVODBONGNKM0F2cHppa21SSGFJeXVzUnhmNWJ5dTZqeG1jNjlBSkR1eXRXSlJFanpfUHpndXJYMndDY3EzRmpwcDJTNnk2ZHlCZ0ZqT1h6Q2h0OHdqeHYtcTNTS0ZnVVlHVDluMlRHMjFUb3V3LXdXbS1zZGJ0a290UWZfcnYxQVVfdHZidmpRQ29NeWJ3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Chinese Oil Imports May Never Fully Recover From Iran War</a></li>
+</ul>
+</li>
+</ul>
+<h2>💰 商业与市场 / Business & Markets</h2>
+<h3>1. 假期后香港中资股逼近熊市</h3>
+<ul>
+<li><strong>全景综述</strong>：假期后香港中资股接近熊市，同时香港旨在为中国内地居民提供更多投资选择。（来源: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPay1kbHlGWGZtRC1vMFViS0dJRlVwZ0NXNnNGZm5pbGxYemRhd2lSSVl6YlkwMHFaZ2dKc1U0ZU53cEdHdzZWTl9mSnRoTEFhVWUtS201YUxWWWxfVUlpOGdfWllLREQzNGdQRmg1R3ZvMEJ1SHdKU0F6UUNiU0NNbmlxanNVNGVXOTJ2enI5SkRfekJ5YUVNbTF0cjZUbVIwNzVrcVlRVlEyMkFGcEE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>, <a href="https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3357808/hong-kong-aims-offer-more-investment-options-mainland-chinese-paul-chan?utm_source=rss_feed">South China Morning Post</a>）</li>
+<li><strong>核心事实</strong>：假期后香港中资股接近熊市，同时香港旨在为中国内地居民提供更多投资选择 (信息来源: Bloomberg)</li>
+<li><strong>美国监管层视角</strong>：美国监管层的核心诉求是把模型风险纳入金融与基础设施治理，因为高风险场景一旦出错，责任会落到银行和监管机构身上。（基于: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPay1kbHlGWGZtRC1vMFViS0dJRlVwZ0NXNnNGZm5pbGxYemRhd2lSSVl6YlkwMHFaZ2dKc1U0ZU53cEdHdzZWTl9mSnRoTEFhVWUtS201YUxWWWxfVUlpOGdfWllLREQzNGdQRmg1R3ZvMEJ1SHdKU0F6UUNiU0NNbmlxanNVNGVXOTJ2enI5SkRfekJ5YUVNbTF0cjZUbVIwNzVrcVlRVlEyMkFGcEE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>）</li>
+<li><strong>华尔街银行与AI公司视角</strong>：银行和AI公司的行为逻辑是争取试点速度，同时证明模型可解释、可审计、可停用；任何安全事件都会拖慢商业化节奏。（基于: <a href="https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3357808/hong-kong-aims-offer-more-investment-options-mainland-chinese-paul-chan?utm_source=rss_feed">South China Morning Post</a>）</li>
+<li><strong>AI推演</strong>：监管层要求银行放慢脚步并非技术保守，而是在把责任边界提前写进部署流程。AI 公司需要证明模型可解释、可审计、可停用，否则华尔街会把试点保留在沙盒里。（参考: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPay1kbHlGWGZtRC1vMFViS0dJRlVwZ0NXNnNGZm5pbGxYemRhd2lSSVl6YlkwMHFaZ2dKc1U0ZU53cEdHdzZWTl9mSnRoTEFhVWUtS201YUxWWWxfVUlpOGdfWllLREQzNGdQRmg1R3ZvMEJ1SHdKU0F6UUNiU0NNbmlxanNVNGVXOTJ2enI5SkRfekJ5YUVNbTF0cjZUbVIwNzVrcVlRVlEyMkFGcEE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Bloomberg</a>, <a href="https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3357808/hong-kong-aims-offer-more-investment-options-mainland-chinese-paul-chan?utm_source=rss_feed">South China Morning Post</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPay1kbHlGWGZtRC1vMFViS0dJRlVwZ0NXNnNGZm5pbGxYemRhd2lSSVl6YlkwMHFaZ2dKc1U0ZU53cEdHdzZWTl9mSnRoTEFhVWUtS201YUxWWWxfVUlpOGdfWllLREQzNGdQRmg1R3ZvMEJ1SHdKU0F6UUNiU0NNbmlxanNVNGVXOTJ2enI5SkRfekJ5YUVNbTF0cjZUbVIwNzVrcVlRVlEyMkFGcEE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Chinese Stocks in Hong Kong Near Bear Market After Holiday</a></li>
+<li><strong>South China Morning Post</strong>: <a href="https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3357808/hong-kong-aims-offer-more-investment-options-mainland-chinese-paul-chan?utm_source=rss_feed">Hong Kong aims to offer more investment options for mainland Chinese: Paul Chan</a></li>
+<li><strong>Bloomberg</strong>: <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOQUNNSDRqSWJ3WmxnT2pRbVhCMHR3LUdzVmtBMkFzejJ3R2p5dVR5UmtNYks1b1hEbUd4ZTMyRWVtRGVLWnkyS0ZhZlZyclBaS2FIWVBwSTJTTHhaRVI3VnZSZE9tODhyNDR6YUdRbmwtZV9DZGxraUZYSHhwdm5yQTRwbTBENE5Nelg0eVhpaDZUMmJBaDZhc2luWHEwYnMyUTQ0UEVNc05FN2dyRWQ2WTZ3?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Hong Kong Seeks IPO Access for Chinese Investors, Higher Quotas</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 伊朗称和谈取得进展，黄金从一周低点反弹</h3>
+<ul>
+<li><strong>全景综述</strong>：路透社报道，黄金从一周低点反弹，因伊朗称和平谈判取得进展。（来源: <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNWG14bzR3eVBkdmFpZ0VoT0tBUzRBbG0wZVUzWW9wN0hqbDV5SDlYUl9WRWxSZE9sZGsxc2ZCVEhHVDdhQUp0LW5MME0zOTRQM2NCb0h0eGlzZzFNODFVc1NBSFdVYkZCNzg3UnZiYUhpOWRCb0tfUFZaNVlrRDFRX0c2c1M1b3B2U3BROWwwQnlXT2N4LTZJOTRpbUVxdFhycXhQNkp5MzYyQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>, <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxOVUJKVXNjdDQ1Qk4wVGUxU0VYY2FROHplR3N5UW0zT0JjZUgyQnN5MDltTHRxVWtwQktOdUdEcXh1YUY3OTNOUnNWMmNoMXNnRmZTNlI4NzFMeHRoR2Zmd1dwTlJSUldqUkVQcXJfVThwYnhSR0tPMnBUbm5jTW8tQTU3cmtmdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>核心事实</strong>：黄金从一周低点反弹，因伊朗称和平谈判取得进展 (信息来源: Reuters)</li>
+<li><strong>美国谈判策略视角</strong>：美国的核心诉求是把军事威慑转化为可执行的谈判约束，同时避免冲突成本继续传导到能源、通胀和盟友安全承诺。（基于: <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNWG14bzR3eVBkdmFpZ0VoT0tBUzRBbG0wZVUzWW9wN0hqbDV5SDlYUl9WRWxSZE9sZGsxc2ZCVEhHVDdhQUp0LW5MME0zOTRQM2NCb0h0eGlzZzFNODFVc1NBSFdVYkZCNzg3UnZiYUhpOWRCb0tfUFZaNVlrRDFRX0c2c1M1b3B2U3BROWwwQnlXT2N4LTZJOTRpbUVxdFhycXhQNkp5MzYyQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>伊朗政权安全视角</strong>：伊朗的行为逻辑是保留谈判筹码并降低国内安全压力；若让步被解读为被迫退让，其后续执行空间会明显收窄。（基于: <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxOVUJKVXNjdDQ1Qk4wVGUxU0VYY2FROHplR3N5UW0zT0JjZUgyQnN5MDltTHRxVWtwQktOdUdEcXh1YUY3OTNOUnNWMmNoMXNnRmZTNlI4NzFMeHRoR2Zmd1dwTlJSUldqUkVQcXJfVThwYnhSR0tPMnBUbm5jTW8tQTU3cmtmdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>AI推演</strong>：会面本身不足以改变局势，真正有分量的是双方是否同步冻结升级动作。若谈判桌外的军事压力继续增加，美国和伊朗都会把让步视为弱点，停火文本也会缺少执行可信度。（参考: <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNWG14bzR3eVBkdmFpZ0VoT0tBUzRBbG0wZVUzWW9wN0hqbDV5SDlYUl9WRWxSZE9sZGsxc2ZCVEhHVDdhQUp0LW5MME0zOTRQM2NCb0h0eGlzZzFNODFVc1NBSFdVYkZCNzg3UnZiYUhpOWRCb0tfUFZaNVlrRDFRX0c2c1M1b3B2U3BROWwwQnlXT2N4LTZJOTRpbUVxdFhycXhQNkp5MzYyQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>, <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxOVUJKVXNjdDQ1Qk4wVGUxU0VYY2FROHplR3N5UW0zT0JjZUgyQnN5MDltTHRxVWtwQktOdUdEcXh1YUY3OTNOUnNWMmNoMXNnRmZTNlI4NzFMeHRoR2Zmd1dwTlJSUldqUkVQcXJfVThwYnhSR0tPMnBUbm5jTW8tQTU3cmtmdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Reuters</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNWG14bzR3eVBkdmFpZ0VoT0tBUzRBbG0wZVUzWW9wN0hqbDV5SDlYUl9WRWxSZE9sZGsxc2ZCVEhHVDdhQUp0LW5MME0zOTRQM2NCb0h0eGlzZzFNODFVc1NBSFdVYkZCNzg3UnZiYUhpOWRCb0tfUFZaNVlrRDFRX0c2c1M1b3B2U3BROWwwQnlXT2N4LTZJOTRpbUVxdFhycXhQNkp5MzYyQQ?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Gold rebounds from one-week low as Iran cites progress in peace talks</a></li>
+<li><strong>Reuters</strong>: <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxOVUJKVXNjdDQ1Qk4wVGUxU0VYY2FROHplR3N5UW0zT0JjZUgyQnN5MDltTHRxVWtwQktOdUdEcXh1YUY3OTNOUnNWMmNoMXNnRmZTNlI4NzFMeHRoR2Zmd1dwTlJSUldqUkVQcXJfVThwYnhSR0tPMnBUbm5jTW8tQTU3cmtmdw?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Stocks rally in Asia as Iran cites progress in talks</a></li>
+</ul>
+</li>
+</ul>
+<h2>🚀 科技与AI / Tech & AI</h2>
+<h3>1. 三星在韩国及全球DX部门部署企业版ChatGPT和Codex</h3>
+<ul>
+<li><strong>全景综述</strong>：韩国科技巨头三星电子已向其在韩国及全球DX部门的员工全面推出OpenAI的企业版ChatGPT和Codex，OpenAI表示这是其迄今为止规模最大的企业部署之一。（来源: <a href="https://www.techmeme.com/260621/p14#a260621p14">Techmeme</a>）</li>
+<li><strong>核心事实</strong>：三星电子已向其在韩国的所有员工及全球DX部门员工推出OpenAI的企业版ChatGPT和Codex，OpenAI称这是其最大的企业部署之一 (信息来源: Techmeme)</li>
+<li><strong>三星管理层视角</strong>：三星此举旨在提升员工的工作效率和创新能力。通过部署企业级AI工具，公司可以赋能员工在代码编写、内容创作和数据分析等多个领域实现自动化和智能化，从而加速产品开发周期并优化内部运营流程，保持在技术竞争中的领先地位。（基于: <a href="https://www.techmeme.com/260621/p14#a260621p14">Techmeme</a>）</li>
+<li><strong>OpenAI视角</strong>：OpenAI将三星的部署视为其企业级AI解决方案获得市场认可的重要里程碑，并巩固了其在生成式AI领域的市场领导地位。（基于: <a href="https://www.techmeme.com/260621/p14#a260621p14">Techmeme</a>）</li>
+<li><strong>AI推演</strong>：三星的广泛部署凸显了企业对AI工具提升效率的强烈需求，而OpenAI则借此巩固了其在企业级AI市场的地位。此举预示着大型科技公司内部AI应用将成为常态，但数据安全和员工培训仍是关键挑战。（参考: <a href="https://www.techmeme.com/260621/p14#a260621p14">Techmeme</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>Techmeme</strong>: <a href="https://www.techmeme.com/260621/p14#a260621p14">Samsung rolls out ChatGPT Enterprise and Codex to all staff in Korea and DX division staff globally; OpenAI says it's one of its largest enterprise deployments (Kim Su-jeong/CHOSUNBIZ)</a></li>
+</ul>
+</li>
+</ul>
+<h3>2. 盖帝图片宣布与OpenAI建立展示合作关系</h3>
+<ul>
+<li><strong>全景综述</strong>：全球知名视觉内容提供商盖帝图片宣布与OpenAI建立展示合作关系，标志着传统内容提供商与AI技术公司之间合作模式的深化。（来源: <a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxNN2FHN0o3TTJZa0RFd09zOTdHMW5ieWF1NXJSajBxOUFISDdEZUhXV1FLZE9KNkF0ejc4b2JXemhaUEJ2Uk9JUmNzZ0FVdVNONHdwUjJXNFlveVZHUlRYMHktQnl2UEI0d2VtckF3WU1adjVkc0g1MWNQajc5YktySjBhdWhsMVVRclVVa19BSmprZEhtT0U0d1NrMWE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI &amp; LLM Frontier</a>）</li>
+<li><strong>核心事实</strong>：盖帝图片宣布与OpenAI建立展示合作关系 (信息来源: AI &amp; LLM Frontier)</li>
+<li><strong>盖帝图片管理层视角</strong>：盖帝图片通过与OpenAI合作，旨在探索新的商业模式并确保其内容在AI时代得到合法和公平的使用。此举有助于公司在生成式AI领域占据一席之地，并可能为其高质量的视觉内容开辟新的授权和收入来源，同时避免其内容被未经授权地用于AI训练。（基于: <a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxNN2FHN0o3TTJZa0RFd09zOTdHMW5ieWF1NXJSajBxOUFISDdEZUhXV1FLZE9KNkF0ejc4b2JXemhaUEJ2Uk9JUmNzZ0FVdVNONHdwUjJXNFlveVZHUlRYMHktQnl2UEI0d2VtckF3WU1adjVkc0g1MWNQajc5YktySjBhdWhsMVVRclVVa19BSmprZEhtT0U0d1NrMWE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI &amp; LLM Frontier</a>）</li>
+<li><strong>OpenAI视角</strong>：OpenAI与盖帝图片的合作，为其AI模型提供了合法且高质量的视觉内容来源，有助于提升其生成式AI工具的准确性和多样性，同时规避版权纠纷。（基于: <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxQVUh5RE4zbFpYYXhuVmtSZS1JdzhSTElndDU4c1pBNUU3ekpsanpBZE9hOWVJS1ByeDFnSUVjal9qd2drZC1TSUFPdmc0amx5OHdmd3Fhem5LNkkzRGJ2OFRWbXBTaC1ha3gzWG8yTDlFMXV0UFYtVGk4ekFSaFhZUHlHaWpza2t4NDJJa2lLR3Bwb29PTEE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI &amp; LLM Frontier</a>）</li>
+<li><strong>AI推演</strong>：盖帝图片与OpenAI的合作是内容产业与AI技术融合的必然趋势。盖帝图片通过授权获得新收入，OpenAI则获得合法数据源，双方各取所需。这为其他内容创作者与AI公司间的合作提供了范本，但版权保护的长期挑战依然存在。（参考: <a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxNN2FHN0o3TTJZa0RFd09zOTdHMW5ieWF1NXJSajBxOUFISDdEZUhXV1FLZE9KNkF0ejc4b2JXemhaUEJ2Uk9JUmNzZ0FVdVNONHdwUjJXNFlveVZHUlRYMHktQnl2UEI0d2VtckF3WU1adjVkc0g1MWNQajc5YktySjBhdWhsMVVRclVVa19BSmprZEhtT0U0d1NrMWE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">AI &amp; LLM Frontier</a>）</li>
+<li><strong>溯源印证</strong>：<ul>
+<li><strong>AI &amp; LLM Frontier</strong>: <a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxNN2FHN0o3TTJZa0RFd09zOTdHMW5ieWF1NXJSajBxOUFISDdEZUhXV1FLZE9KNkF0ejc4b2JXemhaUEJ2Uk9JUmNzZ0FVdVNONHdwUjJXNFlveVZHUlRYMHktQnl2UEI0d2VtckF3WU1adjVkc0g1MWNQajc5YktySjBhdWhsMVVRclVVa19BSmprZEhtT0U0d1NrMWE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Getty Images Announces Display Partnership With OpenAI - Let's Data Science</a></li>
+<li><strong>AI &amp; LLM Frontier</strong>: <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxQVUh5RE4zbFpYYXhuVmtSZS1JdzhSTElndDU4c1pBNUU3ekpsanpBZE9hOWVJS1ByeDFnSUVjal9qd2drZC1TSUFPdmc0amx5OHdmd3Fhem5LNkkzRGJ2OFRWbXBTaC1ha3gzWG8yTDlFMXV0UFYtVGk4ekFSaFhZUHlHaWpza2t4NDJJa2lLR3Bwb29PTEE?oc=5&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Getty Images Announces Display Partnership with OpenAI - Yahoo Finance Singapore</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>今日回响</strong></p>
+<blockquote>
+<p>已综合 MusicBrainz、AllMusic、Wikidata 等来源交叉核查，但仍未找到首发月日与今天（06-22）一致且能形成多源共识的专辑，本期暂停推荐，以避免错误日期。</p>
+</blockquote>
+</div>
+</body>
+</html>
